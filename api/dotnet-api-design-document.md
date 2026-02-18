@@ -95,24 +95,47 @@ These methods return tuples with an optional error `ActionResult`, enabling earl
 
 ### Services (`src/Services/`)
 
-Services encapsulate business logic that spans multiple repositories or involves non-trivial orchestration. Register them via DI as scoped services.
+Services encapsulate business logic that spans multiple repositories or involves non-trivial orchestration. Services are either static classes (for stateless logic) or singletons instantiated directly where needed.
 
 **When to use a service vs. calling a repository directly from a controller:**
 - **Direct repository call:** Simple CRUD with no cross-cutting logic
 - **Service:** Multi-step operations, external API calls, or any logic spanning multiple repositories
 
-**Module registration pattern** for grouping related services:
+**Static service pattern** (preferred for stateless logic):
 
 ```csharp
-public static class MyModuleExtensions
+public static class MyService
 {
-    public static IServiceCollection AddMyModule(this IServiceCollection services)
+    public static async Task<Result> DoSomethingAsync(Guid entityId)
     {
-        services.AddScoped<IMyService, MyService>();
-        services.AddScoped<MyRepository>();
-        return services;
+        var repo = new ExampleRepository();
+        // orchestration logic
     }
 }
+```
+
+**Singleton instance pattern** (when the service needs initialization or holds config):
+
+```csharp
+public class MyService
+{
+    public static MyService Instance { get; private set; } = null!;
+
+    public static void Initialize(string apiKey, string baseUrl)
+    {
+        Instance = new MyService { _apiKey = apiKey, _baseUrl = baseUrl };
+    }
+
+    private string _apiKey;
+    private string _baseUrl;
+
+    public async Task<Result> DoSomethingAsync() { ... }
+}
+
+// In Program.cs
+MyService.Initialize(
+    builder.Configuration["MyService:ApiKey"]!,
+    builder.Configuration["MyService:BaseUrl"]!);
 ```
 
 ### Repositories (`DataAccess/Repositories/`)
@@ -252,31 +275,29 @@ Domain-specific response classes map from database objects, excluding internal f
 
 ## Configuration
 
-### Options Pattern
+### Configuration Helper
 
-External service configuration uses the ASP.NET Core options pattern. Each integration gets its own options class.
+A static helper class provides access to `IConfiguration` from anywhere in the application, without dependency injection.
 
 ```csharp
-// Configuration/MyServiceOptions.cs
-public class MyServiceOptions
+// Configuration/ConfigHelper.cs
+public static class ConfigHelper
 {
-    public const string SectionName = "MyService";
-    public required string ApiKey { get; set; }
-    public required string BaseUrl { get; set; }
+    public static IConfiguration Configuration { get; set; } = null!;
 }
 
-// appsettings.json
-{
-    "MyService": {
-        "ApiKey": "...",
-        "BaseUrl": "..."
-    }
-}
-
-// Program.cs
-services.Configure<MyServiceOptions>(
-    builder.Configuration.GetSection(MyServiceOptions.SectionName));
+// Program.cs (before any services are used)
+ConfigHelper.Configuration = builder.Configuration;
 ```
+
+Configuration values are read directly where needed:
+
+```csharp
+var apiKey = ConfigHelper.Configuration["MyService:ApiKey"];
+var baseUrl = ConfigHelper.Configuration["MyService:BaseUrl"];
+```
+
+For services that need config at initialization, pass values explicitly during setup in `Program.cs` rather than reading config inside the service.
 
 ### DatabaseManager
 
@@ -355,12 +376,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 ### Token Service
 
-A scoped service that generates JWTs with custom claims. Add whatever domain-specific claims your application requires (e.g., user ID, tenant/org ID, email).
+A static helper class that generates JWTs with custom claims. Reads JWT config via `ConfigHelper`. Add whatever domain-specific claims your application requires (e.g., user ID, tenant/org ID, email).
 
 ```csharp
-public class TokenService
+public static class TokenService
 {
-    public string GenerateToken(Guid userId, string email, List<string> roles)
+    public static string GenerateToken(Guid userId, string email, List<string> roles)
     {
         var claims = new List<Claim>
         {
@@ -370,9 +391,10 @@ public class TokenService
         // Add domain-specific claims as needed
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
-        var key = new SymmetricSecurityKey(Convert.FromBase64String(_config["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(
+            Convert.FromBase64String(ConfigHelper.Configuration["Jwt:Key"]!));
         var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
+            issuer: ConfigHelper.Configuration["Jwt:Issuer"],
             expires: DateTime.UtcNow.AddMinutes(15),
             claims: claims,
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
@@ -434,29 +456,24 @@ Captures request/response details to the database for observability:
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 
+// --- Static configuration (must come first) ---
+ConfigHelper.Configuration = builder.Configuration;
+
 // --- Kestrel configuration ---
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
 });
 
-// --- Configuration binding ---
-builder.Services.Configure<MyServiceOptions>(
-    builder.Configuration.GetSection(MyServiceOptions.SectionName));
-
 // --- Authentication ---
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => { /* see JWT Configuration above */ });
 builder.Services.AddAuthorization();
 
-// --- Service registration ---
-builder.Services.AddScoped<TokenService>();
+// --- Controllers ---
 builder.Services.AddControllers();
 
-// Module registrations
-builder.Services.AddMyModule();
-
-// Background services (if needed)
+// --- Background services (if needed) ---
 // builder.Services.AddHostedService<MyBackgroundWorker>();
 
 // --- CORS ---
@@ -477,6 +494,11 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 
+// --- Initialize singleton services ---
+MyService.Initialize(
+    builder.Configuration["MyService:ApiKey"]!,
+    builder.Configuration["MyService:BaseUrl"]!);
+
 var app = builder.Build();
 
 app.UseForwardedHeaders();
@@ -493,18 +515,17 @@ app.Run();
 
 ---
 
-## Dependency Registration Summary
+## Instantiation Patterns
 
-| Registration | Lifetime | Purpose |
+| Component | Pattern | Example |
 |---|---|---|
-| `TokenService` | Scoped | JWT generation |
-| `IMyService` / `MyService` | Scoped | Business logic |
-| Options classes | Singleton (via `Configure<T>`) | External service config |
-| External API wrappers | Singleton | Stateless third-party service clients |
-| Background workers | Hosted Service | Async background processing |
-| Repositories | Instantiated directly | Data access (no DI needed) |
+| Repositories | `new` in controllers | `private readonly ExampleRepository _repo = new();` |
+| Stateless services | Static class | `TokenService.GenerateToken(...)` |
+| Stateful services | Singleton with `Initialize` | `MyService.Instance.DoSomething()` |
+| Configuration | Static helper | `ConfigHelper.Configuration["Key"]` |
+| Background workers | Hosted Service (only DI used) | `builder.Services.AddHostedService<MyWorker>()` |
 
-Repositories are instantiated directly in controllers (`new ExampleRepository()`) rather than registered in DI. This is appropriate because they are stateless and create their own connections per call.
+The only use of the DI container is for framework-level concerns that require it: authentication, authorization, CORS, hosted background services, and forwarded headers. All application-level code uses static classes or direct instantiation.
 
 ---
 
@@ -526,8 +547,8 @@ Repositories are instantiated directly in controllers (`new ExampleRepository()`
 3. **Snake_case DB columns** mapped automatically to PascalCase C# properties
 4. **Standard response envelope** (`ResponseResult<T>`) on all endpoints
 5. **Claims-based authorization** with role constants and BaseController helpers
-6. **Options pattern** for all external configuration
-7. **Module extension methods** for grouping related service registrations
+6. **Static configuration helper** for accessing `appsettings.json` anywhere
+7. **No dependency injection** for application code — static classes and direct instantiation only
 8. **Async/await throughout** — no synchronous database calls
 9. **Soft deletes** via `Deleted` boolean flag where needed
 10. **Audit timestamps** (`CreatedAt`, `UpdatedAt`) on all entities
