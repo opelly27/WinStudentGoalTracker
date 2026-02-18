@@ -1,210 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="WIN Student Goal Tracker — a student support & case management system for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
+  <meta name="description"
+    content="WIN Student Goal Tracker — a student support & case management system for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
   <meta name="theme-color" content="#111827" />
   <title>WIN — Student Support & Case Management</title>
 
   <!-- Open Graph -->
   <meta property="og:title" content="WIN — Student Support & Case Management" />
-  <meta property="og:description" content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs." />
+  <meta property="og:description"
+    content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs." />
   <meta property="og:type" content="website" />
 
   <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+    }
 
-    body{
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
-      margin:0;
-      background:#f5f7fa;
-      color:#111827;
-      line-height:1.6;
+      margin: 0;
+      background: #f5f7fa;
+      color: #111827;
+      line-height: 1.6;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    a{ color: inherit; }
-    a:focus-visible{
-      outline:3px solid #111827;
-      outline-offset:3px;
-      border-radius:8px;
+    a {
+      color: inherit;
     }
 
-    .skip-link{
-      position:absolute;
-      left:-999px;
-      top:0;
-      background:#fff;
-      color:#111827;
-      padding:0.75rem 1rem;
-      border-radius:10px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.12);
-      z-index:1000;
-    }
-    .skip-link:focus{
-      left:1rem;
-      top:1rem;
-      outline:3px solid #111827;
-      outline-offset:2px;
+    a:focus-visible {
+      outline: 3px solid #111827;
+      outline-offset: 3px;
+      border-radius: 8px;
     }
 
-    header{
-      background:#111827;
-      color:#fff;
-      padding:3.25rem 1.5rem 2.5rem;
-      text-align:center;
-    }
-    header h1{
-      margin:0;
-      font-size:clamp(2rem, 4vw, 2.9rem);
-      letter-spacing:-0.02em;
-    }
-    header p{
-      margin:0.75rem auto 0;
-      max-width:70ch;
-      opacity:0.93;
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 0;
+      background: #fff;
+      color: #111827;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
     }
 
-    .hero-actions{
-      margin-top:1.25rem;
-      display:flex;
-      gap:0.75rem;
-      justify-content:center;
-      flex-wrap:wrap;
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      outline: 3px solid #111827;
+      outline-offset: 2px;
     }
 
-    main{
-      max-width:980px;
-      margin:2rem auto;
-      padding:0 1.5rem;
+    header {
+      background: #111827;
+      color: #fff;
+      padding: 3.25rem 1.5rem 2.5rem;
+      text-align: center;
     }
 
-    .grid{
-      display:grid;
-      gap:1.25rem;
-    }
-    @media (min-width: 860px){
-      .grid-2{ grid-template-columns: 1fr 1fr; }
-      .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
+    header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 2.9rem);
+      letter-spacing: -0.02em;
     }
 
-    .card{
-      background:#fff;
-      padding:1.5rem;
-      border-radius:14px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.06);
+    header p {
+      margin: 0.75rem auto 0;
+      max-width: 70ch;
+      opacity: 0.93;
     }
 
-    h2{
-      margin:0 0 0.5rem;
-      font-size:1.3rem;
-    }
-    h3{
-      margin:0 0 0.25rem;
-      font-size:1.05rem;
-    }
-
-    ul{
-      margin:0.75rem 0 0;
-      padding-left:1.2rem;
+    .hero-actions {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .pill-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:0.5rem;
-      margin-top:0.75rem;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:0.4rem;
-      padding:0.4rem 0.65rem;
-      border-radius:999px;
-      border:1px solid #e5e7eb;
-      background:#f9fafb;
-      font-size:0.92rem;
-      color:#111827;
+    main {
+      max-width: 980px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
     }
 
-    .btn{
-      display:inline-block;
-      padding:0.8rem 1.1rem;
-      background:#1d4ed8;
-      color:#fff;
-      text-decoration:none;
-      border-radius:10px;
-      font-weight:800;
-      border:2px solid transparent;
-    }
-    .btn:hover{ background:#1e40af; }
-    .btn:focus-visible{
-      outline:3px solid #fff;
-      outline-offset:3px;
-      border-color:#111827;
+    .grid {
+      display: grid;
+      gap: 1.25rem;
     }
 
-    .btn.secondary{
-      background:transparent;
-      color:#fff;
-      border-color: rgba(255,255,255,0.55);
-      font-weight:800;
-    }
-    .btn.secondary:hover{
-      background: rgba(255,255,255,0.08);
+    @media (min-width: 860px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
     }
 
-    .muted{ color:#374151; }
-
-    .callout{
-      border-left:6px solid #1d4ed8;
-      padding-left:1rem;
-      background:#ffffff;
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
     }
 
-    .kpi{
-      display:flex;
-      flex-direction:column;
-      gap:0.15rem;
-      padding:1rem;
-      border-radius:14px;
-      background:#ffffff;
-      box-shadow:0 4px 10px rgba(0,0,0,0.06);
-      border:1px solid #eef2ff;
-    }
-    .kpi strong{
-      font-size:1.3rem;
-      letter-spacing:-0.01em;
-    }
-    .kpi span{
-      color:#374151;
-      font-size:0.95rem;
+    h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.3rem;
     }
 
-    footer{
-      text-align:center;
-      padding:2rem 1rem;
-      font-size:0.95rem;
-      color:#374151;
+    h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1.05rem;
     }
 
-    code{
+    ul {
+      margin: 0.75rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.92rem;
+      color: #111827;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.1rem;
+      background: #1d4ed8;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 800;
+      border: 2px solid transparent;
+    }
+
+    .btn.disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .btn:hover {
+      background: #1e40af;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+      border-color: #111827;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.55);
+      font-weight: 800;
+    }
+
+    .btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .muted {
+      color: #374151;
+    }
+
+    .callout {
+      border-left: 6px solid #1d4ed8;
+      padding-left: 1rem;
+      background: #ffffff;
+    }
+
+    .kpi {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      padding: 1rem;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      border: 1px solid #eef2ff;
+    }
+
+    .kpi strong {
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+    }
+
+    .kpi span {
+      color: #374151;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.95rem;
+      color: #374151;
+    }
+
+    code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:0.92em;
-      background:#f3f4f6;
-      padding:0.1rem 0.3rem;
-      border-radius:6px;
+      font-size: 0.92em;
+      background: #f3f4f6;
+      padding: 0.1rem 0.3rem;
+      border-radius: 6px;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      *{
-        scroll-behavior:auto !important;
-        transition:none !important;
-        animation:none !important;
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
       }
     }
   </style>
@@ -221,13 +259,8 @@
     </p>
 
     <div class="hero-actions" role="group" aria-label="Primary actions">
-      <a
-        href="https://github.com/opelly27/WinStudentGoalTracker"
-        class="btn"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Open the WIN Student Goal Tracker repository on GitHub (opens in a new tab)"
-      >
+      <a href="https://github.com/opelly27/WinStudentGoalTracker" class="btn" target="_blank" rel="noopener noreferrer"
+        aria-label="Open the WIN Student Goal Tracker repository on GitHub (opens in a new tab)">
         View Repository
       </a>
       <a href="#getting-started" class="btn secondary" aria-label="Jump to getting started section">
@@ -350,13 +383,8 @@
           Want to contribute? Open a PR with a clear description, screenshots (if UI),
           and notes on security/privacy impacts.
         </p>
-        <a
-          href="https://github.com/opelly27/WinStudentGoalTracker"
-          class="btn"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open repository on GitHub (opens in a new tab)"
-        >
+        <a href="https://github.com/opelly27/WinStudentGoalTracker" class="btn" target="_blank"
+          rel="noopener noreferrer" aria-label="Open repository on GitHub (opens in a new tab)">
           Go to GitHub
         </a>
       </section>
@@ -405,9 +433,30 @@
         <li><b>Raul Rosado</b> - Infrastructure & Governance Lead</li>
         <li><b>Vraj Patel</b> - Front-End Development & Integration Lead.</li>
       </ul>
-    <!-- </div> -->
+      <!-- </div> -->
     </section>
 
+    <section class="card" style="margin-top:1.25rem;" aria-labelledby="documentation">
+      <h2 id="documentation">Documentation</h2>
+      <p class="muted">
+        Explore the technical documentation for the WIN Student Goal Tracker, including the database schema and entity
+        relationships.
+      </p>
+      <div class="pill-row">
+        <a href="db.html" class="btn" aria-label="View database documentation">
+          Database Documentation
+        </a>
+        <span class="btn disabled" aria-disabled="true" title="Coming soon">
+          API Documentation
+        </span>
+        <span class="btn disabled" aria-disabled="true" title="Coming soon">
+          UI Documentation
+        </span>
+        <span class="btn disabled" aria-disabled="true" title="Coming soon">
+          User Manual
+        </span>
+      </div>
+    </section>
 
   </main>
 
@@ -415,4 +464,5 @@
     <small>© 2026 WIN Student Goal Tracker — Built for student support, documentation, and accountability.</small>
   </footer>
 </body>
+
 </html>
