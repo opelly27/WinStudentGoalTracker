@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: winstudent-mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3309:3306"
+    volumes:
+      - win_mysql_data:/var/lib/mysql
+
+volumes:
+  win_mysql_data:
