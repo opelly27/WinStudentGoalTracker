@@ -2,112 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C4G Win</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="WIN Student Goal Tracker — a human-centered goal tracking and critical incident logging platform for student support and case management." />
+  <meta name="theme-color" content="#111827" />
+  <title>WIN Student Goal Tracker</title>
+
+  <!-- Basic Open Graph -->
+  <meta property="og:title" content="WIN Student Goal Tracker" />
+  <meta property="og:description" content="A human-centered goal tracking and critical incident logging platform designed for impact." />
+  <meta property="og:type" content="website" />
+
   <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
       margin: 0;
-      padding: 0;
       background: #f5f7fa;
-      color: #1a1a1a;
+      color: #111827;
       line-height: 1.6;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 0;
+      background: #ffffff;
+      color: #111827;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      z-index: 1000;
+    }
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      outline: 3px solid #111827;
+      outline-offset: 2px;
     }
 
     header {
       background: #111827;
-      color: white;
+      color: #ffffff;
       padding: 3rem 1.5rem;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      letter-spacing: -0.02em;
     }
 
     header p {
-      margin-top: 0.5rem;
-      opacity: 0.85;
+      margin: 0.75rem auto 0;
+      max-width: 60ch;
+      opacity: 0.92;
     }
 
-    section {
+    main {
       max-width: 900px;
       margin: 2rem auto;
       padding: 0 1.5rem;
     }
 
     .card {
-      background: white;
+      background: #ffffff;
       padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      margin-bottom: 1.25rem;
     }
 
     h2 {
-      margin-top: 0;
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    ul {
+      margin: 0.75rem 0 0;
+      padding-left: 1.25rem;
     }
 
     .btn {
       display: inline-block;
-      padding: 0.75rem 1.25rem;
-      background: #2563eb;
-      color: white;
+      padding: 0.75rem 1.1rem;
+      background: #1d4ed8;
+      color: #ffffff;
       text-decoration: none;
-      border-radius: 6px;
-      font-weight: 600;
-      margin-top: 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      border: 2px solid transparent;
     }
 
-    .btn:hover {
-      background: #1d4ed8;
+    .btn:hover { background: #1e40af; }
+
+    .btn:focus-visible {
+      outline: 3px solid #111827;
+      outline-offset: 3px;
+      border-color: #ffffff;
     }
 
     footer {
       text-align: center;
       padding: 2rem 1rem;
-      font-size: 0.9rem;
-      opacity: 0.6;
+      font-size: 0.95rem;
+      color: #374151;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
     }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header>
-    <h1>C4G Win</h1>
+  <header role="banner">
+    <h1>WIN Student Goal Tracker</h1>
     <p>A goal tracking and incident logging platform designed for impact.</p>
   </header>
 
-  <section>
-    <div class="card">
-      <h2>About the Project</h2>
+  <main id="main" role="main">
+    <section class="card" aria-labelledby="about">
+      <h2 id="about">About the Project</h2>
       <p>
-        C4G Win is a simple, human-centered goal management system built to help mentors,
-        case managers, and program administrators track progress and document critical incidents.
+        WIN Student Goal Tracker is a simple, human-centered goal management system built to help mentors,
+        case managers, and program administrators track student progress and document critical incidents.
       </p>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Key Features</h2>
+    <section class="card" aria-labelledby="features">
+      <h2 id="features">Key Features</h2>
       <ul>
         <li>Student goal tracking</li>
-        <li>Progress visualization</li>
-        <li>Incident documentation</li>
-        <li>Secure and privacy-focused design</li>
+        <li>Progress visibility</li>
+        <li>Critical incident documentation</li>
+        <li>Security- and privacy-focused design</li>
       </ul>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Repository</h2>
+    <section class="card" aria-labelledby="repo">
+      <h2 id="repo">Repository</h2>
       <p>View the source code and contribute on GitHub.</p>
-      <a href="https://github.com/YOUR-USERNAME/YOUR-REPO" class="btn">View on GitHub</a>
-    </div>
-  </section>
+      <a
+        href="https://github.com/opelly27/WinStudentGoalTracker"
+        class="btn"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View the WIN Student Goal Tracker repository on GitHub (opens in a new tab)"
+      >
+        View on GitHub
+      </a>
+    </section>
+  </main>
 
-  <footer>
-    © 2026 C4G Win Project
+  <footer role="contentinfo">
+    <small>© 2026 WIN Student Goal Tracker</small>
   </footer>
-
 </body>
 </html>
