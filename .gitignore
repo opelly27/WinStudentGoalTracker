@@ -1,2 +1,5 @@
 .DS_Store
 .env
+/prototype/RolesAssignments/.vs
+/prototype/RolesAssignments/bin
+/prototype/RolesAssignments/obj
