@@ -1,6 +1,40 @@
 @api_HostAddress = http://localhost:5123
 
-GET {{api_HostAddress}}/weatherforecast/
+GET {{api_HostAddress}}/api/student
+Accept: application/json
+
+###
+
+GET {{api_HostAddress}}/api/student/1001
+Accept: application/json
+
+###
+
+POST {{api_HostAddress}}/api/student
+Content-Type: application/json
+
+{
+  "idStudent": 1001,
+  "idProgram": 10,
+  "identifier": "WIN-1001",
+  "programYear": 2026,
+  "enrollmentDate": "2026-01-15",
+  "expectedGrad": "2028-06-01"
+}
+
+###
+
+PUT {{api_HostAddress}}/api/student/1001
+Content-Type: application/json
+
+{
+  "identifier": "WIN-1001-A",
+  "programYear": 2027
+}
+
+###
+
+DELETE {{api_HostAddress}}/api/student/1001
 Accept: application/json
 
 ###
