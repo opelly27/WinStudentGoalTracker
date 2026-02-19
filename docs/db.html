@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WinStudentGoalTracker — Database Documentation</title>
+    <title>Database — Database Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
         :root {
             --bg: #f7f6f2;
@@ -29,25 +26,15 @@
             --idx: #4a1d6b;
             --idx-bg: #f3e8fc;
             --null-color: #94928e;
-            --nav-w: 260px;
             --font-body: 'Google Sans', 'Segoe UI', Roboto, sans-serif;
             --font-head: 'Google Sans Display', 'Google Sans', 'Segoe UI', sans-serif;
             --font-mono: 'JetBrains Mono', 'Courier New', monospace;
             --radius: 8px;
-            --shadow: 0 1px 3px rgba(0, 0, 0, .06), 0 4px 12px rgba(0, 0, 0, .04);
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
         }
 
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
 
         body {
             background: var(--bg);
@@ -60,23 +47,20 @@
             min-height: 100vh;
         }
 
-        /* ── SITE HEADER ───────────────────────── */
+        /* ── SITE HEADER ── */
         .site-header {
             background: #111827;
             color: #fff;
             padding: 2rem 1.5rem;
             text-align: center;
-            flex-shrink: 0;
         }
-
         .site-header h1 {
             margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: clamp(1.6rem, 3vw, 2.2rem);
             font-weight: 700;
             letter-spacing: -0.02em;
         }
-
         .site-header p {
             margin: 0.5rem 0 0;
             opacity: 0.85;
@@ -84,110 +68,21 @@
             font-size: 0.95rem;
         }
 
-        .content-wrapper {
-            display: flex;
-            flex: 1;
-        }
-
-        /* ── NAV ───────────────────────────────── */
-        nav {
-            width: var(--nav-w);
-            min-width: var(--nav-w);
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            height: calc(100vh);
-            align-self: stretch;
-            overflow-y: auto;
-            padding: 0 0 32px;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            z-index: 100;
-        }
-
-        .nav-brand {
-            padding: 24px 20px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-brand h1 {
-            font-family: var(--font-head);
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--accent);
-            line-height: 1.3;
-        }
-
-        .nav-brand .db-label {
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            margin-top: 4px;
-        }
-
-        .nav-section {
-            padding: 16px 20px 4px;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            color: var(--text-muted);
-        }
-
-        nav a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 20px;
-            font-family: var(--font-mono);
-            font-size: 12.5px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-left: 2px solid transparent;
-            transition: all .15s;
-        }
-
-        nav a:hover {
-            color: var(--accent);
-            background: var(--accent-light);
-            border-left-color: var(--accent-mid);
-        }
-
-        nav a.active {
-            color: var(--accent);
-            background: var(--accent-light);
-            border-left-color: var(--accent);
-            font-weight: 500;
-        }
-
-        nav a .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-            opacity: .5;
-            flex-shrink: 0;
-        }
-
-        /* ── MAIN ──────────────────────────────── */
+        /* ── MAIN ── */
         main {
             flex: 1;
             max-width: 960px;
+            margin: 0 auto;
             padding: 48px 56px 80px;
-            overflow-x: hidden;
+            width: 100%;
         }
 
-        /* ── PAGE HEADER ──────────────────────── */
+        /* ── PAGE HEADER ── */
         .page-header {
             margin-bottom: 52px;
             padding-bottom: 32px;
             border-bottom: 1px solid var(--border);
         }
-
         .page-header .tag {
             font-family: var(--font-mono);
             font-size: 11px;
@@ -200,7 +95,6 @@
             display: inline-block;
             margin-bottom: 14px;
         }
-
         .page-header h1 {
             font-family: var(--font-head);
             font-size: 38px;
@@ -209,14 +103,12 @@
             line-height: 1.15;
             letter-spacing: -.02em;
         }
-
         .page-header .meta {
             margin-top: 14px;
             display: flex;
             gap: 24px;
             flex-wrap: wrap;
         }
-
         .meta-item {
             display: flex;
             align-items: center;
@@ -225,13 +117,12 @@
             color: var(--text-muted);
             font-family: var(--font-mono);
         }
-
         .meta-item strong {
             color: var(--text);
             font-weight: 500;
         }
 
-        /* ── SECTION TITLES ───────────────────── */
+        /* ── SECTION TITLES ── */
         .section-title {
             font-family: var(--font-head);
             font-size: 26px;
@@ -241,46 +132,93 @@
             padding-top: 8px;
         }
 
-        .section-intro {
-            font-size: 14.5px;
-            color: var(--text-muted);
-            max-width: 640px;
-            margin-bottom: 32px;
-            line-height: 1.75;
-        }
-
-        /* ── TABLES SECTION ───────────────────── */
-        #tables {
-            scroll-margin-top: 32px;
-        }
-
-        .table-group {
+        /* ── SUMMARY CARDS ── */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 14px;
             margin-bottom: 48px;
         }
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 18px 14px;
+            box-shadow: var(--shadow);
+        }
+        .summary-card .num {
+            font-family: var(--font-head);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .summary-card .lbl {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-family: var(--font-mono);
+        }
 
-        .group-label {
+        /* ── TABLE OF CONTENTS ── */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 36px;
+            box-shadow: var(--shadow);
+        }
+        .toc-title {
             font-family: var(--font-mono);
             font-size: 10.5px;
             text-transform: uppercase;
             letter-spacing: .12em;
             color: var(--text-muted);
-            padding: 0 0 10px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
+            margin-bottom: 14px;
+        }
+        .toc-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .toc-link {
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            color: var(--accent);
+            text-decoration: none;
+            background: var(--accent-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: all .15s;
+        }
+        .toc-link:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ── LEGEND ── */
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            padding: 14px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 12.5px;
+        }
+        .legend-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 7px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 11.5px;
         }
 
-        .group-label::before {
-            content: '';
-            display: inline-block;
-            width: 28px;
-            height: 1px;
-            background: var(--border-mid);
-        }
-
-        /* ── TABLE CARD ───────────────────────── */
+        /* ── TABLE CARD ── */
         .table-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -291,11 +229,9 @@
             scroll-margin-top: 32px;
             transition: box-shadow .2s;
         }
-
         .table-card:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .06);
+            box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.06);
         }
-
         .table-header {
             display: flex;
             align-items: flex-start;
@@ -305,11 +241,7 @@
             background: var(--surface-2);
             gap: 12px;
         }
-
-        .table-header-left {
-            flex: 1;
-        }
-
+        .table-header-left { flex: 1; }
         .table-name {
             font-family: var(--font-mono);
             font-size: 16px;
@@ -317,14 +249,12 @@
             color: var(--accent);
             letter-spacing: -.01em;
         }
-
         .table-desc {
             font-size: 13px;
             color: var(--text-muted);
             margin-top: 4px;
             line-height: 1.5;
         }
-
         .col-count {
             font-family: var(--font-mono);
             font-size: 11px;
@@ -336,18 +266,16 @@
             margin-top: 2px;
         }
 
-        /* ── COLUMN TABLE ─────────────────────── */
+        /* ── COLUMN TABLE ── */
         .col-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13.5px;
         }
-
         .col-table thead tr {
             background: var(--bg);
             border-bottom: 1px solid var(--border);
         }
-
         .col-table thead th {
             padding: 9px 14px;
             text-align: left;
@@ -358,25 +286,16 @@
             color: var(--text-muted);
             font-weight: 500;
         }
-
         .col-table tbody tr {
             border-bottom: 1px solid var(--border);
             transition: background .1s;
         }
-
-        .col-table tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        .col-table tbody tr:hover {
-            background: #fafaf8;
-        }
-
+        .col-table tbody tr:last-child { border-bottom: none; }
+        .col-table tbody tr:hover { background: #fafaf8; }
         .col-table td {
             padding: 10px 14px;
             vertical-align: middle;
         }
-
         .col-name {
             font-family: var(--font-mono);
             font-size: 13px;
@@ -384,6 +303,7 @@
             color: var(--text);
         }
 
+        /* ── BADGES ── */
         .badge {
             display: inline-block;
             font-family: var(--font-mono);
@@ -394,26 +314,11 @@
             margin-right: 4px;
             white-space: nowrap;
         }
-
-        .badge-pk {
-            color: var(--pk);
-            background: var(--pk-bg);
-        }
-
-        .badge-fk {
-            color: var(--fk);
-            background: var(--fk-bg);
-        }
-
-        .badge-uq {
-            color: var(--idx);
-            background: var(--idx-bg);
-        }
-
-        .badge-idx {
-            color: #555;
-            background: #f0f0ee;
-        }
+        .badge-pk { color: var(--pk); background: var(--pk-bg); }
+        .badge-fk { color: var(--fk); background: var(--fk-bg); }
+        .badge-uq { color: var(--idx); background: var(--idx-bg); }
+        .badge-idx { color: #555; background: #f0f0ee; }
+        .badge-ai { color: #2d6a4f; background: #d8f3dc; }
 
         .type-chip {
             font-family: var(--font-mono);
@@ -424,20 +329,17 @@
             border-radius: 4px;
             border: 1px solid var(--border);
         }
-
         .null-yes {
             color: var(--null-color);
             font-size: 12px;
             font-family: var(--font-mono);
         }
-
         .null-no {
             color: var(--pk);
             font-size: 12px;
             font-family: var(--font-mono);
             font-weight: 500;
         }
-
         .default-val {
             font-family: var(--font-mono);
             font-size: 12px;
@@ -446,7 +348,6 @@
             padding: 1px 6px;
             border-radius: 3px;
         }
-
         .fk-ref {
             font-family: var(--font-mono);
             font-size: 12px;
@@ -456,17 +357,10 @@
             align-items: center;
             gap: 4px;
         }
+        .fk-ref:hover { text-decoration: underline; }
+        .fk-ref::before { content: '→'; opacity: .6; }
 
-        .fk-ref:hover {
-            text-decoration: underline;
-        }
-
-        .fk-ref::before {
-            content: '→';
-            opacity: .6;
-        }
-
-        /* ── CONSTRAINTS SECTION ─────────────── */
+        /* ── CONSTRAINTS BAR ── */
         .constraints-bar {
             padding: 10px 16px;
             background: var(--bg);
@@ -479,1434 +373,1145 @@
             font-family: var(--font-mono);
             align-items: center;
         }
-
-        .constraint-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .constraint-item .label {
-            color: var(--text-muted);
-        }
-
-        .constraint-item .val {
-            color: var(--text);
-        }
-
-        /* ── LEGEND ───────────────────────────── */
-        .legend {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-            padding: 14px 18px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 12.5px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            font-size: 11.5px;
-        }
-
-        /* ── SUMMARY CARDS ───────────────────── */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 14px;
-            margin-bottom: 48px;
-        }
-
-        .summary-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 18px 18px 14px;
-            box-shadow: var(--shadow);
-        }
-
-        .summary-card .num {
-            font-family: var(--font-head);
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .summary-card .lbl {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 5px;
-            font-family: var(--font-mono);
-        }
-
-        /* ── SCROLLBAR ───────────────────────── */
-        nav::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        nav::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 2px;
-        }
+        .constraint-item { display: flex; align-items: center; gap: 6px; }
+        .constraint-item .label { color: var(--text-muted); }
+        .constraint-item .val { color: var(--text); }
 
         @media (max-width: 760px) {
-            nav {
-                display: none;
-            }
-
-            main {
-                padding: 32px 20px 60px;
-            }
-
-            .site-header {
-                padding: 1.5rem 1rem;
-            }
+            main { padding: 32px 20px 60px; }
+            .site-header { padding: 1.5rem 1rem; }
         }
     </style>
 </head>
-
 <body>
-
-    <!-- ── SITE HEADER ─────────────────────────────── -->
-    <header class="site-header" role="banner">
-        <h1>WIN — Student Support &amp; Case Management</h1>
+    <header class="site-header">
+        <h1>Database</h1>
         <p>Database Schema Documentation</p>
-        <p style="margin-top:0.25rem;font-size:0.85rem;opacity:0.6;">Version 0.1 — February 18, 2026</p>
+        <p style="margin-top:0.25rem;font-size:0.85rem;opacity:0.6;">Generated 2026-02-19</p>
     </header>
 
-    <div class="content-wrapper">
-        <!-- ── SIDEBAR NAV ─────────────────────────────── -->
-        <nav id="sidebar">
-            <div class="nav-brand">
-                <h1>WinStudentGoalTracker</h1>
-                <div class="db-label">Database Schema</div>
+    <main>
+        <div class="page-header">
+            <div class="tag">Schema Reference</div>
+            <h1>Database</h1>
+            <div class="meta">
+                <div class="meta-item"><strong>15</strong>&nbsp;tables</div>
+                <div class="meta-item"><strong>91</strong>&nbsp;columns</div>
+                <div class="meta-item"><strong>22</strong>&nbsp;foreign keys</div>
+                <div class="meta-item">Generated&nbsp;<strong>2026-02-19</strong></div>
             </div>
-
-            <a href="Index.html"
-                style="display:flex;align-items:center;gap:8px;padding:12px 20px;font-family:var(--font-mono);font-size:12.5px;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border);font-weight:600;">
-                ← Home
-            </a>
-
-            <div class="nav-section">Core</div>
-            <a href="#tbl-permission"><span class="dot"></span>permission</a>
-            <a href="#tbl-role"><span class="dot"></span>role</a>
-            <a href="#tbl-role_permission"><span class="dot"></span>role_permission</a>
-            <a href="#tbl-school_district"><span class="dot"></span>school_district</a>
-
-            <div class="nav-section">Users</div>
-            <a href="#tbl-user"><span class="dot"></span>user</a>
-            <a href="#tbl-password_history"><span class="dot"></span>password_history</a>
-            <a href="#tbl-password_reset_token"><span class="dot"></span>password_reset_token</a>
-
-            <div class="nav-section">Programs</div>
-            <a href="#tbl-program"><span class="dot"></span>program</a>
-            <a href="#tbl-user_program"><span class="dot"></span>user_program</a>
-
-            <div class="nav-section">Students</div>
-            <a href="#tbl-student"><span class="dot"></span>student</a>
-            <a href="#tbl-user_student"><span class="dot"></span>user_student</a>
-
-            <div class="nav-section">Goals & Notes</div>
-            <a href="#tbl-goal"><span class="dot"></span>goal</a>
-            <a href="#tbl-health_note"><span class="dot"></span>health_note</a>
-
-            <div class="nav-section">Progress</div>
-            <a href="#tbl-progress_event"><span class="dot"></span>progress_event</a>
-            <a href="#tbl-progress_report"><span class="dot"></span>progress_report</a>
-        </nav>
-
-        <!-- ── MAIN CONTENT ────────────────────────────── -->
-        <main>
-
-            <!-- PAGE HEADER -->
-            <div class="page-header">
-                <div class="tag">Schema Reference</div>
-                <h1>WinStudentGoalTracker</h1>
-                <div class="meta">
-                    <div class="meta-item"><strong>15</strong>&nbsp;tables</div>
-                    <div class="meta-item"><strong>MySQL&nbsp;InnoDB</strong>&nbsp;engine</div>
-                    <div class="meta-item"><strong>utf8mb4_0900_ai_ci</strong>&nbsp;charset</div>
-                    <div class="meta-item">Generated&nbsp;<strong>2026-02-18</strong></div>
+        </div>
+        <div class="summary-grid">
+            <div class="summary-card"><div class="num">15</div><div class="lbl">Tables</div></div>
+            <div class="summary-card"><div class="num">91</div><div class="lbl">Columns</div></div>
+            <div class="summary-card"><div class="num">22</div><div class="lbl">Foreign Keys</div></div>
+            <div class="summary-card"><div class="num">5</div><div class="lbl">Unique Keys</div></div>
+            <div class="summary-card"><div class="num">21</div><div class="lbl">Indexes</div></div>
+        </div>
+        <section id="tables">
+            <h2 class="section-title">Table Definitions</h2>
+            <div class="legend">
+                <div class="legend-item"><span class="badge badge-pk">PK</span> Primary Key</div>
+                <div class="legend-item"><span class="badge badge-fk">FK</span> Foreign Key</div>
+                <div class="legend-item"><span class="badge badge-uq">UQ</span> Unique</div>
+                <div class="legend-item"><span class="badge badge-idx">IDX</span> Indexed</div>
+                <div class="legend-item"><span class="null-no">NN</span> = Not Null</div>
+                <div class="legend-item"><span class="null-yes">NULL</span> = Nullable</div>
+            </div>
+            <div class="toc">
+                <div class="toc-title">Tables</div>
+                <div class="toc-grid">
+                    <a href="#tbl-goal" class="toc-link">goal</a>
+                    <a href="#tbl-health_note" class="toc-link">health_note</a>
+                    <a href="#tbl-password_history" class="toc-link">password_history</a>
+                    <a href="#tbl-password_reset_token" class="toc-link">password_reset_token</a>
+                    <a href="#tbl-permission" class="toc-link">permission</a>
+                    <a href="#tbl-program" class="toc-link">program</a>
+                    <a href="#tbl-progress_event" class="toc-link">progress_event</a>
+                    <a href="#tbl-progress_report" class="toc-link">progress_report</a>
+                    <a href="#tbl-role" class="toc-link">role</a>
+                    <a href="#tbl-role_permission" class="toc-link">role_permission</a>
+                    <a href="#tbl-school_district" class="toc-link">school_district</a>
+                    <a href="#tbl-student" class="toc-link">student</a>
+                    <a href="#tbl-user" class="toc-link">user</a>
+                    <a href="#tbl-user_program" class="toc-link">user_program</a>
+                    <a href="#tbl-user_student" class="toc-link">user_student</a>
                 </div>
             </div>
 
-            <!-- SUMMARY -->
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <div class="num">15</div>
-                    <div class="lbl">Tables</div>
-                </div>
-                <div class="summary-card">
-                    <div class="num">4</div>
-                    <div class="lbl">Core tables</div>
-                </div>
-                <div class="summary-card">
-                    <div class="num">18</div>
-                    <div class="lbl">Foreign keys</div>
-                </div>
-                <div class="summary-card">
-                    <div class="num">5</div>
-                    <div class="lbl">Unique keys</div>
-                </div>
-                <div class="summary-card">
-                    <div class="num">1</div>
-                    <div class="lbl">Self-ref FK</div>
-                </div>
-            </div>
-
-            <!-- ── TABLE DEFINITIONS ── -->
-            <section id="tables">
-                <h2 class="section-title">Table Definitions</h2>
-
-                <!-- LEGEND -->
-                <div class="legend">
-                    <div class="legend-item"><span class="badge badge-pk">PK</span> Primary Key</div>
-                    <div class="legend-item"><span class="badge badge-fk">FK</span> Foreign Key</div>
-                    <div class="legend-item"><span class="badge badge-uq">UQ</span> Unique Key</div>
-                    <div class="legend-item"><span class="badge badge-idx">IDX</span> Index</div>
-                    <div class="legend-item"><span class="null-no">NN</span>&nbsp;NOT NULL</div>
-                    <div class="legend-item"><span class="null-yes">NULL</span>&nbsp;nullable</div>
-                </div>
-
-                <!-- ── GROUP: CORE ── -->
-                <div class="table-group">
-                    <div class="group-label">Core — No dependencies</div>
-
-                    <!-- permission -->
-                    <div class="table-card" id="tbl-permission">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">permission</div>
-                                <div class="table-desc">Defines granular access rights. Each row represents a specific
-                                    action on a resource within a scope.</div>
-                            </div>
-                            <div class="col-count">6 columns</div>
+                <div class="table-card" id="tbl-goal">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">goal</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_permission</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">name</span></td>
-                                    <td><span class="type-chip">varchar(100)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">description</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">resource</span></td>
-                                    <td><span class="type-chip">varchar(100)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">action</span></td>
-                                    <td><span class="type-chip">varchar(50)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">scope</span></td>
-                                    <td><span class="type-chip">varchar(50)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">9 columns</div>
                     </div>
-
-                    <!-- role -->
-                    <div class="table-card" id="tbl-role">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">role</div>
-                                <div class="table-desc">User roles that bundle permissions. Referenced by
-                                    <code>user</code>
-                                    and <code>role_permission</code>.
-                                </div>
-                            </div>
-                            <div class="col-count">4 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_role</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">name</span></td>
-                                    <td><span class="type-chip">varchar(100)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">description</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- role_permission -->
-                    <div class="table-card" id="tbl-role_permission">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">role_permission</div>
-                                <div class="table-desc">Junction table assigning permissions to roles. Many-to-many
-                                    between
-                                    <code>role</code> and <code>permission</code>.
-                                </div>
-                            </div>
-                            <div class="col-count">3 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_role_permission</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_role</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-role" class="fk-ref">role.id_role</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_permission</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-permission" class="fk-ref">permission.id_permission</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- school_district -->
-                    <div class="table-card" id="tbl-school_district">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">school_district</div>
-                                <div class="table-desc">Top-level organizational unit. Programs belong to a district.
-                                </div>
-                            </div>
-                            <div class="col-count">4 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_school_district</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">name</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">contact_email</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_goal</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_goal_parent</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user_created</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">title</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">description</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">category</span></td>
+                                <td><span class="type-chip">varchar(100)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">updated_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- ── GROUP: USERS ── -->
-                <div class="table-group">
-                    <div class="group-label">Users — Authentication &amp; security</div>
-
-                    <!-- user -->
-                    <div class="table-card" id="tbl-user">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">user</div>
-                                <div class="table-desc">Application user accounts with role assignment and login
-                                    security
-                                    tracking (failed attempts, lockout).</div>
-                            </div>
-                            <div class="col-count">9 columns</div>
+                <div class="table-card" id="tbl-health_note">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">health_note</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_user</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_role</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-role" class="fk-ref">role.id_role</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">email</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">name</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">password_hash</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">password_updated_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">failed_login_attempts</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td><span class="default-val">0</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">locked_until</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">5 columns</div>
                     </div>
-
-                    <!-- password_history -->
-                    <div class="table-card" id="tbl-password_history">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">password_history</div>
-                                <div class="table-desc">Stores hashed past passwords per user to enforce password reuse
-                                    policies.</div>
-                            </div>
-                            <div class="col-count">4 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_password_history</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">password_hash</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="constraints-bar">
-                            <div class="constraint-item"><span class="label">IDX</span> <span
-                                    class="val">idx_user_created
-                                    (id_user, created_at)</span></div>
-                        </div>
-                    </div>
-
-                    <!-- password_reset_token -->
-                    <div class="table-card" id="tbl-password_reset_token">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">password_reset_token</div>
-                                <div class="table-desc">Manages password reset flows. Tracks token lifecycle — creation,
-                                    expiry, use, and invalidation — plus the requesting IP.</div>
-                            </div>
-                            <div class="col-count">8 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_password_reset_token</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">token_hash</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-uq">UQ</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">expires_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">used_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">invalidated_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">request_ip</span></td>
-                                    <td><span class="type-chip">varchar(45)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="constraints-bar">
-                            <div class="constraint-item"><span class="label">UQ</span> <span class="val">uq_token_hash
-                                    (token_hash)</span></div>
-                            <div class="constraint-item"><span class="label">IDX</span> <span
-                                    class="val">idx_user_created
-                                    (id_user, created_at)</span></div>
-                        </div>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_health_note</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user_created</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">content</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- ── GROUP: PROGRAMS ── -->
-                <div class="table-group">
-                    <div class="group-label">Programs — District-level offerings</div>
-
-                    <!-- program -->
-                    <div class="table-card" id="tbl-program">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">program</div>
-                                <div class="table-desc">An educational program offered by a school district. Students
-                                    and
-                                    users are associated to programs.</div>
-                            </div>
-                            <div class="col-count">5 columns</div>
+                <div class="table-card" id="tbl-password_history">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">password_history</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_program</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_school_district</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-school_district"
-                                            class="fk-ref">school_district.id_school_district</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">name</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">description</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">4 columns</div>
                     </div>
-
-                    <!-- user_program -->
-                    <div class="table-card" id="tbl-user_program">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">user_program</div>
-                                <div class="table-desc">Junction table assigning users to programs. Supports a
-                                    primary-program designation and active/inactive status.</div>
-                            </div>
-                            <div class="col-count">6 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_user_program</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-uq">UQ</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_program</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-uq">UQ</span>
-                                        <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-program" class="fk-ref">program.id_program</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">is_primary</span></td>
-                                    <td><span class="type-chip">tinyint(1)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td><span class="default-val">0</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">status</span></td>
-                                    <td><span class="type-chip">varchar(20)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td><span class="default-val">'active'</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">joined_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="constraints-bar">
-                            <div class="constraint-item"><span class="label">UQ</span> <span class="val">uq_user_program
-                                    (id_user, id_program)</span></div>
-                            <div class="constraint-item"><span class="label">IDX</span> <span class="val">idx_id_program
-                                    (id_program)</span></div>
-                        </div>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_password_history</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">password_hash</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-idx">IDX</span></td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- ── GROUP: STUDENTS ── -->
-                <div class="table-group">
-                    <div class="group-label">Students — Enrollment &amp; access</div>
-
-                    <!-- student -->
-                    <div class="table-card" id="tbl-student">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">student</div>
-                                <div class="table-desc">Core student record. Linked to a program and identified by an
-                                    opaque
-                                    <code>identifier</code> field (e.g. district ID). Tracks enrollment and expected
-                                    graduation dates.
-                                </div>
-                            </div>
-                            <div class="col-count">7 columns</div>
+                <div class="table-card" id="tbl-password_reset_token">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">password_reset_token</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_program</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-program" class="fk-ref">program.id_program</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">identifier</span></td>
-                                    <td><span class="type-chip">varchar(50)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">program_year</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">enrollment_date</span></td>
-                                    <td><span class="type-chip">date</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">expected_grad</span></td>
-                                    <td><span class="type-chip">date</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">8 columns</div>
                     </div>
-
-                    <!-- user_student -->
-                    <div class="table-card" id="tbl-user_student">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">user_student</div>
-                                <div class="table-desc">Controls which users have access to which students, with
-                                    optional
-                                    access level differentiation and a primary-counselor flag.</div>
-                            </div>
-                            <div class="col-count">5 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_user_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">access_level</span></td>
-                                    <td><span class="type-chip">varchar(50)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">is_primary</span></td>
-                                    <td><span class="type-chip">tinyint(1)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_password_reset_token</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">token_hash</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-uq">UQ</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">expires_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-idx">IDX</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">used_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">invalidated_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">request_ip</span></td>
+                                <td><span class="type-chip">varchar(45)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- ── GROUP: GOALS & NOTES ── -->
-                <div class="table-group">
-                    <div class="group-label">Goals &amp; Notes — Goal tracking</div>
-
-                    <!-- goal -->
-                    <div class="table-card" id="tbl-goal">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">goal</div>
-                                <div class="table-desc">Student goals with hierarchical structure (self-referencing
-                                    <code>id_goal_parent</code> FK). Each goal belongs to a student and was created by a
-                                    user.
-                                </div>
-                            </div>
-                            <div class="col-count">9 columns</div>
+                <div class="table-card" id="tbl-permission">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">permission</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_goal</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_goal_parent</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a> <em
-                                            style="font-size:11px;color:var(--text-muted)">(self)</em></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user_created</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">title</span></td>
-                                    <td><span class="type-chip">varchar(255)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">description</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">category</span></td>
-                                    <td><span class="type-chip">varchar(100)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">updated_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">6 columns</div>
                     </div>
-
-                    <!-- health_note -->
-                    <div class="table-card" id="tbl-health_note">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">health_note</div>
-                                <div class="table-desc">Free-text health or welfare notes attached to a student,
-                                    authored by
-                                    a user. Intended for sensitive, restricted-access information.</div>
-                            </div>
-                            <div class="col-count">5 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_health_note</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user_created</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">content</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_permission</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">name</span></td>
+                                <td><span class="type-chip">varchar(100)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">description</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">resource</span></td>
+                                <td><span class="type-chip">varchar(100)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">action</span></td>
+                                <td><span class="type-chip">varchar(50)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">scope</span></td>
+                                <td><span class="type-chip">varchar(50)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- ── GROUP: PROGRESS ── -->
-                <div class="table-group">
-                    <div class="group-label">Progress — Events &amp; reports</div>
-
-                    <!-- progress_event -->
-                    <div class="table-card" id="tbl-progress_event">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">progress_event</div>
-                                <div class="table-desc">Individual logged events tied to a student and optionally a
-                                    specific
-                                    goal. The <code>is_sensitive</code> flag marks events requiring restricted
-                                    visibility.
-                                </div>
-                            </div>
-                            <div class="col-count">8 columns</div>
+                <div class="table-card" id="tbl-program">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">program</div>
                         </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_progress_event</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_goal</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user_created</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">content</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">is_sensitive</span></td>
-                                    <td><span class="type-chip">tinyint(1)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">created_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">updated_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="col-count">5 columns</div>
                     </div>
-
-                    <!-- progress_report -->
-                    <div class="table-card" id="tbl-progress_report">
-                        <div class="table-header">
-                            <div class="table-header-left">
-                                <div class="table-name">progress_report</div>
-                                <div class="table-desc">Periodic summary reports for a student's goal. Identified by
-                                    <code>period</code> and <code>year</code> for reporting cycles (e.g. quarters,
-                                    semesters).
-                                </div>
-                            </div>
-                            <div class="col-count">8 columns</div>
-                        </div>
-                        <table class="col-table">
-                            <thead>
-                                <tr>
-                                    <th>Column</th>
-                                    <th>Type</th>
-                                    <th>Null</th>
-                                    <th>Default</th>
-                                    <th>Key</th>
-                                    <th>References</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="col-name">id_progress_report</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-no">NN</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-pk">PK</span></td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_student</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_goal</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">id_user_created</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span>
-                                    </td>
-                                    <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">period</span></td>
-                                    <td><span class="type-chip">varchar(10)</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">year</span></td>
-                                    <td><span class="type-chip">int</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">summary</span></td>
-                                    <td><span class="type-chip">text</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="col-name">generated_at</span></td>
-                                    <td><span class="type-chip">timestamp</span></td>
-                                    <td><span class="null-yes">NULL</span></td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                    <td>—</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_program</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_school_district</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-school_district" class="fk-ref">school_district.id_school_district</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">name</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">description</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-            </section>
-        </main>
-    </div><!-- /.content-wrapper -->
+                <div class="table-card" id="tbl-progress_event">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">progress_event</div>
+                        </div>
+                        <div class="col-count">8 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_progress_event</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_goal</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user_created</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">content</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">is_sensitive</span></td>
+                                <td><span class="type-chip">tinyint(1)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">updated_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-    <script>
-        // Active nav link on scroll
-        const sections = document.querySelectorAll('[id]');
-        const navLinks = document.querySelectorAll('nav a');
+                <div class="table-card" id="tbl-progress_report">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">progress_report</div>
+                        </div>
+                        <div class="col-count">8 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_progress_report</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_goal</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-goal" class="fk-ref">goal.id_goal</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user_created</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">period</span></td>
+                                <td><span class="type-chip">varchar(10)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">year</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">summary</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">generated_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
-                    if (active) active.classList.add('active');
-                }
-            });
-        }, { rootMargin: '-20% 0px -70% 0px' });
+                <div class="table-card" id="tbl-role">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">role</div>
+                        </div>
+                        <div class="col-count">4 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_role</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">name</span></td>
+                                <td><span class="type-chip">varchar(100)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">description</span></td>
+                                <td><span class="type-chip">text</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-        sections.forEach(s => observer.observe(s));
-    </script>
+                <div class="table-card" id="tbl-role_permission">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">role_permission</div>
+                        </div>
+                        <div class="col-count">3 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_role_permission</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_role</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-role" class="fk-ref">role.id_role</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_permission</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-permission" class="fk-ref">permission.id_permission</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card" id="tbl-school_district">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">school_district</div>
+                        </div>
+                        <div class="col-count">4 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_school_district</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">name</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">contact_email</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card" id="tbl-student">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">student</div>
+                        </div>
+                        <div class="col-count">7 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_program</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-program" class="fk-ref">program.id_program</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">identifier</span></td>
+                                <td><span class="type-chip">varchar(50)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">program_year</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">enrollment_date</span></td>
+                                <td><span class="type-chip">date</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">expected_grad</span></td>
+                                <td><span class="type-chip">date</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card" id="tbl-user">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">user</div>
+                        </div>
+                        <div class="col-count">9 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_user</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_role</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-role" class="fk-ref">role.id_role</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">email</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">name</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">password_hash</span></td>
+                                <td><span class="type-chip">varchar(255)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">password_updated_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">failed_login_attempts</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">&#39;0&#39;</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">locked_until</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">created_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card" id="tbl-user_program">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">user_program</div>
+                        </div>
+                        <div class="col-count">6 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_user_program</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-uq">UQ</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_program</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-uq">UQ</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-program" class="fk-ref">program.id_program</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">is_primary</span></td>
+                                <td><span class="type-chip">tinyint(1)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">&#39;0&#39;</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">status</span></td>
+                                <td><span class="type-chip">varchar(20)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">&#39;active&#39;</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">joined_at</span></td>
+                                <td><span class="type-chip">timestamp</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card" id="tbl-user_student">
+                    <div class="table-header">
+                        <div class="table-header-left">
+                            <div class="table-name">user_student</div>
+                        </div>
+                        <div class="col-count">5 columns</div>
+                    </div>
+                    <table class="col-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Type</th>
+                                <th>Null</th>
+                                <th>Default</th>
+                                <th>Key</th>
+                                <th>References</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="col-name">id_user_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-no">NN</span></td>
+                                <td>—</td>
+                                <td><span class="badge badge-pk">PK</span></td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_user</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-user" class="fk-ref">user.id_user</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">id_student</span></td>
+                                <td><span class="type-chip">int</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span></td>
+                                <td><a href="#tbl-student" class="fk-ref">student.id_student</a></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">access_level</span></td>
+                                <td><span class="type-chip">varchar(50)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-name">is_primary</span></td>
+                                <td><span class="type-chip">tinyint(1)</span></td>
+                                <td><span class="null-yes">NULL</span></td>
+                                <td><span class="default-val">NULL</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </section>
+    </main>
 </body>
-
 </html>
