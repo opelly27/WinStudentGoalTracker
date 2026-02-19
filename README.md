@@ -1,6 +1,6 @@
 # WIN – Student Support & Case Management System
 
-## Jump to the [Project Home Page](https://opelly27.github.io/WinStudentGoalTracker/Index.html)
+### Jump to the [Project Home Page](https://opelly27.github.io/WinStudentGoalTracker/Index.html)
 
 ## Overview
 
