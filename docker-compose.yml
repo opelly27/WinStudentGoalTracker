@@ -9,6 +9,66 @@ services:
       - "3309:3306"
     volumes:
       - win_mysql_data:/var/lib/mysql
+      - ./db/docker-init:/docker-entrypoint-initdb.d:ro
+      - ./db/Objects:/db-objects:ro
+    healthcheck:
+      # Uses TCP (-h 127.0.0.1) so it only passes after init scripts complete
+      # and MySQL starts listening on the network.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    networks:
+      - backend
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: winstudent-api
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_URLS=http://+:8005
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=${MYSQL_DATABASE};Uid=${MYSQL_USER};Pwd=${MYSQL_PASSWORD};
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=WinStudentGoalTrackerAPI
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - backend
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.winstudent-api.rule=Host(`winapi.opelly.me`)"
+      - "traefik.http.routers.winstudent-api.entrypoints=websecure"
+      - "traefik.http.routers.winstudent-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.winstudent-api.loadbalancer.server.port=8005"
+      - "traefik.http.routers.winstudent-api.middlewares=gzip@file,security-headers@file"
+
+  ui:
+    build:
+      context: ./ui/winstudentgoaltracker
+      dockerfile: Dockerfile
+    container_name: winstudent-ui
+    restart: unless-stopped
+    depends_on:
+      - api
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.winstudent-ui.rule=Host(`win.opelly.me`)"
+      - "traefik.http.routers.winstudent-ui.entrypoints=websecure"
+      - "traefik.http.routers.winstudent-ui.tls.certresolver=letsencrypt"
+      - "traefik.http.services.winstudent-ui.loadbalancer.server.port=8006"
+      - "traefik.http.routers.winstudent-ui.middlewares=gzip@file,security-headers@file"
+
+networks:
+  backend:
+  web:
+    external: true
 
 volumes:
   win_mysql_data:
