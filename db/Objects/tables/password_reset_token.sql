@@ -1,6 +1,6 @@
 CREATE TABLE `password_reset_token` (
-  `id_password_reset_token` int NOT NULL,
-  `id_user` int DEFAULT NULL,
+  `id_password_reset_token` char(36) NOT NULL,
+  `id_user` char(36) DEFAULT NULL,
   `token_hash` varchar(255) DEFAULT NULL,
   `expires_at` timestamp NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

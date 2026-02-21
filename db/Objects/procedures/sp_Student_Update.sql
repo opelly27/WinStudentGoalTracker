@@ -1,9 +1,7 @@
-DROP PROCEDURE IF EXISTS sp_Student_Update;
-DELIMITER $$
-
-CREATE PROCEDURE sp_Student_Update(
-    IN p_id_student INT,
-    IN p_id_program INT,
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_Update`(
+    IN p_id_student CHAR(36),
+    IN p_id_program CHAR(36),
     IN p_identifier VARCHAR(50),
     IN p_program_year INT,
     IN p_enrollment_date DATE,
@@ -18,8 +16,6 @@ BEGIN
         enrollment_date = COALESCE(p_enrollment_date, enrollment_date),
         expected_grad = COALESCE(p_expected_grad, expected_grad)
     WHERE id_student = p_id_student;
-
     SELECT ROW_COUNT() AS rows_affected;
-END$$
-
+END;;
 DELIMITER ;

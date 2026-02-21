@@ -1,7 +1,5 @@
-DROP PROCEDURE IF EXISTS sp_Student_GetAll;
-DELIMITER $$
-
-CREATE PROCEDURE sp_Student_GetAll()
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_GetAll`()
 BEGIN
     SELECT
         id_student,
@@ -13,6 +11,5 @@ BEGIN
         created_at
     FROM student
     ORDER BY id_student;
-END$$
-
+END;;
 DELIMITER ;

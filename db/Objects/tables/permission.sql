@@ -1,5 +1,5 @@
 CREATE TABLE `permission` (
-  `id_permission` int NOT NULL,
+  `id_permission` char(36) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `description` text,
   `resource` varchar(100) DEFAULT NULL,

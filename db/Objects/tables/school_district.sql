@@ -1,5 +1,5 @@
 CREATE TABLE `school_district` (
-  `id_school_district` int NOT NULL,
+  `id_school_district` char(36) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `contact_email` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

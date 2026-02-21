@@ -1,7 +1,7 @@
 CREATE TABLE `user_program` (
-  `id_user_program` int NOT NULL,
-  `id_user` int DEFAULT NULL,
-  `id_program` int DEFAULT NULL,
+  `id_user_program` char(36) NOT NULL,
+  `id_user` char(36) DEFAULT NULL,
+  `id_program` char(36) DEFAULT NULL,
   `is_primary` tinyint(1) DEFAULT '0',
   `status` varchar(20) DEFAULT 'active',
   `joined_at` timestamp NULL DEFAULT NULL,

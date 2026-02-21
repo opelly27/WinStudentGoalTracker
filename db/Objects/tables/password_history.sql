@@ -1,6 +1,6 @@
 CREATE TABLE `password_history` (
-  `id_password_history` int NOT NULL,
-  `id_user` int DEFAULT NULL,
+  `id_password_history` char(36) NOT NULL,
+  `id_user` char(36) DEFAULT NULL,
   `password_hash` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_password_history`),

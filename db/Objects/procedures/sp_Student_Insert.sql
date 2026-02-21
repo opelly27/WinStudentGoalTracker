@@ -1,9 +1,7 @@
-DROP PROCEDURE IF EXISTS sp_Student_Insert;
-DELIMITER $$
-
-CREATE PROCEDURE sp_Student_Insert(
-    IN p_id_student INT,
-    IN p_id_program INT,
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_Insert`(
+    IN p_id_student CHAR(36),
+    IN p_id_program CHAR(36),
     IN p_identifier VARCHAR(50),
     IN p_program_year INT,
     IN p_enrollment_date DATE,
@@ -30,7 +28,6 @@ BEGIN
         p_expected_grad,
         UTC_TIMESTAMP()
     );
-
     SELECT
         id_student,
         id_program,
@@ -42,6 +39,5 @@ BEGIN
     FROM student
     WHERE id_student = p_id_student
     LIMIT 1;
-END$$
-
+END;;
 DELIMITER ;

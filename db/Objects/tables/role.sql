@@ -1,6 +1,7 @@
 CREATE TABLE `role` (
-  `id_role` int NOT NULL,
+  `id_role` char(36) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
+  `internal_name` varchar(100) DEFAULT NULL,
   `description` text,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_role`)
