@@ -75,7 +75,7 @@ public class AuthController : BaseController
         }
 
         // Generate JWT access token
-        var accessToken = _tokenService.GenerateToken(user.IdUser, user.Email!, user.RoleName);
+        var accessToken = _tokenService.GenerateToken(user.IdUser, user.Email!, user.RoleInternalName);
 
         // Generate refresh token secret
         var secretToken = Guid.NewGuid().ToString();
@@ -118,7 +118,8 @@ public class AuthController : BaseController
                 Email = user.Email!,
                 Jwt = accessToken,
                 RefreshToken = fullRefreshToken,
-                Role = user.RoleName
+                Role = user.RoleInternalName,
+                RoleDisplayName = user.RoleDisplayName
             }
         });
     }
@@ -209,7 +210,7 @@ public class AuthController : BaseController
         }
 
         // Generate new JWT
-        var newJwtToken = _tokenService.GenerateToken(tokenUser.IdUser, tokenUser.Email!, tokenUser.RoleName);
+        var newJwtToken = _tokenService.GenerateToken(tokenUser.IdUser, tokenUser.Email!, tokenUser.RoleInternalName);
         var jwtExpiresIn = _tokenService.GetTokenExpiryInSeconds(newJwtToken);
 
         // Generate new refresh token (rotation)

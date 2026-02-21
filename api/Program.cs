@@ -35,6 +35,18 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<TokenService>();
 
+builder.Services.AddHttpClient<TranscriptionService>(client =>
+{
+    client.BaseAddress = new Uri("https://stt.opelly.me");
+    client.Timeout = TimeSpan.FromMinutes(5);
+});
+
+builder.Services.AddHttpClient<OllamaService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Ollama:BaseUrl"] ?? "https://llm.opelly.me");
+    client.Timeout = TimeSpan.FromMinutes(3);
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

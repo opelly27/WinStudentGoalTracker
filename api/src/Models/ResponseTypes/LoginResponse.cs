@@ -7,4 +7,5 @@ public class LoginResponse
     public required string Jwt { get; set; }
     public required string RefreshToken { get; set; }
     public string? Role { get; set; }
+    public string? RoleDisplayName { get; set; }
 }
