@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using WinStudentGoalTracker.Models;
 
 namespace WinStudentGoalTracker.Services;
 
@@ -15,8 +16,14 @@ public class TokenService
         _config = config;
     }
 
-    public string GenerateToken(Guid userId, string email, string? roleName)
+    public string GenerateToken(Guid userId, string email, string role)
     {
+
+        if (UserRoles.TryParse(role) is null)
+        {
+            throw new ArgumentException("Invalid role name");
+        }
+
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
@@ -25,9 +32,9 @@ public class TokenService
             new Claim("user_id", userId.ToString())
         };
 
-        if (!string.IsNullOrWhiteSpace(roleName))
+        if (role is not null)
         {
-            claims.Add(new Claim(ClaimTypes.Role, roleName));
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

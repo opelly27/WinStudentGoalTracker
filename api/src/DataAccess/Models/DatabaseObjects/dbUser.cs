@@ -11,6 +11,6 @@ public class dbUser
     public int FailedLoginAttempts { get; set; }
     public DateTime? LockedUntil { get; set; }
     public DateTime? CreatedAt { get; set; }
-    public string? RoleInternalName { get; set; }
-    public string? RoleDisplayName { get; set; }
+    public required string RoleInternalName { get; set; }
+    public required string RoleDisplayName { get; set; }
 }

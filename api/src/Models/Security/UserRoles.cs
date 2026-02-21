@@ -2,20 +2,15 @@ namespace WinStudentGoalTracker.Models;
 
 public static class UserRoles
 {
-    // Role names from role-based-access-control.md
-    public const string Teacher = "Teacher";
-    public const string Paraeducator = "Paraeducator";
-    public const string ProgramAdmin = "ProgramAdmin";
-    public const string DistrictAdmin = "DistrictAdmin";
-    public const string SuperAdmin = "SuperAdmin";
+    public const string Teacher       = "teacher";
+    public const string Paraeducator  = "paraeducator";
+    public const string ProgramAdmin  = "program_admin";
+    public const string DistrictAdmin = "district_admin";
+    public const string SuperAdmin    = "super_admin";
 
-    public static readonly IReadOnlyList<string> All = new[]
-    {
-        Teacher,
-        Paraeducator,
-        ProgramAdmin,
-        DistrictAdmin,
-        SuperAdmin
-        
-    };
+    public static string? TryParse(string value) =>
+        All.Contains(value) ? value : null;
+
+    public static readonly IReadOnlyList<string> All =
+        [Teacher, Paraeducator, ProgramAdmin, DistrictAdmin, SuperAdmin];
 }
