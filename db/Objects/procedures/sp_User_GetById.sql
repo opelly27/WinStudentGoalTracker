@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `sp_User_GetById`(IN p_id_user INT)
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_User_GetById`(IN p_id_user CHAR(36))
 BEGIN
     SELECT
         u.id_user,
