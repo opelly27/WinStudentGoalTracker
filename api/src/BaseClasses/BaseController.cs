@@ -5,14 +5,14 @@ namespace WinStudentGoalTracker.BaseClasses;
 
 public class BaseController : ControllerBase
 {
-    protected (int userId, ActionResult? error) GetUserIdFromClaims()
+    protected (Guid userId, ActionResult? error) GetUserIdFromClaims()
     {
         var userIdClaim = User.FindFirst("user_id")?.Value
             ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        if (string.IsNullOrWhiteSpace(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
         {
-            return (0, Unauthorized("Missing or invalid user_id claim."));
+            return (Guid.Empty, Unauthorized("Missing or invalid user_id claim."));
         }
 
         return (userId, null);

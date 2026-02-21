@@ -16,12 +16,12 @@ public class StudentRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<dbStudent?> GetByIdAsync(int idStudent)
+    public async Task<dbStudent?> GetByIdAsync(Guid idStudent)
     {
         using var db = Connection;
         return await db.QuerySingleOrDefaultAsync<dbStudent>(
             "sp_Student_GetById",
-            new { p_id_student = idStudent },
+            new { p_id_student = idStudent.ToString() },
             commandType: CommandType.StoredProcedure);
     }
 
@@ -32,8 +32,8 @@ public class StudentRepository
             "sp_Student_Insert",
             new
             {
-                p_id_student = dto.IdStudent,
-                p_id_program = dto.IdProgram,
+                p_id_student = dto.IdStudent.ToString(),
+                p_id_program = dto.IdProgram?.ToString(),
                 p_identifier = dto.Identifier,
                 p_program_year = dto.ProgramYear,
                 p_enrollment_date = dto.EnrollmentDate,
@@ -42,15 +42,15 @@ public class StudentRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<bool> UpdateAsync(int idStudent, UpdateStudentDto dto)
+    public async Task<bool> UpdateAsync(Guid idStudent, UpdateStudentDto dto)
     {
         using var db = Connection;
         var rowsAffected = await db.ExecuteScalarAsync<int>(
             "sp_Student_Update",
             new
             {
-                p_id_student = idStudent,
-                p_id_program = dto.IdProgram,
+                p_id_student = idStudent.ToString(),
+                p_id_program = dto.IdProgram?.ToString(),
                 p_identifier = dto.Identifier,
                 p_program_year = dto.ProgramYear,
                 p_enrollment_date = dto.EnrollmentDate,
@@ -60,12 +60,12 @@ public class StudentRepository
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteAsync(int idStudent)
+    public async Task<bool> DeleteAsync(Guid idStudent)
     {
         using var db = Connection;
         var rowsAffected = await db.ExecuteScalarAsync<int>(
             "sp_Student_Delete",
-            new { p_id_student = idStudent },
+            new { p_id_student = idStudent.ToString() },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;
     }

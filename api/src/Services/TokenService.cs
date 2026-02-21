@@ -15,7 +15,7 @@ public class TokenService
         _config = config;
     }
 
-    public string GenerateToken(int userId, string email, string? roleName)
+    public string GenerateToken(Guid userId, string email, string? roleName)
     {
         var claims = new List<Claim>
         {

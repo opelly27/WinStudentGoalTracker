@@ -17,12 +17,12 @@ public class UserRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<dbUser?> GetByIdAsync(int idUser)
+    public async Task<dbUser?> GetByIdAsync(Guid idUser)
     {
         using var db = Connection;
         return await db.QuerySingleOrDefaultAsync<dbUser>(
             "sp_User_GetById",
-            new { p_id_user = idUser },
+            new { p_id_user = idUser.ToString() },
             commandType: CommandType.StoredProcedure);
     }
 }

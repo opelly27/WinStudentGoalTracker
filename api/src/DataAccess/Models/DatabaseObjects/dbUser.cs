@@ -2,8 +2,8 @@ namespace WinStudentGoalTracker.DataAccess;
 
 public class dbUser
 {
-    public required int IdUser { get; set; }
-    public int? IdRole { get; set; }
+    public required Guid IdUser { get; set; }
+    public Guid? IdRole { get; set; }
     public string? Email { get; set; }
     public string? Name { get; set; }
     public string? PasswordHash { get; set; }

@@ -87,6 +87,7 @@ public class AuthController : BaseController
 
         // Store refresh token in database (30 days expiration)
         var refreshTokenId = await _authRepo.CreateRefreshTokenAsync(
+            Guid.NewGuid(),
             user.IdUser,
             refreshTokenHash,
             refreshTokenSalt,
@@ -151,7 +152,7 @@ public class AuthController : BaseController
         var tokenIdStr = refreshTokenDto.RefreshToken[..dotIndex];
         var secretToken = refreshTokenDto.RefreshToken[(dotIndex + 1)..];
 
-        if (!int.TryParse(tokenIdStr, out int tokenId))
+        if (!Guid.TryParse(tokenIdStr, out Guid tokenId))
         {
             return BadRequest(new ResponseResult<TokenRefreshResponse>
             {
@@ -221,6 +222,7 @@ public class AuthController : BaseController
 
         var newRefreshTokenId = await _authRepo.ReplaceRefreshTokenAsync(
             matchedToken.IdRefreshToken,
+            Guid.NewGuid(),
             tokenUser.IdUser,
             newRefreshTokenHash,
             newRefreshTokenSalt,
@@ -272,7 +274,7 @@ public class AuthController : BaseController
         if (error != null) return error;
 
         var dotIndex = logoutDto.RefreshToken.IndexOf('.');
-        if (dotIndex < 1 || !int.TryParse(logoutDto.RefreshToken[..dotIndex], out int tokenId))
+        if (dotIndex < 1 || !Guid.TryParse(logoutDto.RefreshToken[..dotIndex], out Guid tokenId))
         {
             return BadRequest(new ResponseResult<object>
             {
