@@ -4,6 +4,7 @@ CREATE TABLE `user` (
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `password_hash` varchar(255) DEFAULT NULL,
+  `password_salt` varchar(255) DEFAULT NULL,
   `password_updated_at` timestamp NULL DEFAULT NULL,
   `failed_login_attempts` int DEFAULT '0',
   `locked_until` timestamp NULL DEFAULT NULL,

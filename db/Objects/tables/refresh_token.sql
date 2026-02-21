@@ -1,0 +1,20 @@
+CREATE TABLE `refresh_token` (
+  `id_refresh_token` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `token_hash` varchar(512) NOT NULL,
+  `token_salt` varchar(512) NOT NULL,
+  `expires_at` timestamp NOT NULL,
+  `last_used_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `revoked_at` timestamp NULL DEFAULT NULL,
+  `device_info` varchar(255) DEFAULT NULL,
+  `user_agent` varchar(512) DEFAULT NULL,
+  `replaced_by_token_id` int DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_refresh_token`),
+  KEY `idx_refresh_token_user` (`id_user`),
+  KEY `idx_refresh_token_expires` (`expires_at`),
+  KEY `refresh_token_ibfk_2` (`replaced_by_token_id`),
+  CONSTRAINT `refresh_token_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
+  CONSTRAINT `refresh_token_ibfk_2` FOREIGN KEY (`replaced_by_token_id`) REFERENCES `refresh_token` (`id_refresh_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

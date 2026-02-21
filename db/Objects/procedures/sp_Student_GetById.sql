@@ -1,7 +1,5 @@
-DROP PROCEDURE IF EXISTS sp_Student_GetById;
-DELIMITER $$
-
-CREATE PROCEDURE sp_Student_GetById(IN p_id_student INT)
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_GetById`(IN p_id_student INT)
 BEGIN
     SELECT
         id_student,
@@ -14,6 +12,5 @@ BEGIN
     FROM student
     WHERE id_student = p_id_student
     LIMIT 1;
-END$$
-
+utf8mb4_0900_ai_ci;;
 DELIMITER ;
