@@ -2,10 +2,15 @@ namespace WinStudentGoalTracker.Models;
 
 public class LoginResponse
 {
-    public Guid UserId { get; set; }
-    public required string Email { get; set; }
-    public required string Jwt { get; set; }
-    public required string RefreshToken { get; set; }
-    public string? Role { get; set; }
-    public string? RoleDisplayName { get; set; }
+    public required string SessionToken { get; set; }
+    public required List<UserProgramSummary> Programs { get; set; }
+}
+
+public class UserProgramSummary
+{
+    public Guid ProgramId { get; set; }
+    public required string ProgramName { get; set; }
+    public required string Role { get; set; }
+    public required string RoleDisplayName { get; set; }
+    public bool IsPrimary { get; set; }
 }

@@ -11,6 +11,7 @@ public class AuthRepository
     public async Task<Guid?> CreateRefreshTokenAsync(
         Guid refreshTokenId,
         Guid userId,
+        Guid programId,
         string tokenHash,
         string tokenSalt,
         int expiresInSeconds,
@@ -24,6 +25,7 @@ public class AuthRepository
             {
                 p_id_refresh_token = refreshTokenId.ToString(),
                 p_id_user = userId.ToString(),
+                p_id_program = programId.ToString(),
                 p_token_hash = tokenHash,
                 p_token_salt = tokenSalt,
                 p_expires_in_seconds = expiresInSeconds,
@@ -57,6 +59,7 @@ public class AuthRepository
         Guid oldTokenId,
         Guid newTokenId,
         Guid userId,
+        Guid programId,
         string tokenHash,
         string tokenSalt,
         int expiresInSeconds,
@@ -71,6 +74,7 @@ public class AuthRepository
                 p_old_token_id = oldTokenId.ToString(),
                 p_id_refresh_token = newTokenId.ToString(),
                 p_id_user = userId.ToString(),
+                p_id_program = programId.ToString(),
                 p_token_hash = tokenHash,
                 p_token_salt = tokenSalt,
                 p_expires_in_seconds = expiresInSeconds,

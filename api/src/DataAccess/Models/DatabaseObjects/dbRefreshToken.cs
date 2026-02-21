@@ -4,6 +4,7 @@ public class dbRefreshToken
 {
     public Guid IdRefreshToken { get; set; }
     public Guid IdUser { get; set; }
+    public Guid IdProgram { get; set; }
     public required string TokenHash { get; set; }
     public required string TokenSalt { get; set; }
     public DateTime ExpiresAt { get; set; }

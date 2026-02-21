@@ -39,4 +39,16 @@ public class BaseController : ControllerBase
     {
         return roles.Any(User.IsInRole);
     }
+
+    protected (Guid programId, ActionResult? error) GetProgramIdFromClaims()
+    {
+        var programIdClaim = User.FindFirst("program_id")?.Value;
+
+        if (string.IsNullOrWhiteSpace(programIdClaim) || !Guid.TryParse(programIdClaim, out var programId))
+        {
+            return (Guid.Empty, Unauthorized("Missing or invalid program_id claim."));
+        }
+
+        return (programId, null);
+    }
 }
