@@ -1,5 +1,7 @@
 # WIN – Student Support & Case Management System
 
+### Jump to the [Project Home Page](https://opelly27.github.io/WinStudentGoalTracker/Index.html)
+
 ## Overview
 
 **WIN (Wellness & Intervention Network)** is a secure, role-based case management application designed to support student intervention documentation, service tracking, and compliance workflows.
