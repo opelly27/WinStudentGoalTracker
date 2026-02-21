@@ -1,5 +1,7 @@
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_GetAll`()
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_GetAll`()
 BEGIN
     SELECT
         id_student,
