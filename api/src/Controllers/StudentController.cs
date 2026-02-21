@@ -29,10 +29,10 @@ public class StudentController : BaseController
         });
     }
 
-    [HttpGet("{idStudent:int}")]
+    [HttpGet("{idStudent:guid}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseResult<StudentResponse>>> GetById(int idStudent)
+    public async Task<ActionResult<ResponseResult<StudentResponse>>> GetById(Guid idStudent)
     {
         var student = await _studentRepository.GetByIdAsync(idStudent);
         if (student is null)
@@ -84,10 +84,10 @@ public class StudentController : BaseController
         });
     }
 
-    [HttpPut("{idStudent:int}")]
+    [HttpPut("{idStudent:guid}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseResult<StudentResponse>>> Update(int idStudent, [FromBody] UpdateStudentDto request)
+    public async Task<ActionResult<ResponseResult<StudentResponse>>> Update(Guid idStudent, [FromBody] UpdateStudentDto request)
     {
         var existing = await _studentRepository.GetByIdAsync(idStudent);
         if (existing is null)
@@ -118,10 +118,10 @@ public class StudentController : BaseController
         });
     }
 
-    [HttpDelete("{idStudent:int}")]
+    [HttpDelete("{idStudent:guid}")]
     [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseResult<object>>> Delete(int idStudent)
+    public async Task<ActionResult<ResponseResult<object>>> Delete(Guid idStudent)
     {
         var deleted = await _studentRepository.DeleteAsync(idStudent);
         if (!deleted)

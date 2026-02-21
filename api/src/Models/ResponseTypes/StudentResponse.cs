@@ -4,8 +4,8 @@ namespace WinStudentGoalTracker.Models;
 
 public class StudentResponse
 {
-    public int IdStudent { get; set; }
-    public int? IdProgram { get; set; }
+    public Guid IdStudent { get; set; }
+    public Guid? IdProgram { get; set; }
     public string? Identifier { get; set; }
     public int? ProgramYear { get; set; }
     public DateTime? EnrollmentDate { get; set; }
