@@ -10,12 +10,10 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_RefreshToken_Replace`(
     IN p_user_agent VARCHAR(512)
 )
 BEGIN
-    -- Revoke the old token
     UPDATE refresh_token
     SET revoked_at = UTC_TIMESTAMP()
     WHERE id_refresh_token = p_old_token_id
       AND revoked_at IS NULL;
-    -- Create the new token
     INSERT INTO refresh_token
     (
         id_refresh_token,
@@ -36,7 +34,6 @@ BEGIN
         p_device_info,
         p_user_agent
     );
-    -- Link old token to new one
     UPDATE refresh_token
     SET replaced_by_token_id = p_id_refresh_token
     WHERE id_refresh_token = p_old_token_id;
