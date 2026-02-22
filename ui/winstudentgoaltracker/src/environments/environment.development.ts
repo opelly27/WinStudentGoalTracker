@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:5123',
+  apiBaseUrl: 'https://winapi.opelly.me',
 };
