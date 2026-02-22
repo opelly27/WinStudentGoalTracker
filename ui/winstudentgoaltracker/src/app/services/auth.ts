@@ -15,7 +15,6 @@ const STORAGE_KEYS = {
   JWT: 'auth_jwt',
   REFRESH_TOKEN: 'auth_refresh_token',
   SESSION_TOKEN: 'auth_session_token',
-  USER: 'auth_user',
 } as const;
 
 // Refresh the JWT this many seconds before it actually expires.
@@ -30,16 +29,20 @@ export class Auth {
 
   // --------------- Reactive state (signals) ---------------
 
-  private readonly _user = signal<AuthUser | null>(this.loadUser());
+  // Bump this to force `user` to re-derive from the JWT in localStorage.
+  private readonly _jwtVersion = signal(0);
   private readonly _sessionToken = signal<string | null>(this.loadSessionToken());
   private readonly _programs = signal<UserProgramSummary[]>([]);
   private readonly _isRefreshing = signal(false);
 
-  /** The currently authenticated user (null when logged out). */
-  readonly user = this._user.asReadonly();
+  /** The currently authenticated user, parsed from the JWT. Null when logged out. */
+  readonly user = computed<AuthUser | null>(() => {
+    this._jwtVersion(); // subscribe to token changes
+    return this.parseUserFromJwt();
+  });
 
   /** True when the user has completed both login phases and holds a valid JWT. */
-  readonly isAuthenticated = computed(() => this._user() !== null && !!this.jwt);
+  readonly isAuthenticated = computed(() => this.user() !== null);
 
   /** True while login phase 1 has succeeded and the user is choosing a program. */
   readonly isSelectingProgram = computed(() => this._sessionToken() !== null);
@@ -98,8 +101,7 @@ export class Auth {
 
   /**
    * Complete login by choosing a program. On success the service stores
-   * the JWT + refresh token, starts the proactive refresh timer,
-   * and populates the `user` signal.
+   * the JWT + refresh token and starts the proactive refresh timer.
    */
   selectProgram(programId: string): Observable<ResponseResult<SelectProgramResponse>> {
     return this.api.selectProgram({ programId }).pipe(
@@ -155,14 +157,18 @@ export class Auth {
   /** Log out: revoke the refresh token on the server, then clear local state. */
   logout(): Observable<ResponseResult<object>> {
     const token = this.refreshToken;
-    this.clearState();
 
     if (!token) {
+      this.clearState();
       return of({ success: true, message: 'Logged out.' });
     }
 
     return this.api.logout({ refreshToken: token }).pipe(
-      catchError(() => of({ success: true, message: 'Logged out locally.' })),
+      tap(() => this.clearState()),
+      catchError(() => {
+        this.clearState();
+        return of({ success: true, message: 'Logged out locally.' });
+      }),
     );
   }
 
@@ -179,26 +185,15 @@ export class Auth {
   }
 
   private handleFullAuth(data: SelectProgramResponse): void {
-    const user: AuthUser = {
-      userId: data.userId,
-      email: data.email,
-      programId: data.jwt ? this.extractClaim(data.jwt, 'program_id') ?? '' : '',
-      programName: data.programName,
-      role: data.role,
-      roleDisplayName: data.roleDisplayName,
-    };
-
-    // Persist
     this.storeTokens(data.jwt, data.refreshToken);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
 
     // Clear phase-1 artefacts
     localStorage.removeItem(STORAGE_KEYS.SESSION_TOKEN);
     this._sessionToken.set(null);
     this._programs.set([]);
 
-    // Update reactive state
-    this._user.set(user);
+    // Notify signals that the JWT changed
+    this._jwtVersion.update((v) => v + 1);
 
     // Start proactive refresh
     this.scheduleRefresh(data.jwtExpiresIn);
@@ -207,6 +202,7 @@ export class Auth {
   private storeTokens(jwt: string, refreshToken: string): void {
     localStorage.setItem(STORAGE_KEYS.JWT, jwt);
     localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+    this._jwtVersion.update((v) => v + 1);
   }
 
   private scheduleRefresh(expiresInSeconds: number): void {
@@ -229,35 +225,31 @@ export class Auth {
     localStorage.removeItem(STORAGE_KEYS.JWT);
     localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.SESSION_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER);
-    this._user.set(null);
+    this._jwtVersion.update((v) => v + 1);
     this._sessionToken.set(null);
     this._programs.set([]);
     this._isRefreshing.set(false);
-  }
-
-  private loadUser(): AuthUser | null {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.USER);
-      return raw ? (JSON.parse(raw) as AuthUser) : null;
-    } catch {
-      return null;
-    }
   }
 
   private loadSessionToken(): string | null {
     return localStorage.getItem(STORAGE_KEYS.SESSION_TOKEN);
   }
 
-  /**
-   * Decode a single claim from a JWT without pulling in a library.
-   * Returns null if the claim is missing or the token is malformed.
-   */
-  private extractClaim(jwt: string, claim: string): string | null {
+  /** Parse user info directly from the JWT in localStorage. Returns null if no valid JWT. */
+  private parseUserFromJwt(): AuthUser | null {
+    const token = this.jwt;
+    if (!token) return null;
+
     try {
-      const payload = jwt.split('.')[1];
-      const decoded = JSON.parse(atob(payload));
-      return decoded[claim] ?? null;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return {
+        userId: payload['user_id'] ?? '',
+        email: payload['email'] ?? '',
+        programId: payload['program_id'] ?? '',
+        role: payload[
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+        ] ?? payload['role'] ?? '',
+      };
     } catch {
       return null;
     }

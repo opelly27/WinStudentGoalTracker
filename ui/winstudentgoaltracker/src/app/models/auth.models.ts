@@ -51,12 +51,10 @@ export interface TokenRefreshResponse {
   jwtExpiresIn: number;
 }
 
-// Auth state exposed by the Auth service
+// Auth state derived from JWT claims
 export interface AuthUser {
   userId: string;
   email: string;
   programId: string;
-  programName: string;
   role: string;
-  roleDisplayName: string;
 }
