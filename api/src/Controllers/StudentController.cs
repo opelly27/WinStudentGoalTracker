@@ -19,6 +19,14 @@ public class StudentController : BaseController
     [ProducesResponseType(typeof(ResponseResult<IEnumerable<StudentResponse>>), StatusCodes.Status200OK)]
     public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetAll()
     {
+
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+
+        if (error is not null)
+        {
+            return error;
+        }
+
         var students = await _studentRepository.GetAllAsync();
         var response = students.Select(StudentResponse.FromDatabaseModel);
 
