@@ -28,6 +28,8 @@ services:
       dockerfile: Dockerfile
     container_name: winstudent-api
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       - ASPNETCORE_URLS=http://+:8005
       - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=${MYSQL_DATABASE};Uid=${MYSQL_USER};Pwd=${MYSQL_PASSWORD};
