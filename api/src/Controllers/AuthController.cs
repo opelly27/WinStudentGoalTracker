@@ -15,6 +15,7 @@ public class AuthController : BaseController
     private readonly UserRepository _userRepo = new();
     private readonly AuthRepository _authRepo = new();
     private readonly TokenService _tokenService;
+    private static readonly int _loginExpiration = 60 * 60 * 24 * 31; // Refresh token expires after 1 month.
 
     public AuthController(TokenService tokenService)
     {
@@ -125,8 +126,9 @@ public class AuthController : BaseController
             });
         }
 
-        var (userId, userIdError) = GetUserIdFromClaims();
-        if (userIdError != null) return userIdError;
+        var userIdClaim = User.FindFirst("user_id")?.Value;
+        if (!Guid.TryParse(userIdClaim, out Guid userId))
+            return Unauthorized(new ResponseResult<SelectProgramResponse> { Success = false, Message = "Invalid session token." });
 
         if (!Guid.TryParse(dto.ProgramId, out Guid programId))
         {
@@ -177,7 +179,7 @@ public class AuthController : BaseController
             programUser.IdProgram,
             refreshTokenHash,
             refreshTokenSalt,
-            expiresInSeconds: 2592000, // 30 days
+            expiresInSeconds: _loginExpiration,
             deviceInfo: deviceInfo,
             userAgent: userAgent
         );
@@ -296,13 +298,13 @@ public class AuthController : BaseController
             });
         }
 
-        var newJwtToken = _tokenService.GenerateToken(
+        var newJwt = _tokenService.GenerateToken(
             programUser.IdUser,
             programUser.Email!,
             programUser.RoleInternalName,
             programUser.IdProgram);
 
-        var jwtExpiresIn = _tokenService.GetTokenExpiryInSeconds(newJwtToken);
+        var jwtExpiresIn = _tokenService.GetTokenExpiryInSeconds(newJwt);
 
         var newSecretToken = Guid.NewGuid().ToString();
         var (newRefreshTokenHash, newRefreshTokenSalt) = PasswordHasher.HashPassword(newSecretToken);
@@ -340,7 +342,7 @@ public class AuthController : BaseController
             Message = "Token refreshed successfully.",
             Data = new TokenRefreshResponse
             {
-                Jwt = newJwtToken,
+                Jwt = newJwt,
                 NewRefreshToken = fullNewRefreshToken,
                 JwtExpiresIn = jwtExpiresIn
             }
@@ -362,8 +364,8 @@ public class AuthController : BaseController
             });
         }
 
-        var (userId, error) = GetUserIdFromClaims();
-        if (error != null) return error;
+        var (userId, _, _, _, claimsError) = GetProgramUserFromClaims();
+        if (claimsError != null) return claimsError;
 
         var dotIndex = logoutDto.RefreshToken.IndexOf('.');
         if (dotIndex < 1 || !Guid.TryParse(logoutDto.RefreshToken[..dotIndex], out Guid tokenId))

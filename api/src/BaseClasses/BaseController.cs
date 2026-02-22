@@ -5,50 +5,24 @@ namespace WinStudentGoalTracker.BaseClasses;
 
 public class BaseController : ControllerBase
 {
-    protected (Guid userId, ActionResult? error) GetUserIdFromClaims()
+    protected (Guid userId, string email, Guid programId, string role, ActionResult? error) GetProgramUserFromClaims()
     {
-        var userIdClaim = User.FindFirst("user_id")?.Value
-            ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userIdClaim = User.FindFirst("user_id")?.Value;
+        if (!Guid.TryParse(userIdClaim, out var userId))
+            return (Guid.Empty, string.Empty, Guid.Empty, string.Empty, Unauthorized("Missing or invalid user_id claim."));
 
-        if (string.IsNullOrWhiteSpace(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
-            return (Guid.Empty, Unauthorized("Missing or invalid user_id claim."));
-        }
-
-        return (userId, null);
-    }
-
-    protected (string email, List<string> roles, ActionResult? error) GetUserDetailsFromClaims()
-    {
         var email = User.FindFirst(ClaimTypes.Email)?.Value;
         if (string.IsNullOrWhiteSpace(email))
-        {
-            return (string.Empty, new List<string>(), Unauthorized("Missing email claim."));
-        }
+            return (Guid.Empty, string.Empty, Guid.Empty, string.Empty, Unauthorized("Missing email claim."));
 
-        var roles = User.FindAll(ClaimTypes.Role).Select(claim => claim.Value).ToList();
-        return (email, roles, null);
-    }
-
-    protected bool HasRole(string role)
-    {
-        return User.IsInRole(role);
-    }
-
-    protected bool HasAnyRole(params string[] roles)
-    {
-        return roles.Any(User.IsInRole);
-    }
-
-    protected (Guid programId, ActionResult? error) GetProgramIdFromClaims()
-    {
         var programIdClaim = User.FindFirst("program_id")?.Value;
+        if (!Guid.TryParse(programIdClaim, out var programId))
+            return (Guid.Empty, string.Empty, Guid.Empty, string.Empty, Unauthorized("Missing or invalid program_id claim."));
 
-        if (string.IsNullOrWhiteSpace(programIdClaim) || !Guid.TryParse(programIdClaim, out var programId))
-        {
-            return (Guid.Empty, Unauthorized("Missing or invalid program_id claim."));
-        }
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (string.IsNullOrWhiteSpace(role))
+            return (Guid.Empty, string.Empty, Guid.Empty, string.Empty, Unauthorized("Missing role claim."));
 
-        return (programId, null);
+        return (userId, email, programId, role, null);
     }
 }
