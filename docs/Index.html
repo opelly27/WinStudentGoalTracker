@@ -5,12 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description"
-    content="WIN Student Goal Tracker — a student support & case management system for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
+    content="WIN Student Goal Tracker — a student goal tracker and reporting for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
   <meta name="theme-color" content="#111827" />
-  <title>WIN — Student Support & Case Management</title>
+  <title>WIN — Student Goal Tracker and Reporting</title>
 
   <!-- Open Graph -->
-  <meta property="og:title" content="WIN — Student Support & Case Management" />
+  <meta property="og:title" content="WIN — Student Goal Tracker and Reporting" />
   <meta property="og:description"
     content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs." />
   <meta property="og:type" content="website" />
@@ -256,7 +256,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header role="banner" aria-label="Project header">
-    <h1>WIN — Student Support &amp; Case Management</h1>
+    <h1>WIN — Student Goal Tracker and Reporting</h1>
     <p>
       A privacy-minded system for tracking student goals, documenting services and notes,
       and logging critical incidents with clear audit trails and role-based access.
@@ -324,8 +324,8 @@
       <h2 id="workflow">Typical Workflow</h2>
       <ol style="margin:0.5rem 0 0; padding-left:1.25rem;">
         <li>Select a student and review current goals and status.</li>
-        <li>Add or update goals (category, status, progress notes).</li>
-        <li>Record case notes and services provided for that session.</li>
+        <li>Select a goal.</li>
+        <li>Record progres events for that goal.</li>
         <li>If needed, log a critical incident with severity and follow-up actions.</li>
         <li>Generate reports for program outcomes and internal review.</li>
       </ol>
@@ -336,7 +336,7 @@
         <h2 id="features">Core Features</h2>
         <ul>
           <li><strong>Student profiles:</strong> basic demographics and program context.</li>
-          <li><strong>Goal management:</strong> categories, statuses, and progress visibility.</li>
+          <li><strong>Goal management:</strong> sub-goals, statuses, and progress visibility.</li>
           <li><strong>Case documentation:</strong> notes and service tracking aligned to program needs.</li>
           <li><strong>Critical incidents:</strong> consistent logging, review, and escalation support.</li>
           <li><strong>Search &amp; filters:</strong> quickly locate students and prioritize follow-ups.</li>
@@ -366,8 +366,9 @@
       <section class="card" aria-labelledby="architecture">
         <h2 id="architecture">Project Structure</h2>
         <ul>
-          <li><code>api/</code> — backend services and data access</li>
+          <li><code>api/</code> — middle-tier services and data access</li>
           <li><code>ui/</code> — front-end application</li>
+          <li><code>db/</code> — database structures and code</li>
           <li><code>SECURITY.md</code> — security reporting and practices</li>
           <li><code>README.md</code> — build/run instructions and overview</li>
         </ul>
