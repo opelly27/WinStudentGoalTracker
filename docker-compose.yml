@@ -32,9 +32,6 @@ services:
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:8005
-      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=${MYSQL_DATABASE};Uid=${MYSQL_USER};Pwd=${MYSQL_PASSWORD};
-      - Jwt__Key=${JWT_KEY}
-      - Jwt__Issuer=WinStudentGoalTrackerAPI
     depends_on:
       mysql:
         condition: service_healthy
