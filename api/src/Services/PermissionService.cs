@@ -14,7 +14,7 @@ public class PermissionService
     /// <param name="isMine">Whether the resource belongs to the requesting user.
     /// For Create actions this parameter is ignored.</param>
     /// <returns>True if the action is permitted, false otherwise.</returns>
-    public bool IsAllowed(string role, string entity, string action, bool isMine = true)
+    public static bool IsAllowed(string role, string entity, string action, bool isMine = true)
     {
         var rule = PermissionMatrix.GetRule(role, entity, action);
 

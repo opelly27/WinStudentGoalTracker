@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WinStudentGoalTracker.Models;
 using WinStudentGoalTracker.BaseClasses;
 using WinStudentGoalTracker.DataAccess;
+using WinStudentGoalTracker.Services;
 
 namespace WinStudentGoalTracker.Controllers;
 
@@ -31,6 +32,7 @@ public class StudentController : BaseController
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
             Success = true,
+            Message = "Students retrieved successfully.",
             Data = response
         });
     }
@@ -52,12 +54,13 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetStudentsByProgramAsync(idProgram);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, idProgram, role);
         var response = students.Select(StudentResponse.FromDatabaseModel);
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
             Success = true,
+            Message = "Students retrieved successfully.",
             Data = response
         });
     }
@@ -91,6 +94,7 @@ public class StudentController : BaseController
         return Ok(new ResponseResult<StudentResponse>
         {
             Success = true,
+            Message = "Student retrieved successfully.",
             Data = StudentResponse.FromDatabaseModel(student)
         });
     }
@@ -108,6 +112,15 @@ public class StudentController : BaseController
             return error;
         }
 
+        if (!PermissionService.IsAllowed(role, EntityType.Student, PermissionAction.Create))
+        {
+            return BadRequest(new ResponseResult
+            {
+                Success = false,
+                Message = "Unable to create student."
+            });
+        }
+
         var newStudentId = Guid.NewGuid();
         var created = await _studentRepository.InsertAsync(newStudentData, newStudentId, programId, userId);
         if (created is null)
@@ -123,6 +136,7 @@ public class StudentController : BaseController
         return CreatedAtAction(nameof(GetById), new { idStudent = response.IdStudent }, new ResponseResult<StudentResponse>
         {
             Success = true,
+            Message = "Student created successfully.",
             Data = response
         });
     }
@@ -164,7 +178,7 @@ public class StudentController : BaseController
         return Ok(new ResponseResult<StudentResponse>
         {
             Success = true,
-            Message = updated ? null : "No changes were applied.",
+            Message = updated ? "Changes applied successfully." : "No changes were applied.",
             Data = StudentResponse.FromDatabaseModel(refreshed)
         });
     }
