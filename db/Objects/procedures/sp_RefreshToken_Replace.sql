@@ -3,6 +3,7 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_RefreshToken_Replace`(
     IN p_old_token_id CHAR(36),
     IN p_id_refresh_token CHAR(36),
     IN p_id_user CHAR(36),
+    IN p_id_program CHAR(36),
     IN p_token_hash VARCHAR(512),
     IN p_token_salt VARCHAR(512),
     IN p_expires_in_seconds INT,
@@ -18,6 +19,7 @@ BEGIN
     (
         id_refresh_token,
         id_user,
+        id_program,
         token_hash,
         token_salt,
         expires_at,
@@ -28,6 +30,7 @@ BEGIN
     (
         p_id_refresh_token,
         p_id_user,
+        p_id_program,
         p_token_hash,
         p_token_salt,
         DATE_ADD(UTC_TIMESTAMP(), INTERVAL p_expires_in_seconds SECOND),

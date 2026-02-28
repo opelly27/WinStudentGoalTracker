@@ -4,13 +4,11 @@ $mysql = "C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe"
 $baseOutputDir = Join-Path $PSScriptRoot "Objects"
 $database = "winstudentgoaltracker"
 
-# Get password once
-$securePass = Read-Host "Enter MySQL password" -AsSecureString
-$pass = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
-    [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePass))
+# Password
+$pass = "B0I3P0r0ZJzOJWFB"
 
 # Connection parameters
-$connParams = @("-h", "10.66.66.1", "-P", "3309", "-u", "root", "-p$pass")
+$connParams = @("-h", "10.55.55.1", "-P", "3309", "-u", "root", "-p$pass")
 
 # =============================================================================
 # CONNECTION TEST
@@ -22,7 +20,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Could not connect to MySQL. Details:" -ForegroundColor Red
     Write-Host ($connTest | Out-String).Trim() -ForegroundColor Red
     Write-Host ""
-    Write-Host "Check your password, host (10.66.66.1), port (3309), and that the MySQL server is reachable." -ForegroundColor Yellow
+    Write-Host "Check your password, host (10.55.55.1), port (3309), and that the MySQL server is reachable." -ForegroundColor Yellow
     exit 1
 }
 Write-Host "Connection OK." -ForegroundColor Green

@@ -2,7 +2,6 @@ CREATE TABLE `user_student` (
   `id_user_student` char(36) NOT NULL,
   `id_user` char(36) DEFAULT NULL,
   `id_student` char(36) DEFAULT NULL,
-  `access_level` varchar(50) DEFAULT NULL,
   `is_primary` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_user_student`),
   KEY `user_student_ibfk_1` (`id_user`),
