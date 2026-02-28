@@ -1,0 +1,78 @@
+<!-- Phase 1: Email & Password -->
+@if (!auth.isAuthenticated() && !auth.isSelectingProgram()) {
+  <div class="card">
+    <h2>Login</h2>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <form (ngSubmit)="onLogin()">
+      <label>
+        Email
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </label>
+
+      <label>
+        Password
+        <input type="password" [(ngModel)]="password" name="password" required />
+      </label>
+
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+  </div>
+}
+
+<!-- Phase 2: Program Selection -->
+@if (auth.isSelectingProgram()) {
+  <div class="card">
+    <h2>Select a Program</h2>
+    <p class="subtitle">Choose which program to log into.</p>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <div class="program-list">
+      @for (program of auth.programs(); track program.programId) {
+        <button
+          class="program-button"
+          [disabled]="loading()"
+          (click)="onSelectProgram(program.programId)"
+        >
+          <span class="program-name">{{ program.programName }}</span>
+          <span class="program-meta">{{ program.roleDisplayName }}{{ program.isPrimary ? ' (Primary)' : '' }}</span>
+        </button>
+      }
+    </div>
+
+    <button class="link-button" (click)="onBackToLogin()">Back to login</button>
+  </div>
+}
+
+<!-- Authenticated: User Info -->
+@if (auth.isAuthenticated()) {
+  <div class="card">
+    <h2>Authenticated</h2>
+
+    @if (auth.user(); as user) {
+      <dl>
+        <dt>User ID</dt>
+        <dd class="mono">{{ user.userId }}</dd>
+
+        <dt>Email</dt>
+        <dd>{{ user.email }}</dd>
+
+        <dt>Program ID</dt>
+        <dd class="mono">{{ user.programId }}</dd>
+
+        <dt>Role</dt>
+        <dd>{{ user.role }}</dd>
+      </dl>
+    }
+    <button (click)="onHome()">Continue</button>
+    <button (click)="onLogout()">Logout</button>
+  </div>
+}

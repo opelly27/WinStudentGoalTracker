@@ -13,7 +13,6 @@ BEGIN
     (
         id_student,
         id_program,
-        id_user,
         identifier,
         program_year,
         enrollment_date,
@@ -24,17 +23,17 @@ BEGIN
     (
         p_id_student,
         p_id_program,
-        p_id_user,
         p_identifier,
         p_program_year,
         p_enrollment_date,
         p_expected_grad,
         UTC_TIMESTAMP()
     );
+    INSERT INTO user_student (id_user_student, id_user, id_student, is_primary)
+    VALUES (UUID(), p_id_user, p_id_student, 1);
     SELECT
         id_student,
         id_program,
-        id_user,
         identifier,
         program_year,
         enrollment_date,

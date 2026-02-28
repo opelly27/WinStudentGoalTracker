@@ -1,0 +1,14 @@
+<div class="toolbar">
+    <button class="toolbar-btn" (click)="onAddStudent()">+ Add a Student</button>
+</div>
+
+@if (displayMode() === 'card') {
+<div class="card-grid">
+    @for (student of students(); track student.studentId) {
+    <app-student-card [student]="student" />
+    }
+</div>
+} @else {
+<!-- List mode — to be implemented -->
+<p>List view coming soon.</p>
+}

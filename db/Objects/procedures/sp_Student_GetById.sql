@@ -4,7 +4,6 @@ BEGIN
     SELECT
         id_student,
         id_program,
-        id_user,
         identifier,
         program_year,
         enrollment_date,

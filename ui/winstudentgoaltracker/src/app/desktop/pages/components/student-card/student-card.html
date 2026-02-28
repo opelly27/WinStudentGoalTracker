@@ -1,0 +1,19 @@
+<div class="card">
+    <h2 class="identifier">🎓 {{ student().identifier }}</h2>
+
+    <div class="meta">
+        <span class="badge">Age: {{ student().age }}</span>
+        <span class="last-entry">
+            @if (student().lastEntryDate) {
+            Last entry: {{ student().lastEntryDate | date:'M/d/yy' }}
+            } @else {
+            No entries yet
+            }
+        </span>
+    </div>
+
+    <div class="stats">
+        <span>Goals: {{ student().goalCount }}</span>
+        <span>Events: {{ student().progressEventCount }}</span>
+    </div>
+</div>
