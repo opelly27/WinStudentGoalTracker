@@ -2,6 +2,7 @@ using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using WinStudentGoalTracker.Models;
+using WinStudentGoalTracker.Services;
 
 namespace WinStudentGoalTracker.DataAccess;
 
@@ -11,32 +12,20 @@ public class StudentRepository
 
     public async Task<IEnumerable<dbStudent>> GetMyStudentsAsync(Guid userId, Guid programId, string role)
     {
-        return role switch
-        {
-            UserRoles.Teacher or UserRoles.ProgramAdmin =>
-                await GetStudentsByProgramAsync(programId),
-            UserRoles.Paraeducator =>
-                await GetAssignedStudentsAsync(userId, programId),
-            _ => Enumerable.Empty<dbStudent>()
-        };
-    }
-
-    public async Task<IEnumerable<dbStudent>> GetStudentsByProgramAsync(Guid programId)
-    {
         using var db = Connection;
-        return await db.QueryAsync<dbStudent>(
-            "sp_Student_GetByProgram",
-            new { p_id_program = programId.ToString() },
+        using var multi = await db.QueryMultipleAsync(
+            "sp_Student_GetWithAssignments",
+            new { p_id_program = programId.ToString(), p_id_user = userId.ToString() },
             commandType: CommandType.StoredProcedure);
-    }
 
-    private async Task<IEnumerable<dbStudent>> GetAssignedStudentsAsync(Guid userId, Guid programId)
-    {
-        using var db = Connection;
-        return await db.QueryAsync<dbStudent>(
-            "sp_Student_GetByUserAndProgram",
-            new { p_id_user = userId.ToString(), p_id_program = programId.ToString() },
-            commandType: CommandType.StoredProcedure);
+        var students = await multi.ReadAsync<dbStudent>();
+        var assignments = await multi.ReadAsync<dbUserStudent>();
+
+        var myStudents = students.Where(s =>
+            PermissionService.IsAllowed(role, EntityType.Student, PermissionAction.Read , assignments.Any(a => a.IdStudent == s.IdStudent && a.IdUser == userId))
+        );
+
+        return myStudents;
     }
 
     public async Task<dbStudent?> GetByIdAsync(Guid idStudent)
