@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WinStudentGoalTracker.Models;
 using WinStudentGoalTracker.BaseClasses;
@@ -12,14 +13,11 @@ public class StudentController : BaseController
     private readonly StudentRepository _studentRepository = new();
 
 
-    // TODO refactor this stored procedure
-    // to getmystudents
-    // This required auth system to be set up first
-    [HttpGet]
+    [HttpGet("my")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult<IEnumerable<StudentResponse>>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetAll()
+    public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetMyStudents()
     {
-
         var (userId, email, programId, role, error) = GetProgramUserFromClaims();
 
         if (error is not null)
@@ -27,7 +25,34 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetAllAsync();
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var response = students.Select(StudentResponse.FromDatabaseModel);
+
+        return Ok(new ResponseResult<IEnumerable<StudentResponse>>
+        {
+            Success = true,
+            Data = response
+        });
+    }
+
+
+    // TODO refactor with database changes to ensure 
+    // users who are a district admin are actually associated with a district, and 
+    // then this endpoint should validate that the requested program is part of the district
+    // Once that is in place, then district admins will be allowed to call this function.
+    [HttpGet("program/{idProgram:guid}")]
+    [Authorize(Roles = $"{UserRoles.SuperAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<IEnumerable<StudentResponse>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetStudentsForProgram(Guid idProgram)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetStudentsByProgramAsync(idProgram);
         var response = students.Select(StudentResponse.FromDatabaseModel);
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
@@ -38,12 +63,21 @@ public class StudentController : BaseController
     }
 
     [HttpGet("{idStudent:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ResponseResult<StudentResponse>>> GetById(Guid idStudent)
     {
-        var student = await _studentRepository.GetByIdAsync(idStudent);
-        if (student is null)
+
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.IdStudent).Contains(idStudent))
         {
             return NotFound(new ResponseResult<StudentResponse>
             {
@@ -51,6 +85,8 @@ public class StudentController : BaseController
                 Message = "Student not found."
             });
         }
+        
+        var student = students.Single(s => s.IdStudent == idStudent);
 
         return Ok(new ResponseResult<StudentResponse>
         {
@@ -60,21 +96,20 @@ public class StudentController : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseResult<StudentResponse>>> Create([FromBody] CreateStudentDto request)
+    public async Task<ActionResult<ResponseResult<StudentResponse>>> Create([FromBody] CreateStudentDto newStudentData)
     {
-        var existing = await _studentRepository.GetByIdAsync(request.IdStudent);
-        if (existing is not null)
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+
+        if (error is not null)
         {
-            return BadRequest(new ResponseResult<StudentResponse>
-            {
-                Success = false,
-                Message = $"Student with id {request.IdStudent} already exists."
-            });
+            return error;
         }
 
-        var created = await _studentRepository.InsertAsync(request);
+        var newStudentId = Guid.NewGuid();
+        var created = await _studentRepository.InsertAsync(newStudentData, newStudentId, programId, userId);
         if (created is null)
         {
             return BadRequest(new ResponseResult<StudentResponse>
@@ -93,12 +128,20 @@ public class StudentController : BaseController
     }
 
     [HttpPut("{idStudent:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ResponseResult<StudentResponse>>> Update(Guid idStudent, [FromBody] UpdateStudentDto request)
     {
-        var existing = await _studentRepository.GetByIdAsync(idStudent);
-        if (existing is null)
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.IdStudent).Contains(idStudent))
         {
             return NotFound(new ResponseResult<StudentResponse>
             {
@@ -127,10 +170,28 @@ public class StudentController : BaseController
     }
 
     [HttpDelete("{idStudent:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ResponseResult<object>>> Delete(Guid idStudent)
     {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.IdStudent).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<StudentResponse>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
         var deleted = await _studentRepository.DeleteAsync(idStudent);
         if (!deleted)
         {

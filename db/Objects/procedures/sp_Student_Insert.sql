@@ -28,6 +28,22 @@ BEGIN
         p_expected_grad,
         UTC_TIMESTAMP()
     );
+
+    INSERT INTO user_student
+    (
+        id_user_student,
+        id_user,
+        id_student,
+        is_primary
+    )
+    VALUES
+    (
+        UUID(),
+        p_id_user,
+        p_id_student,
+        1
+    );
+
     SELECT
         id_student,
         id_program,
