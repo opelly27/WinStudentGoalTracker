@@ -27,19 +27,18 @@ public class StudentController : BaseController
         }
 
         var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
-        var response = students.Select(StudentResponse.FromDatabaseModel);
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
             Success = true,
             Message = "Students retrieved successfully.",
-            Data = response
+            Data = students
         });
     }
 
 
-    // TODO refactor with database changes to ensure 
-    // users who are a district admin are actually associated with a district, and 
+    // TODO refactor with database changes to ensure
+    // users who are a district admin are actually associated with a district, and
     // then this endpoint should validate that the requested program is part of the district
     // Once that is in place, then district admins will be allowed to call this function.
     [HttpGet("program/{idProgram:guid}")]
@@ -55,13 +54,12 @@ public class StudentController : BaseController
         }
 
         var students = await _studentRepository.GetMyStudentsAsync(userId, idProgram, role);
-        var response = students.Select(StudentResponse.FromDatabaseModel);
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
             Success = true,
             Message = "Students retrieved successfully.",
-            Data = response
+            Data = students
         });
     }
 
@@ -80,7 +78,7 @@ public class StudentController : BaseController
 
         var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
 
-        if (!students.Select(s => s.IdStudent).Contains(idStudent))
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
             return NotFound(new ResponseResult<StudentResponse>
             {
@@ -88,14 +86,14 @@ public class StudentController : BaseController
                 Message = "Student not found."
             });
         }
-        
-        var student = students.Single(s => s.IdStudent == idStudent);
+
+        var student = students.Single(s => s.StudentId == idStudent);
 
         return Ok(new ResponseResult<StudentResponse>
         {
             Success = true,
             Message = "Student retrieved successfully.",
-            Data = StudentResponse.FromDatabaseModel(student)
+            Data = student
         });
     }
 
@@ -132,12 +130,11 @@ public class StudentController : BaseController
             });
         }
 
-        var response = StudentResponse.FromDatabaseModel(created);
-        return CreatedAtAction(nameof(GetById), new { idStudent = response.IdStudent }, new ResponseResult<StudentResponse>
+        return CreatedAtAction(nameof(GetById), new { idStudent = created.StudentId }, new ResponseResult<StudentResponse>
         {
             Success = true,
             Message = "Student created successfully.",
-            Data = response
+            Data = created
         });
     }
 
@@ -155,7 +152,7 @@ public class StudentController : BaseController
 
         var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
 
-        if (!students.Select(s => s.IdStudent).Contains(idStudent))
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
             return NotFound(new ResponseResult<StudentResponse>
             {
@@ -179,7 +176,7 @@ public class StudentController : BaseController
         {
             Success = true,
             Message = updated ? "Changes applied successfully." : "No changes were applied.",
-            Data = StudentResponse.FromDatabaseModel(refreshed)
+            Data = refreshed
         });
     }
 
@@ -197,7 +194,7 @@ public class StudentController : BaseController
 
         var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
 
-        if (!students.Select(s => s.IdStudent).Contains(idStudent))
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
             return NotFound(new ResponseResult<StudentResponse>
             {

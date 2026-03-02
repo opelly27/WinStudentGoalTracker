@@ -1,8 +1,8 @@
 export interface StudentCardDto {
     studentId: string;
     identifier: string;
-    age: number;
-    lastEntryDate: string | null;
+    expectedGradDate: Date;
+    lastEntryDate: Date | null;
     goalCount: number;
     progressEventCount: number;
 }

@@ -2,7 +2,7 @@
     <h2 class="identifier">🎓 {{ student().identifier }}</h2>
 
     <div class="meta">
-        <span class="badge">Age: {{ student().age }}</span>
+        <span class="badge">Grad Date: {{ student().expectedGradDate }}</span>
         <span class="last-entry">
             @if (student().lastEntryDate) {
             Last entry: {{ student().lastEntryDate | date:'M/d/yy' }}

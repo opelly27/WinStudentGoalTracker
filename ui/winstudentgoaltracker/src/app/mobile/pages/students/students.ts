@@ -36,7 +36,7 @@ export class Students {
   // Loads the list of students assigned to the current user.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getDummyStudentsForUser().then(data => {
+    this.studentService.getStudentsForUser().then(data => {
 
       if (!data.success)
       {

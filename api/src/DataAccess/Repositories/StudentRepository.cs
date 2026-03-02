@@ -10,7 +10,7 @@ public class StudentRepository
 {
     private IDbConnection Connection => new MySqlConnection(DatabaseManager.ConnectionString);
 
-    public async Task<IEnumerable<dbStudent>> GetMyStudentsAsync(Guid userId, Guid programId, string role)
+    public async Task<IEnumerable<StudentResponse>> GetMyStudentsAsync(Guid userId, Guid programId, string role)
     {
         using var db = Connection;
         using var multi = await db.QueryMultipleAsync(
@@ -18,29 +18,29 @@ public class StudentRepository
             new { p_id_program = programId.ToString(), p_id_user = userId.ToString() },
             commandType: CommandType.StoredProcedure);
 
-        var students = await multi.ReadAsync<dbStudent>();
+        var students = await multi.ReadAsync<StudentResponse>();
         var assignments = await multi.ReadAsync<dbUserStudent>();
 
         var myStudents = students.Where(s =>
-            PermissionService.IsAllowed(role, EntityType.Student, PermissionAction.Read , assignments.Any(a => a.IdStudent == s.IdStudent && a.IdUser == userId))
+            PermissionService.IsAllowed(role, EntityType.Student, PermissionAction.Read, assignments.Any(a => a.IdStudent == s.StudentId && a.IdUser == userId))
         );
 
         return myStudents;
     }
 
-    public async Task<dbStudent?> GetByIdAsync(Guid idStudent)
+    public async Task<StudentResponse?> GetByIdAsync(Guid idStudent)
     {
         using var db = Connection;
-        return await db.QuerySingleOrDefaultAsync<dbStudent>(
+        return await db.QuerySingleOrDefaultAsync<StudentResponse>(
             "sp_Student_GetById",
             new { p_id_student = idStudent.ToString() },
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<dbStudent?> InsertAsync(CreateStudentDto dto, Guid newStudentGuid, Guid programId, Guid userId)
+    public async Task<StudentResponse?> InsertAsync(CreateStudentDto dto, Guid newStudentGuid, Guid programId, Guid userId)
     {
         using var db = Connection;
-        return await db.QuerySingleOrDefaultAsync<dbStudent>(
+        await db.ExecuteAsync(
             "sp_Student_Insert",
             new
             {
@@ -53,6 +53,8 @@ public class StudentRepository
                 p_expected_grad = dto.ExpectedGrad
             },
             commandType: CommandType.StoredProcedure);
+
+        return await GetByIdAsync(newStudentGuid);
     }
 
     public async Task<bool> UpdateAsync(Guid idStudent, UpdateStudentDto dto)
