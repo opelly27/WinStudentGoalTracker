@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { StudentCardDto } from '../../../../shared/models/dto/student-card.dto';
+import { StudentCardDto } from '../../../../shared/classes/student-card.dto';
 
 @Component({
   selector: 'app-student-card',

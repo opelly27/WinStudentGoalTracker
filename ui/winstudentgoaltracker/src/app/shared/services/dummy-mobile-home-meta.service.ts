@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { ApiResult } from '../classes/api-result';
+import { MobileHomeMeta } from '../classes/mobile-home-meta';
 
 // *****************************************************************
 // TODO: This dummy service should be replaced by MobileHomeMeta,
 // which will fetch real data from the API.
 // *****************************************************************
-
-export interface MobileHomeMeta {
-    programName: string;   // program.name — varchar(255)
-    userName: string;      // user.name — varchar(255)
-}
 
 @Injectable({
     providedIn: 'root',

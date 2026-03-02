@@ -8,7 +8,7 @@ import {
   SelectProgramResponse,
   TokenRefreshResponse,
   UserProgramSummary,
-} from '../models/auth.models';
+} from '../classes/auth.models';
 import { Api } from './api';
 
 const STORAGE_KEYS = {

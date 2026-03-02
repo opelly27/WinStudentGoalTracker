@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { StudentCardDto } from '../../../shared/models/dto/student-card.dto';
+import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 
 @Component({
   selector: 'app-student-card',

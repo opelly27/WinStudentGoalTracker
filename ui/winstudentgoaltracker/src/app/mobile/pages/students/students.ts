@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { StudentCard } from '../../components/student-card/student-card';
-import { StudentService } from '../../../shared/services/student.service';
-import { StudentCardDto } from '../../../shared/models/dto/student-card.dto';
+import { StudentService } from '../../../shared/services/dummy-student.service';
+import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 
 @Component({
   selector: 'app-students',
@@ -22,6 +22,8 @@ export class Students {
   private readonly studentService = inject(StudentService);
   protected readonly students = signal<StudentCardDto[]>([]);
 
+  public errorMessage = signal<String | null>(null);
+
   // ************************** Properties ***************************
 
   // ************************ Public Methods *************************
@@ -34,8 +36,16 @@ export class Students {
   // Loads the list of students assigned to the current user.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getDummyStudentsForUser().subscribe(data => {
-      this.students.set(data);
+    this.studentService.getDummyStudentsForUser().then(data => {
+
+      if (!data.success)
+      {
+        this.errorMessage.set(data.message);
+      }
+      else
+      {
+        this.students.set(data.payload || []);
+      }
     });
   }
 }

@@ -10,7 +10,7 @@ import {
   SelectProgramRequest,
   SelectProgramResponse,
   TokenRefreshResponse,
-} from '../models/auth.models';
+} from '../classes/auth.models';
 
 @Injectable({
   providedIn: 'root',

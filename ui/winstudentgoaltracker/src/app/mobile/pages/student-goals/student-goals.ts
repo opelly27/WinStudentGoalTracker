@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DummyStudentGoalService, StudentGoalSummary } from '../../../shared/services/dummy-student-goal.service';
+import { DummyStudentGoalService } from '../../../shared/services/dummy-student-goal.service';
+import { StudentGoalSummary } from '../../../shared/classes/student-goal';
 
 @Component({
   selector: 'app-student-goals',

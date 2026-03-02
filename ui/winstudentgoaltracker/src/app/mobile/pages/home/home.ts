@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DummyMobileHomeMeta, MobileHomeMeta } from '../../../shared/services/dummy-mobile-home-meta.service';
+import { DummyMobileHomeMeta } from '../../../shared/services/dummy-mobile-home-meta.service';
+import { MobileHomeMeta } from '../../../shared/classes/mobile-home-meta';
 import { Auth } from '../../../shared/services/auth';
 
 @Component({
