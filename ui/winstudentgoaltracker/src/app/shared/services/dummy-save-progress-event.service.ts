@@ -24,8 +24,8 @@ export class DummySaveProgressEvent {
     // TODO: DUMMY — Always returns success. Replace with
     // SaveProgressEvent calling POST /api/progress-events
     // *****************************************************************
-    save(studentId: string, goalId: string, content: string): Observable<ApiResult> {
-        return of(ApiResult.empty());
+    async save(studentId: string, goalId: string, content: string): Promise<ApiResult> {
+        return ApiResult.empty();
     }
 
     // ************************ Event Handlers *************************

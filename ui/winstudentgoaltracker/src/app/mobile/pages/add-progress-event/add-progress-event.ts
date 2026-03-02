@@ -61,24 +61,22 @@ export class AddProgressEvent {
   // Saves the progress event. On success, returns to the goal list.
   // On failure, displays the error message from the API.
   // *****************************************************************
-  onSave() {
+  async onSave() {
     this.error.set(null);
     this.saving.set(true);
 
-    this.saveService.save(this.studentId, this.goalId, this.notes().trim()).subscribe({
-      next: (result) => {
-        this.saving.set(false);
-        if (result.success) {
-          this.router.navigate(['students', this.studentId, 'goals']);
-        } else {
-          this.error.set(result.message);
-        }
-      },
-      error: (err: HttpErrorResponse) => {
-        this.saving.set(false);
-        this.error.set(describeHttpError(err));
-      },
-    });
+    try {
+      const result = await this.saveService.save(this.studentId, this.goalId, this.notes().trim());
+      this.saving.set(false);
+      if (result.success) {
+        this.router.navigate(['students', this.studentId, 'goals']);
+      } else {
+        this.error.set(result.message);
+      }
+    } catch (err) {
+      this.saving.set(false);
+      this.error.set(describeHttpError(err as HttpErrorResponse));
+    }
   }
 
   // ********************** Support Procedures ***********************

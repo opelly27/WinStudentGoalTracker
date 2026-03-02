@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { ApiResult } from '../classes/api-result';
 
 // *****************************************************************
 // TODO: This dummy service should be replaced by StudentGoalService,
@@ -84,8 +84,15 @@ export class DummyStudentGoalService {
     // Returns the student's identifier and their list of goals,
     // given a student ID.
     // *****************************************************************
-    getGoalsForStudent(studentId: string): Observable<StudentGoalSummary | null> {
-        return of(this.data[studentId] ?? null);
+    async getGoalsForStudent(studentId: string): Promise<ApiResult<StudentGoalSummary | null>> {
+        var goals = this.data[studentId] ?? null;
+        if (goals === null)
+        {
+            return ApiResult.fail('Student not found');
+        }
+
+        return ApiResult.ok(goals);
+
     }
 
     // ************************ Event Handlers *************************

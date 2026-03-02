@@ -25,6 +25,9 @@ export class StudentGoals {
   private readonly studentId = this.route.snapshot.paramMap.get('studentId') ?? '';
   protected readonly data = signal<StudentGoalSummary | null>(null);
 
+  // TODO show this in the UI
+  public errorMessage = signal<String | null>(null);
+
   // ************************** Properties ***************************
 
   // ************************ Public Methods *************************
@@ -56,8 +59,18 @@ export class StudentGoals {
   private loadGoals() {
     if (!this.studentId) return;
 
-    this.goalService.getGoalsForStudent(this.studentId).subscribe(result => {
-      this.data.set(result);
+    this.goalService.getGoalsForStudent(this.studentId).then(result => {
+
+      if (!result.success)
+      {
+        this.errorMessage.set(result.message)
+      }
+
+      else
+      {
+        this.data.set(result.payload);
+      }
+      
     });
   }
 }

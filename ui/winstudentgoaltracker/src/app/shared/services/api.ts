@@ -19,6 +19,8 @@ export class Api {
   private readonly http = inject(HttpClient);
   private readonly base = environment.apiBaseUrl;
 
+  // ************************** Auth Endpoints **************************
+
   // Phase 1 — verify credentials, receive session token + program list
   login(request: LoginRequest): Observable<ResponseResult<LoginResponse>> {
     return this.http.post<ResponseResult<LoginResponse>>(
@@ -50,4 +52,7 @@ export class Api {
       request,
     );
   }
+
+  
+
 }

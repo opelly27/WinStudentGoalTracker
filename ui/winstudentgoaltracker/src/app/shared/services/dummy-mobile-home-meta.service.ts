@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { ApiResult } from '../classes/api-result';
 
 // *****************************************************************
 // TODO: This dummy service should be replaced by MobileHomeMeta,
@@ -29,11 +30,13 @@ export class DummyMobileHomeMeta {
     // Replace with MobileHomeMeta service that calls
     // GET /api/mobile/home-meta (or similar).
     // *****************************************************************
-    getMeta(): Observable<MobileHomeMeta> {
-        return of({
+    async getMeta(): Promise<ApiResult<MobileHomeMeta | null>> {
+        var payload = {
             programName: 'WIN Program',
             userName: 'Polly Balsillie',
-        });
+        }
+
+        return ApiResult.ok(payload);
     }
 
     // ************************ Event Handlers *************************

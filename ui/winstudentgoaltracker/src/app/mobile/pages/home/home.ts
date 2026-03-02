@@ -24,6 +24,10 @@ export class Home {
 
   protected readonly meta = signal<MobileHomeMeta | null>(null);
 
+
+  // TODO show this in the UI
+  public errorMessage = signal<String | null>(null);
+
   // ************************** Properties ***************************
 
   // ************************ Public Methods *************************
@@ -41,8 +45,16 @@ export class Home {
   // ********************** Support Procedures ***********************
 
   private loadMeta() {
-    this.metaService.getMeta().subscribe(data => {
-      this.meta.set(data);
+    this.metaService.getMeta().then(data => {
+
+      if (!data.success)
+      {
+        this.errorMessage.set(data.message);
+      }
+      else
+      {
+        this.meta.set(data.payload);
+      }
     });
   }
 }
