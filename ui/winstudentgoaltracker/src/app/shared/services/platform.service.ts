@@ -7,67 +7,104 @@ export type FormFactor = 'mobile' | 'desktop';
     providedIn: 'root',
 })
 export class PlatformService {
+
+    // ************************** Constructor **************************
+
     private readonly router = inject(Router);
 
-    // ──── Raw Hardware Signals ────
+    // ************************** Declarations *************************
 
+    // *****************************************************************
+    // Checks if the device uses a touch screen (like a phone or tablet)
+    // rather than a mouse or trackpad.
+    // *****************************************************************
     private readonly isCoarsePointer =
         typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
+    // *****************************************************************
+    // Captures the screen width and height so we can figure out what
+    // kind of device the user is on. Defaults to a large desktop size
+    // if running on the server.
+    // *****************************************************************
     private readonly screenWidth =
         typeof window !== 'undefined' ? window.innerWidth : 1920;
 
     private readonly screenHeight =
         typeof window !== 'undefined' ? window.innerHeight : 1080;
 
+    // *****************************************************************
+    // The shortest and longest edges of the screen, regardless of
+    // whether the device is held in portrait or landscape.
+    // *****************************************************************
     private readonly minDimension = Math.min(this.screenWidth, this.screenHeight);
     private readonly maxDimension = Math.max(this.screenWidth, this.screenHeight);
 
-    // ──── Override Layer ────
-
-    /** When non-null, overrides auto-detection. */
+    // *****************************************************************
+    // Lets the user (or the app) manually force mobile or desktop mode
+    // instead of relying on automatic detection. When set to null, the
+    // app just figures it out on its own.
+    // *****************************************************************
     private readonly formFactorOverride = signal<FormFactor | null>(null);
 
-    // ──── Public API ────
+    // ************************** Properties ***************************
 
-    /** The resolved form factor — auto-detected or overridden. */
+    // *****************************************************************
+    // The final answer: are we showing the "mobile" or "desktop"
+    // experience? Uses the manual override if one was set, otherwise
+    // auto-detects based on the device hardware.
+    // *****************************************************************
     readonly formFactor = computed<FormFactor>(() =>
         this.formFactorOverride() ?? this.resolveFormFactor(),
     );
 
-    /** True when the user has manually toggled away from auto-detection. */
+    // *****************************************************************
+    // True when the current mode was manually chosen by the user,
+    // false when it was detected automatically.
+    // *****************************************************************
     readonly isOverridden = computed(() => this.formFactorOverride() !== null);
 
-    /**
-     * Switch to a specific form factor at runtime.
-     * Forces a route re-evaluation so the user immediately sees the other experience.
-     */
+    // ************************ Public Methods *************************
+
+    // *****************************************************************
+    // Switches between mobile and desktop mode on the fly. After
+    // switching, the page reloads so the correct layout appears
+    // immediately.
+    // *****************************************************************
     switchTo(target: FormFactor): void {
         this.formFactorOverride.set(target);
         this.router.navigateByUrl(this.router.url);
     }
 
-    /** Clear the override and return to auto-detected form factor. */
+    // *****************************************************************
+    // Clears any manual override and goes back to letting the device
+    // decide which mode to show.
+    // *****************************************************************
     resetToAuto(): void {
         this.formFactorOverride.set(null);
         this.router.navigateByUrl(this.router.url);
     }
 
-    // ──── Device Classification Policy ────
+    // ************************ Event Handlers *************************
 
+    // ********************** Support Procedures ***********************
+
+    // *****************************************************************
+    // The rules for deciding whether a device gets the mobile or
+    // desktop experience:
+    //   - Mouse/trackpad users always get desktop
+    //   - Large tablets (like iPad Pro) get desktop
+    //   - Medium tablets held sideways get desktop
+    //   - Everything else (phones, small tablets) gets mobile
+    // *****************************************************************
     private resolveFormFactor(): FormFactor {
-        // Non-touch devices are always desktop
         if (!this.isCoarsePointer) return 'desktop';
 
-        // Large tablets (iPad Pro 12.9" portrait = 1024px) → desktop
         if (this.minDimension >= 1024) return 'desktop';
 
-        // Medium tablets in landscape with sufficient width → desktop
         if (this.maxDimension >= 1180 && this.screenWidth > this.screenHeight) {
             return 'desktop';
         }
 
-        // Phones and small/portrait tablets → mobile
         return 'mobile';
     }
 }

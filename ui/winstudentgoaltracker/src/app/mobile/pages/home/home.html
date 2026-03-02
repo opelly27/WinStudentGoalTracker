@@ -1,1 +1,17 @@
-<p>Mobile home works!</p>
+<div class="page">
+    <!-- Header: Program Name -->
+    <header class="header">
+        <h1 class="program-name">{{ meta()?.programName }}</h1>
+    </header>
+
+    <!-- Content: Child routes render here -->
+    <main class="content">
+        <router-outlet />
+    </main>
+
+    <!-- Sticky Footer: User Name + Logout -->
+    <footer class="footer">
+        <span class="user-name">{{ meta()?.userName }}</span>
+        <button class="logout-btn" (click)="onLogout()">Log Out</button>
+    </footer>
+</div>

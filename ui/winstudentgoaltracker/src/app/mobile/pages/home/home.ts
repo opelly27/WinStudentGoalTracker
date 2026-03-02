@@ -1,11 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { DummyMobileHomeMeta, MobileHomeMeta } from '../../../shared/services/dummy-mobile-home-meta.service';
+import { Auth } from '../../../shared/services/auth';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
 
+  // ************************** Constructor **************************
+
+  constructor() {
+    this.loadMeta();
+  }
+
+  // ************************** Declarations *************************
+
+  private readonly metaService = inject(DummyMobileHomeMeta);
+  private readonly auth = inject(Auth);
+
+  protected readonly meta = signal<MobileHomeMeta | null>(null);
+
+  // ************************** Properties ***************************
+
+  // ************************ Public Methods *************************
+
+  // ************************ Event Handlers *************************
+
+  // *****************************************************************
+  // Logs the user out and sends them back to the login screen.
+  // *****************************************************************
+  onLogout() {
+    this.auth.logout().subscribe();
+    this.auth.forceLogout();
+  }
+
+  // ********************** Support Procedures ***********************
+
+  private loadMeta() {
+    this.metaService.getMeta().subscribe(data => {
+      this.meta.set(data);
+    });
+  }
 }

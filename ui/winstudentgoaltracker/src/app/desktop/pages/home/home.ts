@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Auth } from '../../../shared/services/auth';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ export class Home {
 
   // ************************** Declarations *************************
 
+  private readonly auth = inject(Auth);
   protected readonly sidebarExpanded = signal(false);
 
   // ************************** Properties ***************************
@@ -23,6 +25,14 @@ export class Home {
 
   onToggleSidebar() {
     this.sidebarExpanded.update(v => !v);
+  }
+
+  // *****************************************************************
+  // Logs the user out and sends them back to the login screen.
+  // *****************************************************************
+  onLogout() {
+    this.auth.logout().subscribe();
+    this.auth.forceLogout();
   }
 
   // ********************** Support Procedures ***********************

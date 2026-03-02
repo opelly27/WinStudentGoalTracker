@@ -1,0 +1,132 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.event-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.back-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    color: #333;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    flex-shrink: 0;
+}
+
+.back-btn:active {
+    background: #f5f5f5;
+}
+
+.student-name {
+    margin-left: auto;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.goal-title {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Form card */
+.form-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.notes-input {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.notes-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+}
+
+.voice-btn {
+    display: block;
+    width: 100%;
+    padding: 0.625rem;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+}
+
+.voice-btn:active {
+    background: #eee;
+}
+
+/* Save button */
+.save-btn {
+    display: block;
+    width: 100%;
+    padding: 0.875rem;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.save-btn:active {
+    background: #444;
+}
+
+.save-btn:disabled {
+    background: #ccc;
+    cursor: default;
+}
+
+.error {
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    background: #fef2f2;
+    color: #dc2626;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}

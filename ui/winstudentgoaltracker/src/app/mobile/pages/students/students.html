@@ -1,0 +1,5 @@
+<div class="card-grid">
+    @for (student of students(); track student.studentId) {
+    <app-student-card [student]="student" />
+    }
+</div>

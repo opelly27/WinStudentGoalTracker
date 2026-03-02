@@ -1,0 +1,21 @@
+<div class="goals-page">
+    <!-- Header with back button and student name -->
+    <div class="page-header">
+        <button class="back-btn" (click)="onBack()">← Back</button>
+        <h1 class="student-name">{{ data()?.studentIdentifier }}</h1>
+    </div>
+
+    <!-- Goal cards -->
+    <h2 class="section-heading">Goals</h2>
+    <div class="goal-cards">
+        @for (goal of data()?.goals; track goal.goalId) {
+        <div class="goal-card" (click)="onGoalClick(goal.goalId, goal.title)">
+            <span class="goal-title">{{ goal.title }}</span>
+            <span class="event-count">{{ goal.progressEventCount }}</span>
+        </div>
+        }
+        @empty {
+        <div class="empty-state">No goals yet.</div>
+        }
+    </div>
+</div>

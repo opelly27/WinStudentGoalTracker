@@ -1,0 +1,27 @@
+<div class="event-page">
+    <!-- Header -->
+    <div class="page-header">
+        <button class="back-btn" (click)="onBack()">← Back</button>
+        <span class="student-name">{{ studentIdentifier() }}</span>
+    </div>
+    <h2 class="goal-title">{{ goalTitle() }}</h2>
+
+    <!-- Error message -->
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    <!-- Progress event form -->
+    <div class="form-card">
+        <label class="field-label">Progress event notes</label>
+        <textarea class="notes-input" placeholder="Type your message here." rows="5" [(ngModel)]="notes"></textarea>
+
+        <label class="field-label">Voice note</label>
+        <button class="voice-btn">🎙 Record voice note</button>
+    </div>
+
+    <!-- Save button -->
+    <button class="save-btn" [disabled]="!canSave()" (click)="onSave()">
+        {{ saving() ? 'Saving...' : 'Save' }}
+    </button>
+</div>

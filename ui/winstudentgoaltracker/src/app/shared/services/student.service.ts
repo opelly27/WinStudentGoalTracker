@@ -48,6 +48,22 @@ export class StudentService {
         ]);
     }
 
+    // *****************************************************************
+    // TODO: DUMMY DATA — Replace with getStudentsPerUser, which will
+    // call GET /api/users/:id/students to return real data.
+    // Returns students assigned to the current user with their
+    // identifier, age, goal count, and progress event count.
+    // *****************************************************************
+    getDummyStudentsForUser(): Observable<StudentCardDto[]> {
+        return of([
+            { studentId: '1', identifier: 'J.B', age: 21, lastEntryDate: '2026-02-21', goalCount: 3, progressEventCount: 5 },
+            { studentId: '2', identifier: 'M.K', age: 19, lastEntryDate: '2026-02-25', goalCount: 4, progressEventCount: 8 },
+            { studentId: '3', identifier: 'A.R', age: 22, lastEntryDate: null, goalCount: 2, progressEventCount: 0 },
+            { studentId: '4', identifier: 'T.W', age: 20, lastEntryDate: '2026-02-18', goalCount: 5, progressEventCount: 12 },
+            { studentId: '5', identifier: 'L.C', age: 18, lastEntryDate: '2026-02-27', goalCount: 1, progressEventCount: 2 },
+        ]);
+    }
+
     // ************************ Event Handlers *************************
 
     // ********************** Support Procedures ***********************

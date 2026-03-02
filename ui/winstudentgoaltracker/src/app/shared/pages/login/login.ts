@@ -1,7 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { describeHttpError } from '../../classes/http-errors';
 
 @Component({
   selector: 'app-login',
@@ -39,9 +41,9 @@ export class Login {
           this.error.set(res.message);
         }
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.loading.set(false);
-        this.error.set('Unable to reach the server.');
+        this.error.set(describeHttpError(err));
       },
     });
   }
@@ -53,24 +55,20 @@ export class Login {
     this.auth.selectProgram(programId).subscribe({
       next: (res) => {
         this.loading.set(false);
-        if (!res.success) {
+        if (res.success) {
+          this.router.navigateByUrl('/');
+        } else {
           this.error.set(res.message);
         }
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.loading.set(false);
-        this.error.set('Unable to reach the server.');
+        this.error.set(describeHttpError(err));
       },
     });
   }
 
-  onHome() {
-    this.router.navigateByUrl('/');
-  }
 
-  onLogout() {
-    this.auth.logout().subscribe();
-  }
 
   onBackToLogin() {
     this.error.set(null);
