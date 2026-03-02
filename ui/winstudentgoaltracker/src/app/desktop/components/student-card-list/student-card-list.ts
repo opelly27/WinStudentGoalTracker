@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { StudentCard } from '../student-card/student-card';
-import { StudentService } from '../../../../shared/services/dummy-student.service';
-import { StudentCardDto } from '../../../../shared/classes/student-card.dto';
+import { StudentService } from '../../../shared/services/dummy-student.service';
+import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 
 export type DisplayMode = 'card' | 'list';
 

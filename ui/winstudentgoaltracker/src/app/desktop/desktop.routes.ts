@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { StudentCardList } from './pages/components/student-card-list/student-card-list';
+import { StudentCardList } from './components/student-card-list/student-card-list';
 
 export default [
     {
