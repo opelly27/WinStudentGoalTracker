@@ -1,7 +1,6 @@
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_ProgressEvent_Insert`(
     IN p_id_progress_event CHAR(36),
-    IN p_id_student CHAR(36),
     IN p_id_goal CHAR(36),
     IN p_id_user_created CHAR(36),
     IN p_content TEXT,
@@ -11,7 +10,6 @@ BEGIN
     INSERT INTO progress_event
     (
         id_progress_event,
-        id_student,
         id_goal,
         id_user_created,
         content,
@@ -22,7 +20,6 @@ BEGIN
     VALUES
     (
         p_id_progress_event,
-        p_id_student,
         p_id_goal,
         p_id_user_created,
         p_content,
@@ -32,7 +29,6 @@ BEGIN
     );
     SELECT
         id_progress_event,
-        id_student,
         id_goal,
         id_user_created,
         content,

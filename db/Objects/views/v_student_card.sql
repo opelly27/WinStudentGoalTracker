@@ -1,17 +1,7 @@
-CREATE OR REPLACE VIEW `v_student_card` AS
-SELECT
-    s.`id_student`                          AS `studentId`,
-    s.`identifier`                          AS `identifier`,
-    s.`expected_grad`                       AS `expectedGradDate`,
-    MAX(pe.`created_at`)                    AS `lastEntryDate`,
-    COUNT(DISTINCT g.`id_goal`)             AS `goalCount`,
-    COUNT(DISTINCT pe.`id_progress_event`)  AS `progressEventCount`
-FROM `student` s
-LEFT JOIN `goal` g
-    ON g.`id_student` = s.`id_student`
-LEFT JOIN `progress_event` pe
-    ON pe.`id_goal` = g.`id_goal`
-GROUP BY
-    s.`id_student`,
-    s.`identifier`,
-    s.`expected_grad`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `winstudentgoaltracker`.`v_student_card` AS
+select `s`.`id_student` AS `studentId`,`s`.`identifier` AS `identifier`,`s`.`expected_grad` AS `expectedGradDate`,max(`pe`.`created_at`) AS `lastEntryDate`,count(distinct `g`.`id_goal`) AS `goalCount`,count(distinct `pe`.`id_progress_event`) AS `progressEventCount`
+from ((`winstudentgoaltracker`.`student` `s`
+left
+join `winstudentgoaltracker`.`goal` `g` on((`g`.`id_student` = `s`.`id_student`)))
+left
+join `winstudentgoaltracker`.`progress_event` `pe` on((`pe`.`id_goal` = `g`.`id_goal`))) group by `s`.`id_student`,`s`.`identifier`,`s`.`expected_grad`;

@@ -2,16 +2,14 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_Goal_GetAll`()
 BEGIN
     SELECT
-        id_goal,
-        id_goal_parent,
-        id_student,
-        id_user_created,
+        goalId,
+        goalParentId,
+        studentId,
         title,
         description,
         category,
-        created_at,
-        updated_at
-    FROM goal
-    ORDER BY id_goal;
+        progressEventCount
+    FROM v_goal_card
+    ORDER BY goalId;
 END;;
 DELIMITER ;
