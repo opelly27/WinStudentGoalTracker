@@ -5,6 +5,22 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    command:
+      - --innodb_buffer_pool_size=32M
+      - --innodb_buffer_pool_instances=1
+      - --innodb_log_buffer_size=4M
+      - --innodb_redo_log_capacity=32M
+      - --key_buffer_size=8M
+      - --max_connections=20
+      - --tmp_table_size=8M
+      - --max_heap_table_size=8M
+      - --performance_schema=OFF
+      - --thread_stack=196608
+      - --sort_buffer_size=512K
+      - --read_buffer_size=256K
+      - --read_rnd_buffer_size=512K
+      - --join_buffer_size=256K
+    mem_limit: 256m
     ports:
       - "3309:3306"
     volumes:
