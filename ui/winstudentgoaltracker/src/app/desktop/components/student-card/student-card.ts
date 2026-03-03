@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 

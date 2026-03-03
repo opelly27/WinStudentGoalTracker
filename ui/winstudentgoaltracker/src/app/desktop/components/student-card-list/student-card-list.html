@@ -2,6 +2,13 @@
     <button class="toolbar-btn" (click)="onAddStudent()">+ Add a Student</button>
 </div>
 
+@if (showAddModal()) {
+    <app-add-student-modal
+        (studentCreated)="onStudentCreated($event)"
+        (cancelled)="onModalCancelled()"
+    />
+}
+
 @if (displayMode() === 'card') {
 <div class="card-grid">
     @for (student of students(); track student.studentId) {

@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DummyStudentGoalService } from '../../../shared/services/dummy-student-goal.service';
 import { StudentGoalSummary } from '../../../shared/classes/student-goal';
+import { DummyStudentService } from '../../../shared/services/dummy-student.service';
+import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
   selector: 'app-student-goals',
@@ -21,7 +22,7 @@ export class StudentGoals {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly goalService = inject(DummyStudentGoalService);
+  private readonly studentService = inject(StudentService);
 
   private readonly studentId = this.route.snapshot.paramMap.get('studentId') ?? '';
   protected readonly data = signal<StudentGoalSummary | null>(null);
@@ -60,7 +61,7 @@ export class StudentGoals {
   private loadGoals() {
     if (!this.studentId) return;
 
-    this.goalService.getGoalsForStudent(this.studentId).then(result => {
+    this.studentService.getGoalsForStudent(this.studentId).then(result => {
 
       if (!result.success)
       {

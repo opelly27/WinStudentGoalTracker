@@ -83,4 +83,48 @@ public class StudentRepository
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;
     }
+
+    public async Task<bool> AddProgressEventAsync(Guid userId, AddProgressEventDto dto)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteAsync(
+            "sp_ProgressEvent_Insert",
+            new
+            {
+                p_id_progress_event = Guid.NewGuid().ToString(),
+                p_id_goal = dto.GoalId.ToString(),
+                p_id_user_created = userId.ToString(),
+                p_content = dto.Content,
+                p_is_sensitive = dto.IsSensitive ? 1 : 0
+            },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
+
+    public async Task<StudentGoalSummary?> GetGoalSummaryAsync(Guid idStudent)
+    {
+        using var db = Connection;
+        var rows = await db.QueryAsync<dbStudentGoalRow>(
+            "sp_Goal_GetByStudentId",
+            new { p_id_student = idStudent.ToString() },
+            commandType: CommandType.StoredProcedure);
+
+        var list = rows.ToList();
+        if (list.Count == 0) return null;
+
+        return new StudentGoalSummary
+        {
+            StudentIdentifier = list[0].StudentIdentifier,
+            Goals = list.Select(r => new StudentGoalItem
+            {
+                GoalId = r.GoalId,
+                GoalParentId = r.GoalParentId,
+                Title = r.Title,
+                Description = r.Description,
+                Category = r.Category,
+                ProgressEventCount = r.ProgressEventCount
+            }).ToList()
+        };
+    }
+
 }

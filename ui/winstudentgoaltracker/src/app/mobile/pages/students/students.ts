@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { StudentCard } from '../../components/student-card/student-card';
-import { StudentService } from '../../../shared/services/dummy-student.service';
+import { DummyStudentService } from '../../../shared/services/dummy-student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
+import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
   selector: 'app-students',
@@ -36,7 +37,7 @@ export class Students {
   // Loads the list of students assigned to the current user.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getStudentsForUser().then(data => {
+    this.studentService.getMyStudents().then(data => {
 
       if (!data.success)
       {

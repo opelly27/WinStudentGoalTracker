@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { StudentCard } from '../student-card/student-card';
-import { StudentService } from '../../../shared/services/dummy-student.service';
+import { AddStudentModal } from '../add-student-modal/add-student-modal';
+import { DummyStudentService } from '../../../shared/services/dummy-student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
+import { StudentService } from '../../../shared/services/student.service';
 
 export type DisplayMode = 'card' | 'list';
 
 @Component({
   selector: 'app-student-card-list',
-  imports: [StudentCard],
+  imports: [StudentCard, AddStudentModal],
   templateUrl: './student-card-list.html',
   styleUrl: './student-card-list.scss',
 })
@@ -24,6 +26,7 @@ export class StudentCardList {
   private readonly studentService = inject(StudentService);
   protected readonly students = signal<StudentCardDto[]>([]);
   protected readonly displayMode = signal<DisplayMode>('card');
+  protected readonly showAddModal = signal(false);
 
   public errorMessage = signal<String | null>(null);
 
@@ -34,7 +37,16 @@ export class StudentCardList {
   // ************************ Event Handlers *************************
 
   onAddStudent() {
-    // TODO: navigate to add-student form
+    this.showAddModal.set(true);
+  }
+
+  onStudentCreated(student: StudentCardDto) {
+    this.students.update(list => [...list, student]);
+    this.showAddModal.set(false);
+  }
+
+  onModalCancelled() {
+    this.showAddModal.set(false);
   }
 
   // ********************** Support Procedures ***********************
@@ -43,7 +55,7 @@ export class StudentCardList {
   // Loads students from the service and populates the students signal.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getStudentCards().then(data => {
+    this.studentService.getMyStudents().then(data => {
       
       if(!data.success)
       {

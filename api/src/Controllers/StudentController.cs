@@ -97,11 +97,85 @@ public class StudentController : BaseController
         });
     }
 
+    [HttpGet("{idStudent:guid}/goals")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<StudentGoalSummary>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<StudentGoalSummary>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<StudentGoalSummary>>> GetGoals(Guid idStudent)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<StudentGoalSummary>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var summary = await _studentRepository.GetGoalSummaryAsync(idStudent);
+
+        return Ok(new ResponseResult<StudentGoalSummary>
+        {
+            Success = true,
+            Message = "Goals retrieved successfully.",
+            Data = summary
+        });
+    }
+
+    [HttpPost("{idStudent:guid}/progress-event")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResponseResult>> AddProgressEvent(Guid idStudent, [FromBody] AddProgressEventDto dto)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var created = await _studentRepository.AddProgressEventAsync(userId, dto);
+        if (!created)
+        {
+            return BadRequest(new ResponseResult
+            {
+                Success = false,
+                Message = "Unable to add progress event."
+            });
+        }
+
+        return StatusCode(StatusCodes.Status201Created, new ResponseResult
+        {
+            Success = true,
+            Message = "Progress event added successfully."
+        });
+    }
+
     [HttpPost]
     [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ResponseResult<StudentResponse>>> Create([FromBody] CreateStudentDto newStudentData)
+    public async Task<ActionResult<ResponseResult<StudentResponse>>> CreateStudent([FromBody] CreateStudentDto newStudentData)
     {
         var (userId, email, programId, role, error) = GetProgramUserFromClaims();
 

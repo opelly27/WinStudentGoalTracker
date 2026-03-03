@@ -10,7 +10,7 @@ FROM `student` s
 LEFT JOIN `goal` g
     ON g.`id_student` = s.`id_student`
 LEFT JOIN `progress_event` pe
-    ON pe.`id_student` = s.`id_student`
+    ON pe.`id_goal` = g.`id_goal`
 GROUP BY
     s.`id_student`,
     s.`identifier`,

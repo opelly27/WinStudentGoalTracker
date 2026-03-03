@@ -2,8 +2,9 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DummySaveProgressEvent } from '../../../shared/services/dummy-save-progress-event.service';
 import { describeHttpError } from '../../../shared/classes/http-errors';
+import { DummyStudentService } from '../../../shared/services/dummy-student.service';
+import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
   selector: 'app-add-progress-event',
@@ -26,7 +27,7 @@ export class AddProgressEvent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly saveService = inject(DummySaveProgressEvent);
+  private readonly studentService = inject(StudentService);
 
   private readonly studentId: string;
   private readonly goalId: string;
@@ -66,7 +67,7 @@ export class AddProgressEvent {
     this.saving.set(true);
 
     try {
-      const result = await this.saveService.save(this.studentId, this.goalId, this.notes().trim());
+      const result = await this.studentService.addProgressEvent(this.studentId, this.goalId, this.notes().trim());
       this.saving.set(false);
       if (result.success) {
         this.router.navigate(['students', this.studentId, 'goals']);

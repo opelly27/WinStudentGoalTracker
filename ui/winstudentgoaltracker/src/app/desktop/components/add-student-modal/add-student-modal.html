@@ -1,0 +1,66 @@
+<div class="overlay" (click)="onCancel()"></div>
+
+<div class="modal">
+    <div class="modal-header">
+        <h2 class="modal-title">Add Student</h2>
+        <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+    </div>
+
+    <form class="modal-body" (ngSubmit)="onSubmit()" #studentForm="ngForm">
+
+        <div class="field">
+            <label for="identifier">Identifier</label>
+            <input
+                id="identifier"
+                type="text"
+                [(ngModel)]="form.identifier"
+                name="identifier"
+                required
+                placeholder="e.g. Student123"
+            />
+        </div>
+
+        <div class="field">
+            <label for="programYear">Program Year</label>
+            <input
+                id="programYear"
+                type="number"
+                [(ngModel)]="form.programYear"
+                name="programYear"
+                placeholder="e.g. 2025"
+            />
+        </div>
+
+        <div class="field">
+            <label for="enrollmentDate">Enrollment Date</label>
+            <input
+                id="enrollmentDate"
+                type="date"
+                [(ngModel)]="form.enrollmentDate"
+                name="enrollmentDate"
+            />
+        </div>
+
+        <div class="field">
+            <label for="expectedGrad">Expected Graduation</label>
+            <input
+                id="expectedGrad"
+                type="date"
+                [(ngModel)]="form.expectedGrad"
+                name="expectedGrad"
+            />
+        </div>
+
+        @if (errorMessage()) {
+            <p class="error">{{ errorMessage() }}</p>
+        }
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid || isSubmitting()">
+                {{ isSubmitting() ? 'Saving...' : 'Add Student' }}
+            </button>
+        </div>
+
+    </form>
+</div>
