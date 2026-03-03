@@ -32,6 +32,18 @@
             />
         </div>
 
+        @if (parentGoalOptions().length > 0) {
+            <div class="field">
+                <label for="goalParentId">Parent Goal <span class="optional">(optional)</span></label>
+                <select id="goalParentId" [(ngModel)]="form.goalParentId" name="goalParentId">
+                    <option [ngValue]="null">None</option>
+                    @for (goal of parentGoalOptions(); track goal.goalId) {
+                        <option [ngValue]="goal.goalId">{{ goal.title }}</option>
+                    }
+                </select>
+            </div>
+        }
+
         <div class="field">
             <label for="description">Description</label>
             <textarea

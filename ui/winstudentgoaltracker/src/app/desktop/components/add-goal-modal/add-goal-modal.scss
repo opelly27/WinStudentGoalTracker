@@ -68,8 +68,14 @@
     color: #333;
 }
 
+.optional {
+    font-weight: 400;
+    color: #999;
+}
+
 .field input,
-.field textarea {
+.field textarea,
+.field select {
     padding: 0.5rem 0.75rem;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -80,7 +86,8 @@
 }
 
 .field input:focus,
-.field textarea:focus {
+.field textarea:focus,
+.field select:focus {
     border-color: #4f46e5;
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
 }

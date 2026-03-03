@@ -52,6 +52,13 @@
     margin: 0 0 1rem;
 }
 
+.empty-state {
+    color: #888;
+    font-size: 0.9375rem;
+    margin: 2rem auto;
+    text-align: center;
+}
+
 .card-grid {
     display: flex;
     flex-wrap: wrap;

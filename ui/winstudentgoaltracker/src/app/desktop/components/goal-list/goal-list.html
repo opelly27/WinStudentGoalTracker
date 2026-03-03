@@ -10,6 +10,7 @@
 @if (showAddModal()) {
     <app-add-goal-modal
         [studentId]="studentId"
+        [existingGoals]="goals()"
         (goalCreated)="onGoalCreated($event)"
         (cancelled)="onModalCancelled()"
     />
@@ -19,8 +20,12 @@
     <p class="error">{{ errorMessage() }}</p>
 }
 
-<div class="card-grid">
-    @for (goal of goals(); track goal.goalId) {
-        <app-goal-card [goal]="goal" />
-    }
-</div>
+@if (goals().length === 0 && !errorMessage()) {
+    <p class="empty-state">No goals yet. Click <strong>+ Add a Goal</strong> to get started.</p>
+} @else {
+    <div class="card-grid">
+        @for (goal of goals(); track goal.goalId) {
+            <app-goal-card [goal]="goal" />
+        }
+    </div>
+}

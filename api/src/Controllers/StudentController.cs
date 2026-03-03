@@ -163,6 +163,30 @@ public class StudentController : BaseController
             });
         }
 
+        if (dto.GoalParentId.HasValue)
+        {
+            var summary = await _studentRepository.GetGoalSummaryAsync(idStudent);
+            var parentGoal = summary?.Goals.FirstOrDefault(g => g.GoalId == dto.GoalParentId.Value);
+
+            if (parentGoal is null)
+            {
+                return BadRequest(new ResponseResult<StudentGoalItem>
+                {
+                    Success = false,
+                    Message = "Parent goal not found."
+                });
+            }
+
+            if (parentGoal.GoalParentId.HasValue)
+            {
+                return BadRequest(new ResponseResult<StudentGoalItem>
+                {
+                    Success = false,
+                    Message = "The selected parent goal already has a parent."
+                });
+            }
+        }
+
         var created = await _studentRepository.InsertGoalAsync(idStudent, userId, dto);
         if (created is null)
         {

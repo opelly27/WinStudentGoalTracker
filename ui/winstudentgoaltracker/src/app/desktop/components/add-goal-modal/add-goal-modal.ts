@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CreateGoalDto } from '../../../shared/classes/create-goal.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
@@ -19,16 +19,22 @@ export class AddGoalModal {
     private readonly studentService = inject(StudentService);
 
     readonly studentId = input.required<string>();
+    readonly existingGoals = input.required<StudentGoalItem[]>();
     readonly goalCreated = output<StudentGoalItem>();
     readonly cancelled = output<void>();
 
     protected readonly isSubmitting = signal(false);
     protected readonly errorMessage = signal<string | null>(null);
 
+    protected readonly parentGoalOptions = computed(() =>
+        this.existingGoals().filter(g => g.goalParentId === null)
+    );
+
     protected form: CreateGoalDto = {
         title: '',
         description: '',
         category: '',
+        goalParentId: null,
     };
 
     // ************************** Properties ***************************

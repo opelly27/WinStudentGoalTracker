@@ -110,6 +110,7 @@ public class StudentRepository
             new
             {
                 p_id_goal = newGoalId.ToString(),
+                p_id_goal_parent = dto.GoalParentId?.ToString(),
                 p_id_student = idStudent.ToString(),
                 p_id_user = userId.ToString(),
                 p_title = dto.Title,
