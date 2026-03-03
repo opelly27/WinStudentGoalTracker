@@ -154,12 +154,12 @@ public class StudentController : BaseController
             });
         }
 
-        if (!PermissionService.IsAllowed(role, EntityType.Goal, PermissionAction.Create))
+        if (!PermissionService.IsAllowed(role, EntityType.Goal, PermissionAction.Create, isMine: true))
         {
             return BadRequest(new ResponseResult<StudentGoalItem>
             {
                 Success = false,
-                Message = "Unable to create goal."
+                Message = "Unable to create goal. - Permission Matrix"
             });
         }
 
