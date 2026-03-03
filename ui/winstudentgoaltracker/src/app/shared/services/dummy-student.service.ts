@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { StudentCardDto } from '../classes/student-card.dto';
 import { ApiResult } from '../classes/api-result';
-import { StudentGoalSummary } from '../classes/student-goal';
+import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
+import { CreateGoalDto } from '../classes/create-goal.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -103,6 +104,25 @@ export class DummyStudentService {
 
         return ApiResult.ok(goals);
 
+    }
+
+    async createGoal(studentId: string, data: CreateGoalDto): Promise<ApiResult<StudentGoalItem>> {
+        const student = this.data[studentId];
+        if (!student) {
+            return ApiResult.fail('Student not found');
+        }
+
+        const newGoal: StudentGoalItem = {
+            goalId: `g${Date.now()}`,
+            goalParentId: null,
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            progressEventCount: 0,
+        };
+
+        student.goals.push(newGoal);
+        return ApiResult.ok(newGoal);
     }
 
     async addProgressEvent(studentId: string, goalId: string, content: string): Promise<ApiResult> {

@@ -130,6 +130,57 @@ public class StudentController : BaseController
         });
     }
 
+    [HttpPost("{idStudent:guid}/goals")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<StudentGoalItem>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ResponseResult<StudentGoalItem>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResponseResult<StudentGoalItem>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResponseResult<StudentGoalItem>>> CreateGoal(Guid idStudent, [FromBody] CreateGoalDto dto)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<StudentGoalItem>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        if (!PermissionService.IsAllowed(role, EntityType.Goal, PermissionAction.Create))
+        {
+            return BadRequest(new ResponseResult<StudentGoalItem>
+            {
+                Success = false,
+                Message = "Unable to create goal."
+            });
+        }
+
+        var created = await _studentRepository.InsertGoalAsync(idStudent, userId, dto);
+        if (created is null)
+        {
+            return BadRequest(new ResponseResult<StudentGoalItem>
+            {
+                Success = false,
+                Message = "Unable to create goal."
+            });
+        }
+
+        return StatusCode(StatusCodes.Status201Created, new ResponseResult<StudentGoalItem>
+        {
+            Success = true,
+            Message = "Goal created successfully.",
+            Data = created
+        });
+    }
+
     [HttpPost("{idStudent:guid}/progress-event")]
     [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status201Created)]
@@ -216,7 +267,7 @@ public class StudentController : BaseController
     [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseResult<StudentResponse>>> Update(Guid idStudent, [FromBody] UpdateStudentDto request)
+    public async Task<ActionResult<ResponseResult<StudentResponse>>> UpdateStudent(Guid idStudent, [FromBody] UpdateStudentDto request)
     {
         var (userId, email, programId, role, error) = GetProgramUserFromClaims();
         if (error is not null)

@@ -6,8 +6,9 @@ import { ApiResult } from '../classes/api-result';
 import { ResponseResult } from '../classes/auth.models';
 import { describeHttpError } from '../classes/http-errors';
 import { CreateStudentDto } from '../classes/create-student.dto';
+import { CreateGoalDto } from '../classes/create-goal.dto';
 import { StudentCardDto } from '../classes/student-card.dto';
-import { StudentGoalSummary } from '../classes/student-goal';
+import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
 
 @Injectable({
     providedIn: 'root',
@@ -64,6 +65,22 @@ export class StudentService {
         try {
             const result = await firstValueFrom(
                 this.http.post<ResponseResult<StudentCardDto>>(`${this.base}/api/Student`, data)
+            );
+            return result.success && result.data
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Creates a new goal for a student and returns the created goal.
+    // *****************************************************************
+    async createGoal(studentId: string, data: CreateGoalDto): Promise<ApiResult<StudentGoalItem>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.post<ResponseResult<StudentGoalItem>>(`${this.base}/api/Student/${studentId}/goals`, data)
             );
             return result.success && result.data
                 ? ApiResult.ok(result.data)

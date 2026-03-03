@@ -1,0 +1,26 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8592; Students</button>
+    @if (studentIdentifier()) {
+        <span class="student-label">{{ studentIdentifier() }}</span>
+    }
+    <span class="spacer"></span>
+    <button class="toolbar-btn" (click)="onAddGoal()">+ Add a Goal</button>
+</div>
+
+@if (showAddModal()) {
+    <app-add-goal-modal
+        [studentId]="studentId"
+        (goalCreated)="onGoalCreated($event)"
+        (cancelled)="onModalCancelled()"
+    />
+}
+
+@if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+}
+
+<div class="card-grid">
+    @for (goal of goals(); track goal.goalId) {
+        <app-goal-card [goal]="goal" />
+    }
+</div>

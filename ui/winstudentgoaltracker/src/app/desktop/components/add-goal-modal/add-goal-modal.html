@@ -1,0 +1,58 @@
+<div class="overlay" (click)="onCancel()"></div>
+
+<div class="modal">
+    <div class="modal-header">
+        <h2 class="modal-title">Add Goal</h2>
+        <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+    </div>
+
+    <form class="modal-body" (ngSubmit)="onSubmit()" #goalForm="ngForm">
+
+        <div class="field">
+            <label for="title">Title</label>
+            <input
+                id="title"
+                type="text"
+                [(ngModel)]="form.title"
+                name="title"
+                required
+                placeholder="e.g. Improve reading comprehension"
+            />
+        </div>
+
+        <div class="field">
+            <label for="category">Category</label>
+            <input
+                id="category"
+                type="text"
+                [(ngModel)]="form.category"
+                name="category"
+                required
+                placeholder="e.g. Academics"
+            />
+        </div>
+
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea
+                id="description"
+                [(ngModel)]="form.description"
+                name="description"
+                rows="3"
+                placeholder="Describe the goal..."
+            ></textarea>
+        </div>
+
+        @if (errorMessage()) {
+            <p class="error">{{ errorMessage() }}</p>
+        }
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="goalForm.invalid || isSubmitting()">
+                {{ isSubmitting() ? 'Saving...' : 'Add Goal' }}
+            </button>
+        </div>
+
+    </form>
+</div>

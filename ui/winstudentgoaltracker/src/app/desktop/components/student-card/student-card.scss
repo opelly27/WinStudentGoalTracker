@@ -8,6 +8,13 @@
     border-radius: 8px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     padding: 1.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
+    transform: translateY(-2px);
 }
 
 .identifier {

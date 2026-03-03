@@ -1,0 +1,48 @@
+:host {
+    display: block;
+    width: 300px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.category-badge {
+    padding: 0.2rem 0.6rem;
+    background: #eef2ff;
+    color: #4f46e5;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.event-count {
+    font-size: 0.8125rem;
+    color: #888;
+}
+
+.title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #555;
+    line-height: 1.5;
+}

@@ -101,6 +101,36 @@ public class StudentRepository
         return rowsAffected > 0;
     }
 
+    public async Task<StudentGoalItem?> InsertGoalAsync(Guid idStudent, Guid userId, CreateGoalDto dto)
+    {
+        var newGoalId = Guid.NewGuid();
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteAsync(
+            "sp_Goal_Insert",
+            new
+            {
+                p_id_goal = newGoalId.ToString(),
+                p_id_student = idStudent.ToString(),
+                p_id_user = userId.ToString(),
+                p_title = dto.Title,
+                p_description = dto.Description,
+                p_category = dto.Category
+            },
+            commandType: CommandType.StoredProcedure);
+
+        if (rowsAffected == 0) return null;
+
+        return new StudentGoalItem
+        {
+            GoalId = newGoalId,
+            GoalParentId = null,
+            Title = dto.Title,
+            Description = dto.Description,
+            Category = dto.Category,
+            ProgressEventCount = 0
+        };
+    }
+
     public async Task<StudentGoalSummary?> GetGoalSummaryAsync(Guid idStudent)
     {
         using var db = Connection;
@@ -110,7 +140,17 @@ public class StudentRepository
             commandType: CommandType.StoredProcedure);
 
         var list = rows.ToList();
-        if (list.Count == 0) return null;
+        if (list.Count == 0)
+        {
+            var student = await GetByIdAsync(idStudent);
+            if (student is null) return null;
+
+            return new StudentGoalSummary
+            {
+                StudentIdentifier = student.Identifier,
+                Goals = []
+            };
+        }
 
         return new StudentGoalSummary
         {
