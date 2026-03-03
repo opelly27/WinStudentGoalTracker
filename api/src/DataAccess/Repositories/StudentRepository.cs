@@ -112,7 +112,7 @@ public class StudentRepository
                 p_id_goal = newGoalId.ToString(),
                 p_id_goal_parent = dto.GoalParentId?.ToString(),
                 p_id_student = idStudent.ToString(),
-                p_id_user = userId.ToString(),
+                p_id_user_created = userId.ToString(),
                 p_title = dto.Title,
                 p_description = dto.Description,
                 p_category = dto.Category
