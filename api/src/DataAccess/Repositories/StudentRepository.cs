@@ -87,7 +87,7 @@ public class StudentRepository
     public async Task<bool> AddProgressEventAsync(Guid userId, AddProgressEventDto dto)
     {
         using var db = Connection;
-        var rowsAffected = await db.ExecuteAsync(
+        var row = await db.QuerySingleOrDefaultAsync(
             "sp_ProgressEvent_Insert",
             new
             {
@@ -98,7 +98,7 @@ public class StudentRepository
                 p_is_sensitive = dto.IsSensitive ? 1 : 0
             },
             commandType: CommandType.StoredProcedure);
-        return rowsAffected > 0;
+        return row is not null;
     }
 
     public async Task<StudentGoalItem?> InsertGoalAsync(Guid idStudent, Guid userId, CreateGoalDto dto)
