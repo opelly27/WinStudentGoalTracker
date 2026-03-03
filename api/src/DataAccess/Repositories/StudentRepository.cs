@@ -105,7 +105,7 @@ public class StudentRepository
     {
         var newGoalId = Guid.NewGuid();
         using var db = Connection;
-        var rowsAffected = await db.ExecuteAsync(
+        var row = await db.QuerySingleOrDefaultAsync(
             "sp_Goal_Insert",
             new
             {
@@ -119,12 +119,12 @@ public class StudentRepository
             },
             commandType: CommandType.StoredProcedure);
 
-        if (rowsAffected == 0) return null;
+        if (row is null) return null;
 
         return new StudentGoalItem
         {
             GoalId = newGoalId,
-            GoalParentId = null,
+            GoalParentId = dto.GoalParentId,
             Title = dto.Title,
             Description = dto.Description,
             Category = dto.Category,
