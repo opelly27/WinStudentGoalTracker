@@ -1,10 +1,11 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-student-card',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './student-card.html',
   styleUrl: './student-card.scss',
 })
