@@ -1,0 +1,61 @@
+:host {
+    display: block;
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0.75rem 1rem;
+}
+
+.content {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.action-icons {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    gap: 0.5rem;
+    align-self: start;
+    justify-content: flex-end;
+}
+
+.author {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #888;
+}
+
+.date {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.8125rem;
+    color: #888;
+    text-align: right;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #888;
+    padding: 0.125rem;
+}
+
+.icon-btn:hover {
+    color: #4f46e5;
+}

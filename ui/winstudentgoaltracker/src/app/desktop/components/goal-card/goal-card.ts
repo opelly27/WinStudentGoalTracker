@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 
 @Component({
@@ -13,6 +14,9 @@ export class GoalCard {
 
     // ************************** Declarations *************************
 
+    private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
+
     readonly goal = input.required<StudentGoalItem>();
 
     // ************************** Properties ***************************
@@ -20,6 +24,14 @@ export class GoalCard {
     // ************************ Public Methods *************************
 
     // ************************ Event Handlers *************************
+
+    // *****************************************************************
+    // Navigates to the progress events page for this goal.
+    // *****************************************************************
+    onCardClick() {
+        const studentId = this.route.snapshot.paramMap.get('studentId')!;
+        this.router.navigate(['/students', studentId, 'goals', this.goal().goalId, 'progress']);
+    }
 
     // ********************** Support Procedures ***********************
 }

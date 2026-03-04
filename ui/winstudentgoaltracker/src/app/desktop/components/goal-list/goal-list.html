@@ -1,31 +1,28 @@
 <div class="toolbar">
     <button class="toolbar-btn back-btn" (click)="onBack()">&#8592; Students</button>
-    @if (studentIdentifier()) {
-        <span class="student-label">{{ studentIdentifier() }}</span>
-    }
     <span class="spacer"></span>
     <button class="toolbar-btn" (click)="onAddGoal()">+ Add a Goal</button>
 </div>
 
+@if (studentIdentifier()) {
+<h2 class="section-header">Goals for {{ studentIdentifier() }}</h2>
+}
+
 @if (showAddModal()) {
-    <app-add-goal-modal
-        [studentId]="studentId"
-        [existingGoals]="goals()"
-        (goalCreated)="onGoalCreated($event)"
-        (cancelled)="onModalCancelled()"
-    />
+<app-add-goal-modal [studentId]="studentId" [existingGoals]="goals()" (goalCreated)="onGoalCreated($event)"
+    (cancelled)="onModalCancelled()" />
 }
 
 @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
+<p class="error">{{ errorMessage() }}</p>
 }
 
 @if (goals().length === 0 && !errorMessage()) {
-    <p class="empty-state">No goals yet. Click <strong>+ Add a Goal</strong> to get started.</p>
+<p class="empty-state">No goals yet. Click <strong>+ Add a Goal</strong> to get started.</p>
 } @else {
-    <div class="card-grid">
-        @for (goal of goals(); track goal.goalId) {
-            <app-goal-card [goal]="goal" />
-        }
-    </div>
+<div class="card-grid">
+    @for (goal of goals(); track goal.goalId) {
+    <app-goal-card [goal]="goal" />
+    }
+</div>
 }

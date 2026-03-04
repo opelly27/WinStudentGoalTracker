@@ -1,0 +1,35 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8592; Goals</button>
+</div>
+
+@if (studentIdentifier() && goalTitle()) {
+<div class="header-row">
+    <h2 class="section-header">
+        {{ events().length }} Progress Events for {{ studentIdentifier() }} for goal: {{ goalTitle() }}
+        @if (isFiltered()) {
+        <span class="filter-count">(showing {{ filteredEvents().length }})</span>
+        }
+    </h2>
+    <div class="search-box">
+        <input type="text" class="search-input" placeholder="Search..." [value]="rawSearchText()"
+            (input)="onSearchInput($any($event.target).value)" />
+        @if (rawSearchText()) {
+        <button class="clear-btn" (click)="onClearSearch()">&times;</button>
+        }
+    </div>
+</div>
+}
+
+@if (errorMessage()) {
+<p class="error">{{ errorMessage() }}</p>
+}
+
+@if (filteredEvents().length === 0 && !errorMessage()) {
+<p class="empty-state">No progress events recorded yet.</p>
+} @else {
+<div class="event-list">
+    @for (evt of filteredEvents(); track evt.progressEventId) {
+    <app-progress-item [event]="evt" />
+    }
+</div>
+}
