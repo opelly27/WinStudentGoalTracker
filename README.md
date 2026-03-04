@@ -10,6 +10,26 @@ The system centralizes student support cases while maintaining auditability and 
 
 > ⚠️ Features marked as **TBD** are planned but not yet implemented.
 
+
+
+## Key Features
+- Student goal tracking
+- Progress monitoring dashboard
+- Instructor updates
+- Goal completion reporting
+- Accessible interface for diverse users
+
+## Current Prototype
+A Figma prototype demonstrates the initial user experience and interface design.
+
+## Evaluation
+Stakeholders can evaluate the prototype using the following survey:
+
+## Future Work
+- Authentication
+- Goal analytics
+- Reporting dashboards
+- Integration with case management systems
 ---
 
 ## Current Status
