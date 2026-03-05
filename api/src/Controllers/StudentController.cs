@@ -246,6 +246,49 @@ public class StudentController : BaseController
         });
     }
 
+    [HttpGet("goals/{idGoal:guid}/progress-events")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<IEnumerable<ProgressEventResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<IEnumerable<ProgressEventResponse>>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<IEnumerable<ProgressEventResponse>>>> GetProgressEventsForGoal(Guid idGoal)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var studentId = await _studentRepository.GetStudentIdForGoalAsync(idGoal);
+        if (!studentId.HasValue)
+        {
+            return NotFound(new ResponseResult<IEnumerable<ProgressEventResponse>>
+            {
+                Success = false,
+                Message = "Goal not found."
+            });
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.StudentId).Contains(studentId.Value))
+        {
+            return NotFound(new ResponseResult<IEnumerable<ProgressEventResponse>>
+            {
+                Success = false,
+                Message = "Goal not found."
+            });
+        }
+
+        var progressEvents = await _studentRepository.GetProgressEventsForGoalAsync(idGoal);
+
+        return Ok(new ResponseResult<IEnumerable<ProgressEventResponse>>
+        {
+            Success = true,
+            Message = "Progress events retrieved successfully.",
+            Data = progressEvents
+        });
+    }
+
     [HttpPost]
     [Authorize(Roles = $"{UserRoles.Teacher}")]
     [ProducesResponseType(typeof(ResponseResult<StudentResponse>), StatusCodes.Status201Created)]

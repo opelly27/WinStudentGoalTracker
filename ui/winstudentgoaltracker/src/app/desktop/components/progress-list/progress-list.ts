@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProgressItem } from '../progress-item/progress-item';
 import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
-import { DummyStudentService } from '../../../shared/services/dummy-student.service';
 import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
@@ -30,7 +29,6 @@ export class ProgressList implements OnDestroy {
 
   // ************************** Declarations *************************
 
-  private readonly dummyService = inject(DummyStudentService);
   private readonly studentService = inject(StudentService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -97,12 +95,11 @@ export class ProgressList implements OnDestroy {
   // ********************** Support Procedures ***********************
 
   // *****************************************************************
-  // Loads progress events for the given goal from the dummy service,
-  // sorted newest-first by createdAt.
-  // TODO: Replace DummyStudentService with StudentService
+  // Loads progress events for the given goal from the API, sorted
+  // newest-first by createdAt.
   // *****************************************************************
   private loadEvents() {
-    this.dummyService.getProgressEventsForGoal(this.goalId).then(result => {
+    this.studentService.getProgressEventsForGoal(this.goalId).then(result => {
       if (!result.success) {
         this.errorMessage.set(result.message);
       } else {

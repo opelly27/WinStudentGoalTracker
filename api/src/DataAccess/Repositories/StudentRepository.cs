@@ -101,6 +101,37 @@ public class StudentRepository
         return row is not null;
     }
 
+    public async Task<Guid?> GetStudentIdForGoalAsync(Guid idGoal)
+    {
+        using var db = Connection;
+        var row = await db.QuerySingleOrDefaultAsync<dbGoalStudentRow>(
+            "sp_Goal_GetById",
+            new { p_id_goal = idGoal.ToString() },
+            commandType: CommandType.StoredProcedure);
+
+        return row?.StudentId;
+    }
+
+    public async Task<IEnumerable<ProgressEventResponse>> GetProgressEventsForGoalAsync(Guid idGoal)
+    {
+        using var db = Connection;
+        var rows = await db.QueryAsync<dbProgressEventRow>(
+            "sp_ProgressEvent_GetByGoalId",
+            new
+            {
+                p_id_goal = idGoal.ToString()
+            },
+            commandType: CommandType.StoredProcedure);
+
+        return rows.Select(r => new ProgressEventResponse
+        {
+            ProgressEventId = r.ProgressEventId,
+            Content = r.Content,
+            CreatedAt = r.CreatedAt,
+            CreatedByName = r.CreatedByName
+        });
+    }
+
     public async Task<StudentGoalItem?> InsertGoalAsync(Guid idStudent, Guid userId, CreateGoalDto dto)
     {
         var newGoalId = Guid.NewGuid();

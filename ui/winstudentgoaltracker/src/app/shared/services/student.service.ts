@@ -9,6 +9,7 @@ import { CreateStudentDto } from '../classes/create-student.dto';
 import { CreateGoalDto } from '../classes/create-goal.dto';
 import { StudentCardDto } from '../classes/student-card.dto';
 import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
+import { ProgressEventDto } from '../classes/progress-event.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -97,6 +98,22 @@ export class StudentService {
             );
             return result.success
                 ? ApiResult.empty()
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Returns progress events for a given student goal.
+    // *****************************************************************
+    async getProgressEventsForGoal(goalId: string): Promise<ApiResult<ProgressEventDto[]>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<ProgressEventDto[]>>(`${this.base}/api/Student/goals/${goalId}/progress-events`)
+            );
+            return result.success
+                ? ApiResult.ok(result.data ?? [])
                 : ApiResult.fail(result.message);
         } catch (error) {
             return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
