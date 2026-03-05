@@ -18,6 +18,10 @@ content="WIN Student Goal Tracker — a student goal tracker and reporting syste
 content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs.">
 <meta property="og:type" content="website">
 
+<!-- Plausible Analytics
+     NOTE: This tracks page views & outbound link clicks. -->
+<script defer data-domain="win.opelly.me" src="https://plausible.io/js/script.js"></script>
+
 <style>
 
 body{
@@ -80,11 +84,6 @@ margin:0 0 .5rem;
 font-size:1.25rem;
 }
 
-h3{
-margin:.75rem 0 .4rem;
-font-size:1.05rem;
-}
-
 .muted{
 color:rgba(17,24,39,.75);
 }
@@ -134,6 +133,13 @@ display:block;
 font-size:1.4rem;
 }
 
+code{
+white-space:nowrap;
+background:#eef2ff;
+padding:2px 6px;
+border-radius:6px;
+}
+
 footer{
 text-align:center;
 padding:2rem;
@@ -143,7 +149,6 @@ color:rgba(17,24,39,.65);
 </style>
 
 </head>
-
 
 <body>
 
@@ -155,11 +160,31 @@ color:rgba(17,24,39,.65);
 Track student goals, document services, and log critical incidents with auditable workflows designed for student support programs.
 </p>
 
+<!-- Live prototype + survey -->
+<div style="margin-top:1.5rem">
+
+  <a href="https://win.opelly.me/"
+     class="btn"
+     target="_blank"
+     rel="noopener noreferrer"
+     style="margin-right:.5rem;">
+    Open Live Prototype
+  </a>
+
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSd4waAGdgDC9SpA2uvelWQtpJt7sGqsFgc-PCBOMoT99LmLHA/viewform"
+     class="btn"
+     target="_blank"
+     rel="noopener noreferrer"
+     style="background:#16a34a;">
+    Take Evaluation Survey
+  </a>
+
+</div>
+
 </header>
 
 
 <main>
-
 
 <section class="grid">
 
@@ -170,7 +195,7 @@ Track student goals, document services, and log critical incidents with auditabl
 <p class="muted">
 WIN Student Goal Tracker supports student goal tracking, services documentation,
 and critical incident reporting with auditability and privacy in mind.
-The system aims to reduce manual paperwork and improve visibility into student progress.
+The system reduces manual paperwork and improves visibility into student progress.
 </p>
 
 </section>
@@ -197,17 +222,17 @@ The system aims to reduce manual paperwork and improve visibility into student p
 <h2>Core Features</h2>
 
 <ul>
-<li><strong>Student profiles:</strong> demographics and program context.</li>
-<li><strong>Goal management:</strong> sub-goals, statuses, and progress tracking.</li>
-<li><strong>Case documentation:</strong> notes and service tracking.</li>
-<li><strong>Critical incidents:</strong> consistent logging and review.</li>
-<li><strong>Search & filters:</strong> quickly locate students.</li>
+<li>👤 <strong>Student profiles:</strong> demographics and program context.</li>
+<li>🎯 <strong>Goal management:</strong> sub-goals, statuses, and progress tracking.</li>
+<li>📝 <strong>Case documentation:</strong> notes and service tracking.</li>
+<li>⚠️ <strong>Critical incidents:</strong> consistent logging and review.</li>
+<li>🔎 <strong>Search &amp; filters:</strong> quickly locate students.</li>
 </ul>
 
 </section>
 
 
-<section class="card">
+<section class="card two">
 
 <h2>Project Structure</h2>
 
@@ -222,14 +247,14 @@ The system aims to reduce manual paperwork and improve visibility into student p
 </section>
 
 
-<section class="card">
+<section class="card two">
 
 <h2>Getting Started</h2>
 
 <ol>
-<li>Review the <code>README.md</code>.</li>
-<li>Configure the API and database.</li>
-<li>Run the UI and validate workflows.</li>
+<li>Open the <strong>live prototype</strong> to validate the core workflow.</li>
+<li>Complete the 3 evaluation tasks on the prototype.</li>
+<li>Submit feedback using the <strong>evaluation survey</strong>.</li>
 </ol>
 
 <a href="https://github.com/opelly27/WinStudentGoalTracker"
@@ -262,8 +287,8 @@ Go to GitHub
 <div class="card" style="box-shadow:none;border:1px solid #e5e7eb;">
 <h3>Operations</h3>
 <ul>
-<li>Search & filters</li>
-<li>Reports & exports</li>
+<li>Search &amp; filters</li>
+<li>Reports &amp; exports</li>
 <li>Supervisor review workflow</li>
 </ul>
 </div>
@@ -287,11 +312,11 @@ Go to GitHub
 <h2>Team Members</h2>
 
 <ul>
-<li><b>Armin Abaye</b> — UX/UI Lead & Product Strategy</li>
+<li><b>Armin Abaye</b> — UX/UI Lead &amp; Product Strategy</li>
 <li><b>Ivan Pelly</b> — Full Stack Development Lead</li>
-<li><b>Oliver Pelly</b> — Backend Systems & Security Engineer</li>
-<li><b>Raul Rosado</b> — Infrastructure & Governance Lead</li>
-<li><b>Vraj Patel</b> — Front-End Development & Integration Lead</li>
+<li><b>Oliver Pelly</b> — Backend Systems &amp; Security Engineer</li>
+<li><b>Raul Rosado</b> — Infrastructure &amp; Governance Lead</li>
+<li><b>Vraj Patel</b> — Front-End Development &amp; Integration Lead</li>
 </ul>
 
 </section>
@@ -302,28 +327,47 @@ Go to GitHub
 <h2 id="documentation">Documentation</h2>
 
 <p class="muted">
-Explore the technical documentation for the WIN Student Goal Tracker.
+Stakeholders: open the live prototype, complete the tasks, then submit feedback using the survey.
 </p>
 
 <div class="pill-row">
 
 <a href="prototype.html" class="btn">
-Prototype Demo
+Prototype Page (Tasks + Links)
+</a>
+
+<a href="https://win.opelly.me/"
+class="btn"
+target="_blank"
+rel="noopener noreferrer">
+Live Prototype
 </a>
 
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd4waAGdgDC9SpA2uvelWQtpJt7sGqsFgc-PCBOMoT99LmLHA/viewform"
 class="btn"
 target="_blank"
-rel="noopener noreferrer">
+rel="noopener noreferrer"
+style="background:#16a34a;">
 Prototype Evaluation Survey
 </a>
 
+<a href="https://www.figma.com/design/VyuyyPsPWtZ4jU5O93TknM/C4G-WIN---Initial-Design?node-id=1-5"
+class="btn"
+target="_blank"
+rel="noopener noreferrer">
+Figma Design (Desktop)
+</a>
+
+<a href="https://www.figma.com/design/VyuyyPsPWtZ4jU5O93TknM/C4G-WIN---Initial-Design?node-id=1-4"
+class="btn"
+target="_blank"
+rel="noopener noreferrer">
+Figma Design (Mobile)
+</a>
+
 <a href="db.html" class="btn">Database Documentation</a>
-
 <a href="api.html" class="btn">API Documentation</a>
-
 <a href="ui.html" class="btn">UI Documentation</a>
-
 <a href="um.html" class="btn">User Manual Documentation</a>
 
 </div>
@@ -365,16 +409,12 @@ Tested in a Chrome Incognito window.
 
 </section>
 
-
 </main>
 
 
 <footer>
-
 © 2026 WIN Student Goal Tracker — Built for student support and accountability.
-
 </footer>
-
 
 </body>
 </html>
