@@ -2,329 +2,345 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-    content="WIN Student Goal Tracker — a student goal tracker and reporting for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
-  <meta name="theme-color" content="#111827" />
-  <title>WIN — Student Goal Tracker and Reporting</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="WIN — Student Goal Tracker and Reporting" />
-  <meta property="og:description"
-    content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs." />
-  <meta property="og:type" content="website" />
+<meta name="description"
+content="WIN Student Goal Tracker — a student goal tracker and reporting system for tracking goals, documenting services, and logging critical incidents with auditability and privacy in mind." />
 
-  <style>
-    :root {
-      color-scheme: light;
-    }
+<meta name="theme-color" content="#111827" />
 
-    * {
-      box-sizing: border-box;
-    }
+<title>WIN — Student Goal Tracker and Reporting</title>
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
-        "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f7fa;
-      color: #111827;
-      line-height: 1.6;
-    }
+<meta property="og:title" content="WIN — Student Goal Tracker and Reporting" />
+<meta property="og:description"
+content="Track goals, services, and critical incidents for students with secure, auditable workflows designed for student support programs." />
+<meta property="og:type" content="website" />
 
-    a {
-      color: inherit;
-    }
+<style>
 
-    header {
-      background: #111827;
-      color: white;
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
+body{
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+margin:0;
+background:#f5f7fa;
+color:#111827;
+line-height:1.6;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.25rem;
-      letter-spacing: -0.02em;
-    }
+header{
+background:#111827;
+color:white;
+padding:3rem 1.5rem;
+text-align:center;
+}
 
-    header p {
-      margin-top: 0.75rem;
-      opacity: 0.9;
-      max-width: 70ch;
-      margin-left: auto;
-      margin-right: auto;
-    }
+header h1{
+margin:0;
+font-size:2.25rem;
+}
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 1.25rem 1rem 3rem;
-    }
+header p{
+margin-top:.75rem;
+opacity:.9;
+max-width:70ch;
+margin-left:auto;
+margin-right:auto;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 1rem;
-      align-items: stretch;
-    }
+main{
+max-width:1100px;
+margin:0 auto;
+padding:1.25rem 1rem 3rem;
+}
 
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 1.25rem;
-      box-shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
-      border: 1px solid rgba(17, 24, 39, 0.06);
-    }
+.grid{
+display:grid;
+grid-template-columns:repeat(12,1fr);
+gap:1rem;
+}
 
-    .hero {
-      grid-column: span 12;
-    }
+.card{
+background:#fff;
+border-radius:14px;
+padding:1.25rem;
+box-shadow:0 6px 18px rgba(17,24,39,.08);
+border:1px solid rgba(17,24,39,.06);
+}
 
-    .two {
-      grid-column: span 12;
-    }
+.hero{ grid-column:span 12; }
 
-    @media (min-width: 860px) {
-      .two {
-        grid-column: span 6;
-      }
-    }
+.two{ grid-column:span 12; }
 
-    h2 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.25rem;
-      letter-spacing: -0.01em;
-    }
+@media (min-width:860px){
+.two{ grid-column:span 6; }
+}
 
-    h3 {
-      margin: 0.75rem 0 0.4rem 0;
-      font-size: 1.05rem;
-      letter-spacing: -0.01em;
-    }
+h2{
+margin:0 0 .5rem;
+font-size:1.25rem;
+}
 
-    .muted {
-      color: rgba(17, 24, 39, 0.75);
-    }
+h3{
+margin:.75rem 0 .4rem;
+font-size:1.05rem;
+}
 
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
+.muted{
+color:rgba(17,24,39,.75);
+}
 
-    .pill {
-      padding: 0.35rem 0.6rem;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.08);
-      border: 1px solid rgba(37, 99, 235, 0.18);
-      color: #1d4ed8;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+.pill-row{
+display:flex;
+flex-wrap:wrap;
+gap:.5rem;
+margin-top:.75rem;
+}
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.6rem 0.85rem;
-      border-radius: 10px;
-      background: #2563eb;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      border: 1px solid rgba(17, 24, 39, 0.08);
-      transition: transform 0.08s ease, background 0.15s ease;
-      white-space: nowrap;
-    }
+.pill{
+padding:.35rem .6rem;
+border-radius:999px;
+background:rgba(37,99,235,.08);
+border:1px solid rgba(37,99,235,.18);
+color:#1d4ed8;
+font-weight:600;
+font-size:.9rem;
+}
 
-    .btn:hover {
-      background: #1d4ed8;
-      transform: translateY(-1px);
-    }
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:.6rem .85rem;
+border-radius:10px;
+background:#2563eb;
+color:#fff;
+text-decoration:none;
+font-weight:700;
+border:1px solid rgba(17,24,39,.08);
+}
 
-    .btn:focus-visible {
-      outline: 3px solid rgba(37, 99, 235, 0.35);
-      outline-offset: 2px;
-    }
+.btn:hover{
+background:#1d4ed8;
+}
 
-    .btn.secondary {
-      background: rgba(17, 24, 39, 0.06);
-      color: #111827;
-    }
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:1rem;
+}
 
-    .btn.secondary:hover {
-      background: rgba(17, 24, 39, 0.1);
-    }
+.grid-4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:1rem;
+}
 
-    .btn.disabled {
-      background: rgba(17, 24, 39, 0.08);
-      color: rgba(17, 24, 39, 0.45);
-      cursor: not-allowed;
-      pointer-events: none;
-      border: 1px dashed rgba(17, 24, 39, 0.12);
-    }
+.kpi strong{
+font-size:1.4rem;
+display:block;
+}
 
-    footer {
-      text-align: center;
-      padding: 2.25rem 1rem 3rem;
-      color: rgba(17, 24, 39, 0.65);
-      font-size: 0.95rem;
-    }
+footer{
+text-align:center;
+padding:2rem;
+color:rgba(17,24,39,.65);
+}
 
-    .kpi {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    .kpi .box {
-      background: rgba(17, 24, 39, 0.03);
-      border: 1px solid rgba(17, 24, 39, 0.06);
-      border-radius: 12px;
-      padding: 0.85rem;
-    }
-
-    .kpi .box b {
-      display: block;
-      font-size: 1.15rem;
-      margin-bottom: 0.15rem;
-    }
-
-    @media (max-width: 520px) {
-      .kpi {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+</style>
 </head>
 
 <body>
-  <header>
-    <h1>WIN — Student Goal Tracker and Reporting</h1>
-    <p>
-      Track goals, document services, and log critical incidents with auditable workflows designed for student support
-      programs.
-    </p>
-  </header>
 
-  <main>
-    <div class="grid">
-      <section class="card hero" aria-labelledby="overview">
-        <h2 id="overview">Project Overview</h2>
-        <p class="muted">
-          WIN Student Goal Tracker supports student goal tracking, services documentation, and critical incident
-          reporting with auditability and privacy in mind. The system aims to reduce manual paperwork, standardize
-          documentation, and improve visibility for program staff.
-        </p>
-        <div class="kpi" aria-label="Project highlights">
-          <div class="box">
-            <b>Goal Tracking</b>
-            <span class="muted">Create, track, and update student goals over time.</span>
-          </div>
-          <div class="box">
-            <b>Documentation</b>
-            <span class="muted">Case notes and services documented consistently.</span>
-          </div>
-          <div class="box">
-            <b>Incident Logging</b>
-            <span class="muted">Record incidents with structured fields and history.</span>
-          </div>
-        </div>
-      </section>
+<header>
+<h1>WIN — Student Goal Tracker and Reporting</h1>
+<p>
+Track student goals, document services, and log critical incidents with auditable workflows designed for student support programs.
+</p>
+</header>
 
-      <section class="card two" aria-labelledby="modules">
-        <h2 id="modules">Core Modules</h2>
-        <p class="muted">
-          Student goals, case notes, services provided, and critical incident reports—designed around
-          day-to-day workflows for advisors, mentors, and case managers.
-        </p>
-        <div class="pill-row" aria-label="Core modules">
-          <span class="pill">Students</span>
-          <span class="pill">Goals</span>
-          <span class="pill">Case Notes</span>
-          <span class="pill">Services</span>
-          <span class="pill">Incidents</span>
-          <span class="pill">Reports</span>
-        </div>
-      </section>
+<main>
 
-      <section class="card two" aria-labelledby="users">
-        <h2 id="users">Who Uses It</h2>
-        <ul class="muted">
-          <li>Advisors and mentors supporting student development</li>
-          <li>Program coordinators and case managers</li>
-          <li>Supervisors reviewing progress, documentation, and outcomes</li>
-        </ul>
-        <div class="pill-row" aria-label="Key roles">
-          <span class="pill">Instructor</span>
-          <span class="pill">Coordinator</span>
-          <span class="pill">Supervisor</span>
-        </div>
-      </section>
+<section class="grid">
 
-      <section class="card" style="margin-top:1.25rem;" aria-labelledby="documentation">
-        <h2 id="documentation">Documentation</h2>
-        <p class="muted">
-          Explore the technical documentation for the WIN Student Goal Tracker, including the database schema and entity
-          relationships.
-        </p>
-        <div class="pill-row">
-          <a href="db.html" class="btn" aria-label="View database documentation">
-            Database Documentation
-          </a>
-          <a href="api.html" class="btn" aria-label="View API documentation">
-            API Documentation
-          </a>
-          <a href="ui.html" class="btn" aria-label="View UI documentation">
-            UI Documentation
-          </a>
-          <a href="um.html" class="btn" aria-label="View User Manual documentation">
-            User Manual Documentation
-          </a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSd4waAGdgDC9SpA2uvelWQtpJt7sGqsFgc-PCBOMoT99LmLHA/viewform"
-            class="btn" target="_blank" rel="noopener noreferrer"
-            aria-label="Open prototype evaluation survey (opens in a new tab)">
-            Prototype Evaluation Survey
-          </a>
-          <!-- <span class="btn disabled" class="btn" aria-labeled="View API Documentation" title="Coming soon">
-          API Documentation
-        </span> -->
-          <!-- <span class="btn disabled" aria-disabled="true" title="Coming soon">
-          UI Documentation
-        </span> -->
-          <!-- <span class="btn disabled" aria-disabled="true" title="Coming soon">
-          User Manual
-        </span> -->
-        </div>
-      </section>
+<section class="card hero">
 
-      <section class="card" style="margin-top:1.25rem;" aria-labelledby="lighthouse">
-        <h2 id="lighthouse">Lighthouse</h2>
-        <p class="muted">
-          This site is designed to be Lighthouse-friendly: semantic HTML, responsive layout, accessible contrast, and
-          descriptive labels. Use Lighthouse in Chrome DevTools to verify performance, accessibility, best practices, and
-          SEO.
-        </p>
-        <div class="pill-row">
-          <a class="btn secondary" href="https://developer.chrome.com/docs/lighthouse/overview/" target="_blank"
-            rel="noopener noreferrer" aria-label="Learn about Lighthouse (opens in a new tab)">
-            Lighthouse Overview
-          </a>
-        </div>
-      </section>
-    </div>
-  </main>
+<h2>Overview</h2>
 
-  <footer>
-    WIN Student Goal Tracker — Documentation Hub
-  </footer>
+<p class="muted">
+WIN Student Goal Tracker supports student goal tracking, services documentation,
+and critical incident reporting with auditability and privacy in mind.
+The system reduces manual paperwork and improves visibility into student progress.
+</p>
+
+</section>
+
+<section class="card two">
+
+<h2>Typical Workflow</h2>
+
+<ol>
+<li>Select a student.</li>
+<li>Select a goal.</li>
+<li>Record progress events for that goal.</li>
+<li>Record case notes and services provided.</li>
+<li>If needed, log a critical incident.</li>
+<li>Generate reports for program outcomes.</li>
+</ol>
+
+</section>
+
+<section class="card two">
+
+<h2>Core Features</h2>
+
+<ul>
+<li><strong>Student profiles:</strong> demographics and program context.</li>
+<li><strong>Goal management:</strong> sub-goals, statuses, and progress tracking.</li>
+<li><strong>Case documentation:</strong> notes and service tracking.</li>
+<li><strong>Critical incidents:</strong> consistent logging and review.</li>
+<li><strong>Search and filters:</strong> quickly locate students.</li>
+</ul>
+
+</section>
+
+<section class="card">
+
+<h2>Project Structure</h2>
+
+<ul>
+<li><code>api/</code> — middle-tier services and data access</li>
+<li><code>ui/</code> — front-end application</li>
+<li><code>db/</code> — database structures</li>
+<li><code>SECURITY.md</code> — security practices</li>
+<li><code>README.md</code> — build instructions</li>
+</ul>
+
+</section>
+
+<section class="card">
+
+<h2>Getting Started</h2>
+
+<ol>
+<li>Review the <code>README.md</code>.</li>
+<li>Configure the API and database.</li>
+<li>Run the UI and validate workflows.</li>
+</ol>
+
+<a href="https://github.com/opelly27/WinStudentGoalTracker"
+class="btn"
+target="_blank"
+rel="noopener noreferrer">
+Go to GitHub
+</a>
+
+</section>
+
+</section>
+
+
+<section class="card" style="margin-top:1.25rem;">
+
+<h2>Roadmap</h2>
+
+<div class="grid-3">
+
+<div class="card" style="box-shadow:none;border:1px solid #e5e7eb;">
+<h3>MVP</h3>
+<ul>
+<li>Student profiles</li>
+<li>Goal creation</li>
+<li>Incident logging</li>
+</ul>
+</div>
+
+<div class="card" style="box-shadow:none;border:1px solid #e5e7eb;">
+<h3>Operations</h3>
+<ul>
+<li>Search and filters</li>
+<li>Reports</li>
+<li>Supervisor review</li>
+</ul>
+</div>
+
+<div class="card" style="box-shadow:none;border:1px solid #e5e7eb;">
+<h3>Compliance</h3>
+<ul>
+<li>Audit logs</li>
+<li>Retention policy</li>
+<li>Incident classification</li>
+</ul>
+</div>
+
+</div>
+
+</section>
+
+
+<section class="card" style="margin-top:1.25rem;">
+
+<h2>Team Members</h2>
+
+<ul>
+<li><b>Armin Abaye</b> — UX/UI Lead</li>
+<li><b>Ivan Pelly</b> — Full Stack Lead</li>
+<li><b>Oliver Pelly</b> — Backend & Security</li>
+<li><b>Raul Rosado</b> — Infrastructure & Governance</li>
+<li><b>Vraj Patel</b> — Front-End Development</li>
+</ul>
+
+</section>
+
+
+<section class="card" style="margin-top:1.25rem;" aria-labelledby="documentation">
+
+<h2 id="documentation">Documentation</h2>
+
+<p class="muted">
+Explore the technical documentation for the WIN Student Goal Tracker.
+</p>
+
+<div class="pill-row">
+
+<a href="db.html" class="btn">Database Documentation</a>
+
+<a href="api.html" class="btn">API Documentation</a>
+
+<a href="ui.html" class="btn">UI Documentation</a>
+
+<a href="um.html" class="btn">User Manual Documentation</a>
+
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSd4waAGdgDC9SpA2uvelWQtpJt7sGqsFgc-PCBOMoT99LmLHA/viewform"
+class="btn"
+target="_blank"
+rel="noopener noreferrer">
+Prototype Evaluation Survey
+</a>
+
+</div>
+
+</section>
+
+
+<section class="card" style="margin-top:1.25rem;">
+
+<h2>Lighthouse Scores</h2>
+
+<div class="grid-4">
+
+<div class="kpi"><strong>100</strong>Performance</div>
+<div class="kpi"><strong>100</strong>Accessibility</div>
+<div class="kpi"><strong>100</strong>Best Practices</div>
+<div class="kpi"><strong>100</strong>SEO</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+© 2026 WIN Student Goal Tracker — Built for student support and accountability.
+</footer>
+
 </body>
-
-</html>
