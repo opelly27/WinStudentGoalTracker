@@ -4,6 +4,24 @@
     height: 100%;
 }
 
+.generate-report {
+    display: inline-flex;
+    align-items: center;
+    background-color: #4000ee;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+
+}
+
+.generate-report:hover {
+    background-color: #4f46e5;
+}
+
 .toolbar {
     display: flex;
     align-items: center;
@@ -15,6 +33,7 @@
     border-bottom: 1px solid #ddd;
     margin-bottom: 1rem;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .toolbar-btn {
