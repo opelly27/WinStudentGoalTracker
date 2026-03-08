@@ -26,9 +26,25 @@ export class GoalCard {
     // ************************ Event Handlers *************************
 
     // *****************************************************************
-    // Navigates to the progress events page for this goal.
+    // Navigates to the goal detail page.
     // *****************************************************************
     onCardClick() {
+        const studentId = this.route.snapshot.paramMap.get('studentId')!;
+        this.router.navigate(['/students', studentId, 'goals', this.goal().goalId]);
+    }
+
+    // *****************************************************************
+    // Navigates to the benchmarks page for this goal.
+    // *****************************************************************
+    onBenchmarksClick() {
+        const studentId = this.route.snapshot.paramMap.get('studentId')!;
+        this.router.navigate(['/students', studentId, 'goals', this.goal().goalId, 'benchmarks']);
+    }
+
+    // *****************************************************************
+    // Navigates to the progress events page for this goal.
+    // *****************************************************************
+    onProgressEventsClick() {
         const studentId = this.route.snapshot.paramMap.get('studentId')!;
         this.router.navigate(['/students', studentId, 'goals', this.goal().goalId, 'progress']);
     }

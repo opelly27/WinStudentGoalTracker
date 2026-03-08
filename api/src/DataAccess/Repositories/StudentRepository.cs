@@ -194,9 +194,119 @@ public class StudentRepository
                 Title = r.Title,
                 Description = r.Description,
                 Category = r.Category,
-                ProgressEventCount = r.ProgressEventCount
+                ProgressEventCount = r.ProgressEventCount,
+                BenchmarkCount = r.BenchmarkCount
             }).ToList()
         };
+    }
+
+    // *****************************************************************
+    // Updates a goal's title, description, and category.
+    // *****************************************************************
+    public async Task<bool> UpdateGoalAsync(Guid goalId, UpdateGoalDto dto)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteScalarAsync<int>(
+            "sp_Goal_Update",
+            new
+            {
+                p_id_goal = goalId.ToString(),
+                p_id_goal_parent = (string?)null,
+                p_id_student = (string?)null,
+                p_id_user_created = (string?)null,
+                p_title = dto.Title,
+                p_description = dto.Description,
+                p_category = dto.Category
+            },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
+
+    // *****************************************************************
+    // Returns all benchmarks for a student, grouped under a summary
+    // with the student identifier. Returns null if student not found.
+    // *****************************************************************
+    public async Task<StudentBenchmarkSummary?> GetBenchmarkSummaryAsync(Guid idStudent)
+    {
+        using var db = Connection;
+        var rows = await db.QueryAsync<dbStudentBenchmarkRow>(
+            "sp_Benchmark_GetByStudentId",
+            new { p_id_student = idStudent.ToString() },
+            commandType: CommandType.StoredProcedure);
+
+        var list = rows.ToList();
+        if (list.Count == 0)
+        {
+            var student = await GetByIdAsync(idStudent);
+            if (student is null) return null;
+
+            return new StudentBenchmarkSummary
+            {
+                StudentIdentifier = student.Identifier,
+                Benchmarks = []
+            };
+        }
+
+        return new StudentBenchmarkSummary
+        {
+            StudentIdentifier = list[0].StudentIdentifier,
+            Benchmarks = list.Select(r => new StudentBenchmarkItem
+            {
+                BenchmarkId = r.BenchmarkId,
+                GoalId = r.GoalId,
+                GoalTitle = r.GoalTitle,
+                Benchmark = r.Benchmark,
+                CreatedByName = r.CreatedByName,
+                CreatedAt = r.CreatedAt,
+                UpdatedAt = r.UpdatedAt
+            }).ToList()
+        };
+    }
+
+    // *****************************************************************
+    // Inserts a new benchmark and returns the created benchmark item.
+    // *****************************************************************
+    public async Task<StudentBenchmarkItem?> InsertBenchmarkAsync(Guid goalId, Guid userId, CreateBenchmarkDto dto)
+    {
+        var newId = Guid.NewGuid();
+        using var db = Connection;
+        var row = await db.QuerySingleOrDefaultAsync(
+            "sp_Benchmark_Insert",
+            new
+            {
+                p_id_benchmark = newId.ToString(),
+                p_id_goal = goalId.ToString(),
+                p_id_user_created = userId.ToString(),
+                p_benchmark = dto.Benchmark
+            },
+            commandType: CommandType.StoredProcedure);
+
+        if (row is null) return null;
+
+        return new StudentBenchmarkItem
+        {
+            BenchmarkId = newId,
+            GoalId = goalId,
+            Benchmark = dto.Benchmark,
+            CreatedAt = DateTime.UtcNow
+        };
+    }
+
+    // *****************************************************************
+    // Updates a benchmark's text and returns whether rows were affected.
+    // *****************************************************************
+    public async Task<bool> UpdateBenchmarkAsync(Guid benchmarkId, string benchmarkText)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteScalarAsync<int>(
+            "sp_Benchmark_Update",
+            new
+            {
+                p_id_benchmark = benchmarkId.ToString(),
+                p_benchmark = benchmarkText
+            },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
     }
 
 }

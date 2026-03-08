@@ -1,0 +1,24 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Goal</button>
+    <span class="spacer"></span>
+    <button class="toolbar-btn" (click)="onAddBenchmark()">+ Add a Benchmark</button>
+</div>
+
+@if (studentIdentifier()) {
+<h2 class="section-header">Benchmarks for {{ studentIdentifier() }}</h2>
+}
+
+@if (errorMessage()) {
+<p class="error">{{ errorMessage() }}</p>
+}
+
+@if (benchmarks().length === 0 && !errorMessage()) {
+<p class="empty-state">No benchmarks yet. Click <a class="empty-link" (click)="onAddBenchmark()">Add a Benchmark</a> to
+    get started.</p>
+} @else {
+<div class="card-grid">
+    @for (bm of benchmarks(); track bm.benchmarkId) {
+    <app-benchmark-card [benchmark]="bm" />
+    }
+</div>
+}

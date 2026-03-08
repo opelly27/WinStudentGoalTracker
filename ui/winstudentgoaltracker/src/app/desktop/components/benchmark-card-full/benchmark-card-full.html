@@ -1,0 +1,44 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Benchmarks</button>
+    <span class="toolbar-title">{{ isNew() ? 'New Benchmark' : 'Benchmark Detail' }}</span>
+    <span class="spacer"></span>
+</div>
+
+@if (errorMessage()) {
+<p class="error">{{ errorMessage() }}</p>
+}
+
+@if (successMessage()) {
+<p class="success">{{ successMessage() }}</p>
+}
+
+@if (loaded()) {
+<div class="detail-card">
+    <div class="field">
+        <span class="field-label">Goal</span>
+        <span class="field-value">{{ goalTitle }}</span>
+    </div>
+    <div class="field">
+        <label class="field-label" for="benchmarkText">Benchmark</label>
+        <textarea id="benchmarkText" class="field-input field-textarea" [(ngModel)]="benchmarkText" rows="4"
+            placeholder="Enter benchmark text..."></textarea>
+    </div>
+    @if (!isNew()) {
+    <div class="metadata">
+        @if (createdByName) {
+        <span class="meta-item">Created by: {{ createdByName }}</span>
+        }
+        <span class="meta-item">Created: {{ createdAt | date:'medium' }}</span>
+        @if (updatedAt) {
+        <span class="meta-item">Updated: {{ updatedAt | date:'medium' }}</span>
+        }
+    </div>
+    }
+    <div class="actions">
+        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+            {{ saving() ? 'Saving...' : 'Save' }}
+        </button>
+    </div>
+</div>
+}

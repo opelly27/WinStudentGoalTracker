@@ -16,10 +16,11 @@
     margin-bottom: 1rem;
     flex-shrink: 0;
 }
+
 .page-title {
     font-size: 24px;
     font-weight: 600;
-    margin: 0;
+    margin-left: 0.75rem;
 }
 
 .toolbar-btn {
@@ -40,8 +41,8 @@
 .card-grid {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: 1rem;
     overflow-y: auto;
     flex: 1;
 }
-

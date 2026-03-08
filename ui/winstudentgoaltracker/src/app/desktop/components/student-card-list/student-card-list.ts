@@ -41,7 +41,7 @@ export class StudentCardList {
   }
 
   onStudentCreated(student: StudentCardDto) {
-    this.students.update(list => [...list, student]);
+    this.students.update(list => this.sortByIdentifier([...list, student]));
     this.showAddModal.set(false);
   }
 
@@ -52,18 +52,25 @@ export class StudentCardList {
   // ********************** Support Procedures ***********************
 
   // *****************************************************************
+  // Sorts an array of students alphabetically by identifier.
+  // *****************************************************************
+  private sortByIdentifier(students: StudentCardDto[]): StudentCardDto[] {
+    return students.sort((a, b) =>
+      a.identifier.localeCompare(b.identifier, undefined, { sensitivity: 'base' })
+    );
+  }
+
+  // *****************************************************************
   // Loads students from the service and populates the students signal.
   // *****************************************************************
   private loadStudents() {
     this.studentService.getMyStudents().then(data => {
-      
-      if(!data.success)
-      {
+
+      if (!data.success) {
         this.errorMessage.set(data.message);
       }
-      else
-      {
-        this.students.set(data.payload || [])
+      else {
+        this.students.set(this.sortByIdentifier(data.payload || []))
       }
 
     });

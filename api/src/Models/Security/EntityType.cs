@@ -8,10 +8,11 @@ public static class EntityType
     public const string Student        = "student";
     public const string Goal           = "goal";
     public const string ProgressEvent  = "progress_event";
+    public const string Benchmark      = "benchmark";
 
     public static string? TryParse(string value) =>
         All.Contains(value) ? value : null;
 
     public static readonly IReadOnlyList<string> All =
-        [SchoolDistrict, Program, User, Student, Goal, ProgressEvent];
+        [SchoolDistrict, Program, User, Student, Goal, ProgressEvent, Benchmark];
 }

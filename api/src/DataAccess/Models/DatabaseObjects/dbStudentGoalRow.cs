@@ -9,4 +9,5 @@ public class dbStudentGoalRow
     public string? Description { get; set; }
     public string? Category { get; set; }
     public int ProgressEventCount { get; set; }
+    public int BenchmarkCount { get; set; }
 }

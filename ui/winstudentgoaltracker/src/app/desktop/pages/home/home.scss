@@ -79,7 +79,8 @@
 }
 
 .sidebar.expanded {
-    width: 220px;
+    width: 260px;
+    overflow-y: auto;
 }
 
 .nav-item {
@@ -93,11 +94,6 @@
 
 .nav-item:hover {
     background: #f5f5f5;
-}
-
-.nav-item.sub {
-    padding-left: 2rem;
-    font-size: 0.8125rem;
 }
 
 .nav-item.active {

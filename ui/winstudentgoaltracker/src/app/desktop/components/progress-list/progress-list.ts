@@ -43,6 +43,7 @@ export class ProgressList implements OnDestroy {
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly rawSearchText = signal('');
   protected readonly searchTerm = signal('');
+  protected readonly showAddModal = signal(false);
 
   // ************************** Properties ***************************
 
@@ -65,11 +66,16 @@ export class ProgressList implements OnDestroy {
 
   // ************************ Event Handlers *************************
 
+  onAddProgressEvent() {
+    this.showAddModal.set(true);
+    // TODO: Wire up add-progress-event modal component
+  }
+
   // *****************************************************************
-  // Navigates back to the goals list for this student.
+  // Navigates back to the parent goal detail.
   // *****************************************************************
   onBack() {
-    this.router.navigate(['/students', this.studentId, 'goals']);
+    this.router.navigate(['/students', this.studentId, 'goals', this.goalId]);
   }
 
   // *****************************************************************

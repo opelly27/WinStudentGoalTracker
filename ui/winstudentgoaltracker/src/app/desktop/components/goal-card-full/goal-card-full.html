@@ -1,0 +1,42 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Student</button>
+    <span class="toolbar-title">Goal Detail</span>
+    <span class="spacer"></span>
+</div>
+
+@if (errorMessage()) {
+<p class="error">{{ errorMessage() }}</p>
+}
+
+@if (successMessage()) {
+<p class="success">{{ successMessage() }}</p>
+}
+
+@if (loaded()) {
+<div class="detail-card">
+    <div class="field">
+        <label class="field-label" for="title">Title</label>
+        <input id="title" class="field-input" type="text" [(ngModel)]="title" />
+    </div>
+    <div class="field">
+        <label class="field-label" for="description">Description</label>
+        <textarea id="description" class="field-input field-textarea" [(ngModel)]="description" rows="4"
+            placeholder="Enter description..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label" for="category">Category</label>
+        <input id="category" class="field-input" type="text" [(ngModel)]="category" />
+    </div>
+    <div class="actions">
+        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+            {{ saving() ? 'Saving...' : 'Save' }}
+        </button>
+    </div>
+
+    <div class="card-footer">
+        <a class="detail-link" (click)="onProgressEvents()">Progress Events</a>
+        <a class="detail-link" (click)="onBenchmarks()">Benchmarks</a>
+    </div>
+</div>
+}

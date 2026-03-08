@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../classes/api-result';
@@ -10,6 +10,7 @@ import { CreateGoalDto } from '../classes/create-goal.dto';
 import { StudentCardDto } from '../classes/student-card.dto';
 import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
 import { ProgressEventDto } from '../classes/progress-event.dto';
+import { StudentBenchmarkSummary } from '../classes/benchmark.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -23,9 +24,19 @@ export class StudentService {
     private readonly http = inject(HttpClient);
     private readonly base = environment.apiBaseUrl;
 
+    // Incremented after any data mutation so subscribers can refresh.
+    readonly dataVersion = signal(0);
+
     // ************************** Properties ***************************
 
     // ************************ Public Methods *************************
+
+    // *****************************************************************
+    // Increments the data version signal so subscribers can refresh.
+    // *****************************************************************
+    notifyDataChanged() {
+        this.dataVersion.update(v => v + 1);
+    }
 
     // *****************************************************************
     // Returns student card summaries for the authenticated user.
@@ -123,4 +134,100 @@ export class StudentService {
     // ************************ Event Handlers *************************
 
     // ********************** Support Procedures ***********************
+
+    // *****************************************************************
+    // Returns a single student by ID.
+    // *****************************************************************
+    async getStudentById(studentId: string): Promise<ApiResult<StudentCardDto>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<StudentCardDto>>(`${this.base}/api/Student/${studentId}`)
+            );
+            return result.success && result.data
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Updates a student and returns the refreshed student data.
+    // *****************************************************************
+    async updateStudent(studentId: string, data: { identifier?: string; programYear?: number | null; enrollmentDate?: string | null; expectedGrad?: string | null }): Promise<ApiResult<StudentCardDto>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.put<ResponseResult<StudentCardDto>>(`${this.base}/api/Student/${studentId}`, data)
+            );
+            return result.success && result.data
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Returns benchmarks for a given student.
+    // *****************************************************************
+    async getBenchmarksForStudent(studentId: string): Promise<ApiResult<StudentBenchmarkSummary | null>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<StudentBenchmarkSummary>>(`${this.base}/api/Student/${studentId}/benchmarks`)
+            );
+            return result.success && result.data
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Creates a new benchmark for a student.
+    // *****************************************************************
+    async createBenchmark(studentId: string, data: { goalId: string; benchmark: string }): Promise<ApiResult<any>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.post<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks`, data)
+            );
+            return result.success
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Updates a benchmark's text.
+    // *****************************************************************
+    async updateBenchmark(studentId: string, benchmarkId: string, benchmarkText: string): Promise<ApiResult<any>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks/${benchmarkId}`, { benchmark: benchmarkText })
+            );
+            return result.success
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Updates a goal's title, description, and category.
+    // *****************************************************************
+    async updateGoal(studentId: string, goalId: string, data: { title?: string; description?: string; category?: string }): Promise<ApiResult<any>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/goals/${goalId}`, data)
+            );
+            return result.success
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
 }

@@ -60,6 +60,13 @@ public static class PermissionMatrix
                 [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = Allow,
             },
+            [EntityType.Benchmark] = new()
+            {
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
+                [PermissionAction.Delete] = Allow,
+            },
         },
 
         // ──────────────────────────────────────────────
@@ -103,6 +110,13 @@ public static class PermissionMatrix
                 [PermissionAction.Delete] = Allow,
             },
             [EntityType.ProgressEvent] = new()
+            {
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
+                [PermissionAction.Delete] = Allow,
+            },
+            [EntityType.Benchmark] = new()
             {
                 [PermissionAction.Create] = Allow,
                 [PermissionAction.Read]   = Allow,
@@ -158,6 +172,13 @@ public static class PermissionMatrix
                 [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = MineOnly,
             },
+            [EntityType.Benchmark] = new()
+            {
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
+                [PermissionAction.Delete] = MineOnly,
+            },
         },
 
         // ──────────────────────────────────────────────
@@ -201,6 +222,13 @@ public static class PermissionMatrix
                 [PermissionAction.Delete] = MineOnly,
             },
             [EntityType.ProgressEvent] = new()
+            {
+                [PermissionAction.Create] = MineOnly,
+                [PermissionAction.Read]   = MineOnly,
+                [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Delete] = MineOnly,
+            },
+            [EntityType.Benchmark] = new()
             {
                 [PermissionAction.Create] = MineOnly,
                 [PermissionAction.Read]   = MineOnly,
@@ -254,6 +282,13 @@ public static class PermissionMatrix
                 [PermissionAction.Create] = MineOnly,
                 [PermissionAction.Read]   = MineOnly,
                 [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Delete] = Deny,
+            },
+            [EntityType.Benchmark] = new()
+            {
+                [PermissionAction.Create] = Deny,
+                [PermissionAction.Read]   = MineOnly,
+                [PermissionAction.Update] = Deny,
                 [PermissionAction.Delete] = Deny,
             },
         },

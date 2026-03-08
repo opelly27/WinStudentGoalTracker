@@ -1,0 +1,39 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Students</button>
+    <span class="toolbar-title">Student Detail</span>
+    <span class="spacer"></span>
+</div>
+
+@if (errorMessage()) {
+<p class="error">{{ errorMessage() }}</p>
+}
+
+
+
+@if (loaded()) {
+<div class="detail-card">
+    <div class="field">
+        <label class="field-label" for="identifier">Name</label>
+        <input id="identifier" class="field-input" type="text" [(ngModel)]="identifier" />
+    </div>
+    <div class="field">
+        <label class="field-label" for="expectedGrad">Expected Graduation</label>
+        <input id="expectedGrad" class="field-input" type="date" [(ngModel)]="expectedGradDate" />
+    </div>
+
+    <div class="actions">
+        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+            {{ saving() ? 'Saving...' : 'Save' }}
+        </button>
+    </div>
+
+    <div class="card-footer">
+        <a class="detail-link" (click)="onGoals()">Goals</a>
+        <span class="spacer"></span>
+        @if (successMessage()) {
+        <span class="success-label" [class.fade-out]="fading()">{{ successMessage() }}</span>
+        }
+    </div>
+</div>
+}

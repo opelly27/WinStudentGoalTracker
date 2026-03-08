@@ -10,4 +10,5 @@ export interface StudentGoalItem {
     description: string;         // goal.description — text
     category: string;            // goal.category — varchar(100)
     progressEventCount: number;  // count of progress_event rows for this goal
+    benchmarkCount: number;      // count of benchmark rows for this goal
 }

@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { StudentService } from '../../../shared/services/student.service';
 import { GoalCard } from '../goal-card/goal-card';
@@ -11,13 +12,15 @@ import { AddGoalModal } from '../add-goal-modal/add-goal-modal';
     templateUrl: './goal-list.html',
     styleUrl: './goal-list.scss',
 })
-export class GoalList {
+export class GoalList implements OnDestroy {
 
     // ************************** Constructor **************************
 
     constructor() {
-        this.studentId = this.route.snapshot.paramMap.get('studentId')!;
-        this.loadGoals();
+        this.paramSub = this.route.paramMap.subscribe(params => {
+            this.studentId = params.get('studentId')!;
+            this.loadGoals();
+        });
     }
 
     // ************************** Declarations *************************
@@ -25,8 +28,9 @@ export class GoalList {
     private readonly studentService = inject(StudentService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private readonly paramSub: Subscription;
 
-    protected readonly studentId: string;
+    protected studentId!: string;
     protected readonly studentIdentifier = signal<string | null>(null);
     protected readonly goals = signal<StudentGoalItem[]>([]);
     protected readonly showAddModal = signal(false);
@@ -52,7 +56,11 @@ export class GoalList {
     }
 
     onBack() {
-        this.router.navigate(['/students']);
+        this.router.navigate(['/students', this.studentId]);
+    }
+
+    ngOnDestroy() {
+        this.paramSub.unsubscribe();
     }
 
     // ********************** Support Procedures ***********************

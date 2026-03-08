@@ -8,7 +8,8 @@ BEGIN
         vc.`title`,
         vc.`description`,
         vc.`category`,
-        vc.`progressEventCount`
+        vc.`progressEventCount`,
+        vc.`benchmarkCount`
     FROM `v_goal_card` vc
     INNER JOIN `student` s ON s.`id_student` = vc.`studentId`
     WHERE vc.`studentId` = p_id_student

@@ -1,12 +1,15 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8592; Students</button>
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Student</button>
+    <span class="toolbar-title">Goals</span>
     <span class="spacer"></span>
-    <button class="generate-report"> ⭐ Generate progress report</button>
     <button class="toolbar-btn" (click)="onAddGoal()">+ Add a Goal</button>
 </div>
 
+<!-- <img class="hero-image" src="/hurdlescropped.png" alt="Hurdles" /> -->
+
+
 @if (studentIdentifier()) {
-<h2 class="section-header">Goals for {{ studentIdentifier() }}</h2>
+<h2 class="section-header">Student: {{ studentIdentifier() }}</h2>
 }
 
 @if (showAddModal()) {
@@ -27,3 +30,8 @@
     }
 </div>
 }
+
+<footer class="goal-footer">
+    <span class="spacer"></span>
+    <button class="toolbar-btn"> ⭐ Generate progress report</button>
+</footer>

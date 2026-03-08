@@ -1,4 +1,4 @@
-<div class="card clickable" (click)="onCardClick()">
+<div class="card" (click)="onCardClick()">
     <div class="card-header">
         <span class="category-badge">{{ goal().category }}</span>
         <span class="event-count">{{ goal().progressEventCount }} events</span>
@@ -6,4 +6,9 @@
 
     <h3 class="title">{{ goal().title }}</h3>
     <p class="description">{{ goal().description }}</p>
+
+    <div class="card-footer">
+        <a class="footer-link" (click)="$event.stopPropagation(); onBenchmarksClick()">Benchmarks</a>
+        <a class="footer-link" (click)="$event.stopPropagation(); onProgressEventsClick()">Progress Events</a>
+    </div>
 </div>
