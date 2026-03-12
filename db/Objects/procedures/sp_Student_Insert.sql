@@ -6,7 +6,7 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_Insert`(
     IN p_identifier VARCHAR(50),
     IN p_program_year INT,
     IN p_enrollment_date DATE,
-    IN p_expected_grad DATE
+    IN p_next_iep_date DATE
 )
 BEGIN
     INSERT INTO student
@@ -16,7 +16,7 @@ BEGIN
         identifier,
         program_year,
         enrollment_date,
-        expected_grad,
+        next_iep_date,
         created_at
     )
     VALUES
@@ -26,7 +26,7 @@ BEGIN
         p_identifier,
         p_program_year,
         p_enrollment_date,
-        p_expected_grad,
+        p_next_iep_date,
         UTC_TIMESTAMP()
     );
     INSERT INTO user_student (id_user_student, id_user, id_student, is_primary)
@@ -37,7 +37,7 @@ BEGIN
         identifier,
         program_year,
         enrollment_date,
-        expected_grad,
+        next_iep_date,
         created_at
     FROM student
     WHERE id_student = p_id_student

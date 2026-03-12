@@ -19,7 +19,7 @@ Content-Type: application/json
   "identifier": "WIN-1001",
   "programYear": 2026,
   "enrollmentDate": "2026-01-15",
-  "expectedGrad": "2028-06-01"
+  "nextIepDate": "2028-06-01"
 }
 
 ###

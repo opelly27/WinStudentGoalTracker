@@ -50,7 +50,7 @@ public class StudentRepository
                 p_identifier = dto.Identifier,
                 p_program_year = dto.ProgramYear,
                 p_enrollment_date = dto.EnrollmentDate,
-                p_expected_grad = dto.ExpectedGrad
+                p_next_iep_date = dto.NextIepDate
             },
             commandType: CommandType.StoredProcedure);
 
@@ -68,7 +68,7 @@ public class StudentRepository
                 p_identifier = dto.Identifier,
                 p_program_year = dto.ProgramYear,
                 p_enrollment_date = dto.EnrollmentDate,
-                p_expected_grad = dto.ExpectedGrad
+                p_next_iep_date = dto.NextIepDate
             },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;

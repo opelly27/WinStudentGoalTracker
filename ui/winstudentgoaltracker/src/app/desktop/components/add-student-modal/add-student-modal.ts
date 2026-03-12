@@ -28,7 +28,7 @@ export class AddStudentModal {
         identifier: '',
         programYear: null,
         enrollmentDate: null,
-        expectedGrad: null,
+        nextIepDate: null,
     };
 
     // ************************** Properties ***************************

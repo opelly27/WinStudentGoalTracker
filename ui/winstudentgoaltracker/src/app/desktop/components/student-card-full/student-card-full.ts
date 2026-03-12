@@ -40,11 +40,11 @@ export class StudentCardFull implements OnDestroy {
 
   // Form fields — always editable
   protected identifier = '';
-  protected expectedGradDate = '';
+  protected nextIepDate = '';
 
   // Snapshot of last-saved values for cancel
   private savedIdentifier = '';
-  private savedExpectedGradDate = '';
+  private savedNextIepDate = '';
 
   // ************************** Properties ***************************
 
@@ -53,7 +53,7 @@ export class StudentCardFull implements OnDestroy {
   // *****************************************************************
   hasChanges(): boolean {
     return this.identifier !== this.savedIdentifier
-      || this.expectedGradDate !== this.savedExpectedGradDate;
+      || this.nextIepDate !== this.savedNextIepDate;
   }
 
   // ************************ Public Methods *************************
@@ -70,14 +70,14 @@ export class StudentCardFull implements OnDestroy {
 
     const result = await this.studentService.updateStudent(this.studentId, {
       identifier: this.identifier,
-      expectedGrad: this.expectedGradDate || null,
+      nextIepDate: this.nextIepDate || null,
     });
 
     this.saving.set(false);
 
     if (result.success) {
       this.savedIdentifier = this.identifier;
-      this.savedExpectedGradDate = this.expectedGradDate;
+      this.savedNextIepDate = this.nextIepDate;
       this.showSuccessTemporarily('Changes saved.');
       this.studentService.notifyDataChanged();
     } else {
@@ -90,7 +90,7 @@ export class StudentCardFull implements OnDestroy {
   // *****************************************************************
   onCancel() {
     this.identifier = this.savedIdentifier;
-    this.expectedGradDate = this.savedExpectedGradDate;
+    this.nextIepDate = this.savedNextIepDate;
     this.errorMessage.set(null);
     this.successMessage.set(null);
   }
@@ -138,10 +138,10 @@ export class StudentCardFull implements OnDestroy {
       if (result.success && result.payload) {
         const s = result.payload;
         this.identifier = s.identifier;
-        this.expectedGradDate = this.toDateInput(s.expectedGradDate);
+        this.nextIepDate = this.toDateInput(s.nextIepDate);
 
         this.savedIdentifier = this.identifier;
-        this.savedExpectedGradDate = this.expectedGradDate;
+        this.savedNextIepDate = this.nextIepDate;
         this.loaded.set(true);
       } else {
         this.errorMessage.set(result.message);

@@ -7,6 +7,6 @@ public class dbStudent
     public string? Identifier { get; set; }
     public int? ProgramYear { get; set; }
     public DateTime? EnrollmentDate { get; set; }
-    public DateTime? ExpectedGrad { get; set; }
+    public DateTime? NextIepDate { get; set; }
     public DateTime? CreatedAt { get; set; }
 }

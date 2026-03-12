@@ -8,7 +8,7 @@ BEGIN
     SELECT
         vc.studentId,
         vc.identifier,
-        vc.expectedGradDate,
+        vc.nextIepDate,
         vc.lastEntryDate,
         vc.goalCount,
         vc.progressEventCount

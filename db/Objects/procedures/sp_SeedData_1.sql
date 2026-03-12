@@ -28,7 +28,7 @@ BEGIN
     ('e5f6a7b8-0002-4000-a000-000000000001', 'd4e5f6a7-0002-4000-a000-000000000001', 'b2c3d4e5-0001-4000-a000-000000000001', 'c3d4e5f6-0004-4000-a000-000000000001', 1, 'active', UTC_TIMESTAMP()),
     ('e5f6a7b8-0003-4000-a000-000000000001', 'd4e5f6a7-0003-4000-a000-000000000001', 'b2c3d4e5-0001-4000-a000-000000000001', 'c3d4e5f6-0005-4000-a000-000000000001', 1, 'active', UTC_TIMESTAMP());
     -- 6. STUDENTS
-    INSERT INTO student (id_student, id_program, identifier, program_year, enrollment_date, expected_grad, created_at) VALUES
+    INSERT INTO student (id_student, id_program, identifier, program_year, enrollment_date, next_iep_date, created_at) VALUES
     ('f6a7b8c9-0001-4000-a000-000000000001', 'b2c3d4e5-0001-4000-a000-000000000001', 'STU-001', 1, '2025-09-01', '2029-06-15', UTC_TIMESTAMP()),
     ('f6a7b8c9-0002-4000-a000-000000000001', 'b2c3d4e5-0001-4000-a000-000000000001', 'STU-002', 1, '2025-09-01', '2029-06-15', UTC_TIMESTAMP()),
     ('f6a7b8c9-0003-4000-a000-000000000001', 'b2c3d4e5-0001-4000-a000-000000000001', 'STU-003', 2, '2024-09-01', '2028-06-15', UTC_TIMESTAMP()),

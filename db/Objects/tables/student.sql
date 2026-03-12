@@ -4,7 +4,7 @@ CREATE TABLE `student` (
   `identifier` varchar(50) DEFAULT NULL,
   `program_year` int DEFAULT NULL,
   `enrollment_date` date DEFAULT NULL,
-  `expected_grad` date DEFAULT NULL,
+  `next_iep_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_student`),
   KEY `student_ibfk_1` (`id_program`),

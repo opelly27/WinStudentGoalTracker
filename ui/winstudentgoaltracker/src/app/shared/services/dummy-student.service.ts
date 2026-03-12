@@ -71,7 +71,7 @@ export class DummyStudentService {
             {
                 studentId: '1',
                 identifier: 'J.B',
-                expectedGradDate: new Date('2027-02-27'),
+                nextIepDate: new Date('2027-02-27'),
                 lastEntryDate: new Date('2026-02-21'),
                 goalCount: 3,
                 progressEventCount: 5,
@@ -79,7 +79,7 @@ export class DummyStudentService {
             {
                 studentId: '2',
                 identifier: 'M.K',
-                expectedGradDate: new Date('2027-02-27'),
+                nextIepDate: new Date('2027-02-27'),
                 lastEntryDate: new Date('2026-02-25'),
                 goalCount: 4,
                 progressEventCount: 8,
@@ -87,7 +87,7 @@ export class DummyStudentService {
             {
                 studentId: '3',
                 identifier: 'A.R',
-                expectedGradDate: new Date('2027-02-27'),
+                nextIepDate: new Date('2027-02-27'),
                 lastEntryDate: null,
                 goalCount: 2,
                 progressEventCount: 0,

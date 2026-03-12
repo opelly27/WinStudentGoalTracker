@@ -1,6 +1,6 @@
 <div class="card" (click)="onCardClick()">
     <h2 class="identifier">{{ student().identifier }}</h2>
-    <span class="age-badge">Grad Date: {{ student().expectedGradDate | date:'M/d/yy' }}</span>
+    <span class="age-badge">IEP Date: {{ student().nextIepDate | date:'M/d/yy' }}</span>
     <div class="stats">
         <span class="stat">{{ student().goalCount }} goals</span>
         <span class="stat">{{ student().progressEventCount }} events</span>

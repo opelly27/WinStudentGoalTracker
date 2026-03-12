@@ -4,7 +4,7 @@ BEGIN
     SELECT
         studentId,
         identifier,
-        expectedGradDate,
+        nextIepDate,
         lastEntryDate,
         goalCount,
         progressEventCount

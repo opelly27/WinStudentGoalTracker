@@ -154,7 +154,7 @@ export class StudentService {
     // *****************************************************************
     // Updates a student and returns the refreshed student data.
     // *****************************************************************
-    async updateStudent(studentId: string, data: { identifier?: string; programYear?: number | null; enrollmentDate?: string | null; expectedGrad?: string | null }): Promise<ApiResult<StudentCardDto>> {
+    async updateStudent(studentId: string, data: { identifier?: string; programYear?: number | null; enrollmentDate?: string | null; nextIepDate?: string | null }): Promise<ApiResult<StudentCardDto>> {
         try {
             const result = await firstValueFrom(
                 this.http.put<ResponseResult<StudentCardDto>>(`${this.base}/api/Student/${studentId}`, data)
