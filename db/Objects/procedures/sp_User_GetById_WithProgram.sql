@@ -10,6 +10,7 @@ BEGIN
         u.name,
         up.id_program,
         p.name AS program_name,
+        sd.name AS school_district_name,
         r.internal_name AS role_internal_name,
         r.name AS role_display_name,
         up.status
@@ -17,6 +18,7 @@ BEGIN
     JOIN user_program up ON u.id_user = up.id_user AND up.id_program = p_id_program
     JOIN role r ON up.id_role = r.id_role
     JOIN program p ON up.id_program = p.id_program
+    LEFT JOIN school_district sd ON p.id_school_district = sd.id_school_district
     WHERE u.id_user = p_id_user
     LIMIT 1;
 END;;

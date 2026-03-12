@@ -11,11 +11,18 @@
 }
 
 @if (displayMode() === 'card') {
-<div class="card-grid">
-    @for (student of students(); track student.studentId) {
-    <app-student-card [student]="student" />
+    @if (loaded() && students().length === 0) {
+    <div class="empty-state">
+        <p>You don't have any students entered yet.</p>
+        <p>Click <strong>+ Add a Student</strong> in the upper right to get started.</p>
+    </div>
+    } @else {
+    <div class="card-grid">
+        @for (student of students(); track student.studentId) {
+        <app-student-card [student]="student" />
+        }
+    </div>
     }
-</div>
 } @else {
 <!-- List mode — to be implemented -->
 <p>List view coming soon.</p>

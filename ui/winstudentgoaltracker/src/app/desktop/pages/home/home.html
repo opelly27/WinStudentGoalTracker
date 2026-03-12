@@ -2,8 +2,7 @@
     <!-- Header -->
     <header class="header">
         <button class="menu-toggle" (click)="onToggleSidebar()">☰</button>
-        <span class="header-title">WinStudentGoalTracker</span>
-        <span class="spacer"></span>
+        <span class="header-title">{{ auth.schoolDistrictName() }} — {{ auth.programName() }}</span>
         <button class="logout-btn" (click)="onLogout()">Log Out</button>
     </header>
 

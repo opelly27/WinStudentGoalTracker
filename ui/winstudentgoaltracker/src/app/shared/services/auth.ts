@@ -34,6 +34,8 @@ export class Auth {
   private readonly _sessionToken = signal<string | null>(this.loadSessionToken());
   private readonly _programs = signal<UserProgramSummary[]>([]);
   private readonly _isRefreshing = signal(false);
+  private readonly _programName = signal<string>('');
+  private readonly _schoolDistrictName = signal<string>('');
 
   /** The currently authenticated user, parsed from the JWT. Null when logged out. */
   readonly user = computed<AuthUser | null>(() => {
@@ -49,6 +51,12 @@ export class Auth {
 
   /** Programs returned by phase 1 for the user to choose from. */
   readonly programs = this._programs.asReadonly();
+
+  /** The name of the currently selected program. */
+  readonly programName = this._programName.asReadonly();
+
+  /** The name of the school district for the currently selected program. */
+  readonly schoolDistrictName = this._schoolDistrictName.asReadonly();
 
   /** Emits when a token refresh fails and the user is forced to re-login. */
   readonly sessionExpired$ = new Subject<void>();
@@ -187,6 +195,10 @@ export class Auth {
   private handleFullAuth(data: SelectProgramResponse): void {
     this.storeTokens(data.jwt, data.refreshToken);
 
+    // Store program context for header display
+    this._programName.set(data.programName);
+    this._schoolDistrictName.set(data.schoolDistrictName);
+
     // Clear phase-1 artefacts
     localStorage.removeItem(STORAGE_KEYS.SESSION_TOKEN);
     this._sessionToken.set(null);
@@ -229,6 +241,8 @@ export class Auth {
     this._sessionToken.set(null);
     this._programs.set([]);
     this._isRefreshing.set(false);
+    this._programName.set('');
+    this._schoolDistrictName.set('');
   }
 
   private loadSessionToken(): string | null {

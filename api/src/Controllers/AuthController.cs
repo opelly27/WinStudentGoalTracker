@@ -204,6 +204,7 @@ public class AuthController : BaseController
                 UserId = programUser.IdUser,
                 Email = programUser.Email!,
                 ProgramName = programUser.ProgramName!,
+                SchoolDistrictName = programUser.SchoolDistrictName ?? "",
                 Jwt = accessToken,
                 RefreshToken = fullRefreshToken,
                 Role = programUser.RoleInternalName,

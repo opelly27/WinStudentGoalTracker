@@ -33,6 +33,7 @@ export interface SelectProgramResponse {
   userId: string;
   email: string;
   programName: string;
+  schoolDistrictName: string;
   jwt: string;
   refreshToken: string;
   role: string;

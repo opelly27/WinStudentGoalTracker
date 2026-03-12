@@ -7,6 +7,7 @@ public class dbProgramUser
     public string? Name { get; set; }
     public required Guid IdProgram { get; set; }
     public string? ProgramName { get; set; }
+    public string? SchoolDistrictName { get; set; }
     public required string RoleInternalName { get; set; }
     public required string RoleDisplayName { get; set; }
     public string? Status { get; set; }

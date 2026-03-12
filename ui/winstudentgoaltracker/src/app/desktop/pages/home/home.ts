@@ -41,7 +41,7 @@ export class Home implements OnDestroy {
 
   // ************************** Declarations *************************
 
-  private readonly auth = inject(Auth);
+  protected readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly studentService = inject(StudentService);
   private readonly routeSub: Subscription;

@@ -27,6 +27,7 @@ export class StudentCardList {
   protected readonly students = signal<StudentCardDto[]>([]);
   protected readonly displayMode = signal<DisplayMode>('card');
   protected readonly showAddModal = signal(false);
+  protected readonly loaded = signal(false);
 
   public errorMessage = signal<String | null>(null);
 
@@ -73,6 +74,7 @@ export class StudentCardList {
         this.students.set(this.sortByIdentifier(data.payload || []))
       }
 
+      this.loaded.set(true);
     });
   }
 }
