@@ -31,9 +31,9 @@ export class AddGoalModal {
     );
 
     protected form: CreateGoalDto = {
-        title: '',
         description: '',
         category: '',
+        baseline: '',
         goalParentId: null,
     };
 

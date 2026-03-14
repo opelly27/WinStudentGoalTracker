@@ -6,7 +6,7 @@ export interface StudentBenchmarkSummary {
 export interface BenchmarkDto {
     benchmarkId: string;
     goalId: string;
-    goalTitle: string;
+    goalCategory: string;
     benchmark: string;
     createdByName: string;
     createdAt: Date;

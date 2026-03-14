@@ -5,9 +5,9 @@ BEGIN
         s.`identifier`          AS `studentIdentifier`,
         vc.`goalId`,
         vc.`goalParentId`,
-        vc.`title`,
         vc.`description`,
         vc.`category`,
+        vc.`baseline`,
         vc.`progressEventCount`,
         vc.`benchmarkCount`
     FROM `v_goal_card` vc

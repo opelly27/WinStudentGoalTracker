@@ -144,9 +144,9 @@ public class StudentRepository
                 p_id_goal_parent = dto.GoalParentId?.ToString(),
                 p_id_student = idStudent.ToString(),
                 p_id_user_created = userId.ToString(),
-                p_title = dto.Title,
                 p_description = dto.Description,
-                p_category = dto.Category
+                p_category = dto.Category,
+                p_baseline = dto.Baseline
             },
             commandType: CommandType.StoredProcedure);
 
@@ -156,9 +156,9 @@ public class StudentRepository
         {
             GoalId = newGoalId,
             GoalParentId = dto.GoalParentId,
-            Title = dto.Title,
             Description = dto.Description,
             Category = dto.Category,
+            Baseline = dto.Baseline,
             ProgressEventCount = 0
         };
     }
@@ -191,9 +191,9 @@ public class StudentRepository
             {
                 GoalId = r.GoalId,
                 GoalParentId = r.GoalParentId,
-                Title = r.Title,
                 Description = r.Description,
                 Category = r.Category,
+                Baseline = r.Baseline,
                 ProgressEventCount = r.ProgressEventCount,
                 BenchmarkCount = r.BenchmarkCount
             }).ToList()
@@ -201,7 +201,7 @@ public class StudentRepository
     }
 
     // *****************************************************************
-    // Updates a goal's title, description, and category.
+    // Updates a goal's description, category, and baseline.
     // *****************************************************************
     public async Task<bool> UpdateGoalAsync(Guid goalId, UpdateGoalDto dto)
     {
@@ -214,9 +214,9 @@ public class StudentRepository
                 p_id_goal_parent = (string?)null,
                 p_id_student = (string?)null,
                 p_id_user_created = (string?)null,
-                p_title = dto.Title,
                 p_description = dto.Description,
-                p_category = dto.Category
+                p_category = dto.Category,
+                p_baseline = dto.Baseline
             },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;
@@ -254,7 +254,7 @@ public class StudentRepository
             {
                 BenchmarkId = r.BenchmarkId,
                 GoalId = r.GoalId,
-                GoalTitle = r.GoalTitle,
+                GoalCategory = r.GoalCategory,
                 Benchmark = r.Benchmark,
                 CreatedByName = r.CreatedByName,
                 CreatedAt = r.CreatedAt,

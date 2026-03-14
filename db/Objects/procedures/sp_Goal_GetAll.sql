@@ -5,9 +5,9 @@ BEGIN
         goalId,
         goalParentId,
         studentId,
-        title,
         description,
         category,
+        baseline,
         progressEventCount
     FROM v_goal_card
     ORDER BY goalId;

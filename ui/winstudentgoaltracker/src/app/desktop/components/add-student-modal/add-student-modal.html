@@ -9,14 +9,14 @@
     <form class="modal-body" (ngSubmit)="onSubmit()" #studentForm="ngForm">
 
         <div class="field">
-            <label for="identifier">Identifier</label>
+            <label for="identifier">Student</label>
             <input
                 id="identifier"
                 type="text"
                 [(ngModel)]="form.identifier"
                 name="identifier"
                 required
-                placeholder="e.g. Student123"
+                placeholder="Initials or other non-personally identifiable label"
             />
         </div>
 

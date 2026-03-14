@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Student</button>
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Goals</button>
     <span class="toolbar-title">Goal Detail</span>
     <span class="spacer"></span>
 </div>
@@ -15,8 +15,8 @@
 @if (loaded()) {
 <div class="detail-card">
     <div class="field">
-        <label class="field-label" for="title">Title</label>
-        <input id="title" class="field-input" type="text" [(ngModel)]="title" />
+        <label class="field-label" for="baseline">Baseline</label>
+        <input id="baseline" class="field-input" type="text" [(ngModel)]="baseline" />
     </div>
     <div class="field">
         <label class="field-label" for="description">Description</label>

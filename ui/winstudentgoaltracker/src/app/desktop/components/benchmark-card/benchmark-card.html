@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <span class="goal-badge">{{ benchmark().goalTitle }}</span>
+        <span class="goal-badge">{{ benchmark().goalCategory }}</span>
         @if (benchmark().updatedAt) {
         <span class="date">Updated: {{ benchmark().updatedAt | date:'M/d/yy' }}</span>
         } @else {

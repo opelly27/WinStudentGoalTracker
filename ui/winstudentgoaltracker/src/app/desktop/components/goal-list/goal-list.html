@@ -22,7 +22,10 @@
 }
 
 @if (goals().length === 0 && !errorMessage()) {
-<p class="empty-state">No goals yet. Click <strong>+ Add a Goal</strong> to get started.</p>
+<div class="empty-state">
+    <p>No goals yet.</p>
+    <p>Click <strong>+ Add a Goal</strong> in the upper right to get started.</p>
+</div>
 } @else {
 <div class="card-grid">
     @for (goal of goals(); track goal.goalId) {

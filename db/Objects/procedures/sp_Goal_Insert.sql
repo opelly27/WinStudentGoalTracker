@@ -4,9 +4,9 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_Goal_Insert`(
     IN p_id_goal_parent CHAR(36),
     IN p_id_student CHAR(36),
     IN p_id_user_created CHAR(36),
-    IN p_title VARCHAR(255),
     IN p_description TEXT,
-    IN p_category VARCHAR(100)
+    IN p_category VARCHAR(255),
+    IN p_baseline TEXT
 )
 BEGIN
     INSERT INTO goal
@@ -15,9 +15,9 @@ BEGIN
         id_goal_parent,
         id_student,
         id_user_created,
-        title,
         description,
         category,
+        baseline,
         created_at,
         updated_at
     )
@@ -27,9 +27,9 @@ BEGIN
         p_id_goal_parent,
         p_id_student,
         p_id_user_created,
-        p_title,
         p_description,
         p_category,
+        p_baseline,
         UTC_TIMESTAMP(),
         UTC_TIMESTAMP()
     );
@@ -38,9 +38,9 @@ BEGIN
         id_goal_parent,
         id_student,
         id_user_created,
-        title,
         description,
         category,
+        baseline,
         created_at,
         updated_at
     FROM goal

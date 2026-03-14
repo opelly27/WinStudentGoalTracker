@@ -54,16 +54,13 @@
 }
 
 .empty-state {
-    color: #888;
-    font-size: 0.9375rem;
-    margin: 2rem auto;
     text-align: center;
-}
-
-.empty-link {
-    color: #4f46e5;
-    text-decoration: underline;
-    cursor: pointer;
+    padding: 3rem 1.5rem;
+    color: #555;
+    font-size: 0.9375rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 .card-grid {

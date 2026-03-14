@@ -9,8 +9,8 @@
     <h2 class="section-heading">Goals</h2>
     <div class="goal-cards">
         @for (goal of data()?.goals; track goal.goalId) {
-        <div class="goal-card" (click)="onGoalClick(goal.goalId, goal.title)">
-            <span class="goal-title">{{ goal.title }}</span>
+        <div class="goal-card" (click)="onGoalClick(goal.goalId, goal.category)">
+            <span class="goal-title">{{ goal.category }}</span>
             <span class="event-count">{{ goal.progressEventCount }}</span>
         </div>
         }

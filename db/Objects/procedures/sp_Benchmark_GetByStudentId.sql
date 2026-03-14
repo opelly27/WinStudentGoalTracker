@@ -5,7 +5,7 @@ BEGIN
         s.`identifier`          AS `studentIdentifier`,
         b.`id_benchmark`        AS `benchmarkId`,
         b.`id_goal`             AS `goalId`,
-        g.`title`               AS `goalTitle`,
+        g.`category`            AS `goalCategory`,
         b.`benchmark`           AS `benchmark`,
         u.`name`                AS `createdByName`,
         b.`created_at`          AS `createdAt`,

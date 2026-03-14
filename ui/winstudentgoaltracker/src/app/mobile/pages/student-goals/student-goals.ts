@@ -46,10 +46,10 @@ export class StudentGoals {
   // *****************************************************************
   // Navigates to the add-progress-event page for the selected goal.
   // *****************************************************************
-  onGoalClick(goalId: string, goalTitle: string) {
+  onGoalClick(goalId: string, goalCategory: string) {
     this.router.navigate(
       ['students', this.studentId, 'goals', goalId, 'add-event'],
-      { queryParams: { goalTitle, studentIdentifier: this.data()?.studentIdentifier } },
+      { queryParams: { goalCategory, studentIdentifier: this.data()?.studentIdentifier } },
     );
   }
 

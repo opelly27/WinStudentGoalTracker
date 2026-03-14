@@ -405,4 +405,51 @@ public class AuthController : BaseController
             Message = "Logged out successfully."
         });
     }
+
+    // *****************************************************************
+    // Sets the password hash and salt for an existing user.
+    // Accepts a user ID and plaintext password, hashes it, and stores
+    // the result in the user table.
+    // *****************************************************************
+    [HttpPost("SetPassword")]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResponseResult<object>>> SetPassword([FromBody] SetPasswordDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.UserId) || string.IsNullOrWhiteSpace(dto.Password))
+        {
+            return BadRequest(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "User ID and password are required."
+            });
+        }
+
+        if (!Guid.TryParse(dto.UserId, out Guid userId))
+        {
+            return BadRequest(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "Invalid user ID format."
+            });
+        }
+
+        var (hash, salt) = PasswordHasher.HashPassword(dto.Password);
+        var updated = await _userRepo.SetPasswordAsync(userId, hash, salt);
+
+        if (!updated)
+        {
+            return Ok(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "User not found."
+            });
+        }
+
+        return Ok(new ResponseResult<object>
+        {
+            Success = true,
+            Message = "Password set successfully."
+        });
+    }
 }

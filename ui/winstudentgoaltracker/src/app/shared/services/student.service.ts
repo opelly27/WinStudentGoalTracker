@@ -216,9 +216,9 @@ export class StudentService {
     }
 
     // *****************************************************************
-    // Updates a goal's title, description, and category.
+    // Updates a goal's description, category, and baseline.
     // *****************************************************************
-    async updateGoal(studentId: string, goalId: string, data: { title?: string; description?: string; category?: string }): Promise<ApiResult<any>> {
+    async updateGoal(studentId: string, goalId: string, data: { description?: string; category?: string; baseline?: string }): Promise<ApiResult<any>> {
         try {
             const result = await firstValueFrom(
                 this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/goals/${goalId}`, data)

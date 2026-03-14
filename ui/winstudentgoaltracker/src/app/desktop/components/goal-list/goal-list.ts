@@ -49,6 +49,7 @@ export class GoalList implements OnDestroy {
     onGoalCreated(goal: StudentGoalItem) {
         this.goals.update(list => [...list, goal]);
         this.showAddModal.set(false);
+        this.studentService.notifyDataChanged();
     }
 
     onModalCancelled() {

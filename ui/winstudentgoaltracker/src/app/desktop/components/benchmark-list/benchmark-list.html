@@ -4,8 +4,10 @@
     <button class="toolbar-btn" (click)="onAddBenchmark()">+ Add a Benchmark</button>
 </div>
 
-@if (studentIdentifier()) {
-<h2 class="section-header">Benchmarks for {{ studentIdentifier() }}</h2>
+@if (goalCategory()) {
+<h2 class="section-header">Benchmarks for {{ goalCategory() }}</h2>
+} @else {
+<h2 class="section-header">Benchmarks</h2>
 }
 
 @if (errorMessage()) {
@@ -13,8 +15,11 @@
 }
 
 @if (benchmarks().length === 0 && !errorMessage()) {
-<p class="empty-state">No benchmarks yet. Click <a class="empty-link" (click)="onAddBenchmark()">Add a Benchmark</a> to
-    get started.</p>
+<div class="empty-state">
+    <p>Benchmarks are milestones on the way to achieving a goal. They are optional in this system.</p>
+    <p>No benchmarks yet.</p>
+    <p>Click <strong>+ Add a Benchmark</strong> in the upper right to get started.</p>
+</div>
 } @else {
 <div class="card-grid">
     @for (bm of benchmarks(); track bm.benchmarkId) {

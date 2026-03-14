@@ -20,7 +20,7 @@ export class ProgressList implements OnDestroy {
     this.studentId = this.route.snapshot.paramMap.get('studentId')!;
     this.goalId = this.route.snapshot.paramMap.get('goalId')!;
     this.loadEvents();
-    this.loadGoalTitle();
+    this.loadGoalCategory();
 
     this.searchInput$.pipe(debounceTime(300)).subscribe(term => {
       this.searchTerm.set(term);
@@ -38,7 +38,7 @@ export class ProgressList implements OnDestroy {
   private readonly searchInput$ = new Subject<string>();
 
   protected readonly studentIdentifier = signal<string | null>(null);
-  protected readonly goalTitle = signal<string | null>(null);
+  protected readonly goalCategory = signal<string | null>(null);
   protected readonly events = signal<ProgressEventDto[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly rawSearchText = signal('');
@@ -118,16 +118,15 @@ export class ProgressList implements OnDestroy {
   }
 
   // *****************************************************************
-  // Loads the goal title from the student's goal list so the heading
-  // can display "Progress for <goal title>".
+  // Loads the goal category from the student's goal list so the heading
+  // can display "Progress for <goal category>".
   // *****************************************************************
-  private loadGoalTitle() {
+  private loadGoalCategory() {
     this.studentService.getGoalsForStudent(this.studentId).then(result => {
-      if (result.success && result.payload) {
-        this.studentIdentifier.set(result.payload.studentIdentifier);
-        const goal = result.payload.goals.find(g => g.goalId === this.goalId);
-        this.goalTitle.set(goal?.title ?? null);
-      }
+      if (!result.success || !result.payload) return;
+      this.studentIdentifier.set(result.payload.studentIdentifier);
+      const goal = result.payload.goals.find(g => g.goalId === this.goalId);
+      this.goalCategory.set(goal?.category ?? null);
     });
   }
 }

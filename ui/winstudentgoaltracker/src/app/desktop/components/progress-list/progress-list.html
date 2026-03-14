@@ -7,10 +7,10 @@
 
 <!-- <img class="hero-image" src="/slalomcropped.png" alt="Slalom" /> -->
 
-@if (studentIdentifier() && goalTitle()) {
+@if (studentIdentifier() && goalCategory()) {
 <div class="header-row">
     <h2 class="section-header">
-        Student: {{ studentIdentifier() }} &nbsp;&nbsp; Goal: {{ goalTitle() }}
+        Student: {{ studentIdentifier() }} &nbsp;&nbsp; Goal: {{ goalCategory() }}
         @if (isFiltered()) {
         <span class="filter-count">(showing {{ filteredEvents().length }} of {{ events().length }})</span>
         }

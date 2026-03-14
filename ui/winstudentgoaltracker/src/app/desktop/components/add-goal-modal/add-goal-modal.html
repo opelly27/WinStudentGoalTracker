@@ -9,18 +9,6 @@
     <form class="modal-body" (ngSubmit)="onSubmit()" #goalForm="ngForm">
 
         <div class="field">
-            <label for="title">Title<span class="required">*</span></label>
-            <input
-                id="title"
-                type="text"
-                [(ngModel)]="form.title"
-                name="title"
-                required
-                placeholder="e.g. Improve reading comprehension"
-            />
-        </div>
-
-        <div class="field">
             <label for="category">Category<span class="required">*</span></label>
             <input
                 id="category"
@@ -32,18 +20,6 @@
             />
         </div>
 
-        @if (parentGoalOptions().length > 0) {
-            <div class="field">
-                <label for="goalParentId">Parent Goal <span class="optional">(optional)</span></label>
-                <select id="goalParentId" [(ngModel)]="form.goalParentId" name="goalParentId">
-                    <option [ngValue]="null">None</option>
-                    @for (goal of parentGoalOptions(); track goal.goalId) {
-                        <option [ngValue]="goal.goalId">{{ goal.title }}</option>
-                    }
-                </select>
-            </div>
-        }
-
         <div class="field">
             <label for="description">Description</label>
             <textarea
@@ -54,6 +30,29 @@
                 placeholder="Describe the goal..."
             ></textarea>
         </div>
+
+        <div class="field">
+            <label for="baseline">Baseline</label>
+            <textarea
+                id="baseline"
+                [(ngModel)]="form.baseline"
+                name="baseline"
+                rows="3"
+                placeholder="Enter baseline..."
+            ></textarea>
+        </div>
+
+        @if (parentGoalOptions().length > 0) {
+            <div class="field">
+                <label for="goalParentId">Parent Goal <span class="optional">(optional)</span></label>
+                <select id="goalParentId" [(ngModel)]="form.goalParentId" name="goalParentId">
+                    <option [ngValue]="null">None</option>
+                    @for (goal of parentGoalOptions(); track goal.goalId) {
+                        <option [ngValue]="goal.goalId">{{ goal.category }}</option>
+                    }
+                </select>
+            </div>
+        }
 
         @if (errorMessage()) {
             <p class="error">{{ errorMessage() }}</p>

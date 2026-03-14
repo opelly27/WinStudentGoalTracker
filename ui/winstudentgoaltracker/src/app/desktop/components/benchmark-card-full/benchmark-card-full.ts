@@ -47,7 +47,7 @@ export class BenchmarkCardFull implements OnDestroy {
   private savedBenchmarkText = '';
 
   // Read-only metadata
-  protected goalTitle = '';
+  protected goalCategory = '';
   protected createdByName = '';
   protected createdAt: Date | null = null;
   protected updatedAt: Date | null = null;
@@ -127,7 +127,7 @@ export class BenchmarkCardFull implements OnDestroy {
       this.isNew.set(true);
       this.benchmarkText = '';
       this.savedBenchmarkText = '';
-      this.loadGoalTitle();
+      this.loadGoalCategory();
       this.loaded.set(true);
       return;
     }
@@ -147,7 +147,7 @@ export class BenchmarkCardFull implements OnDestroy {
 
       this.benchmarkText = bm.benchmark;
       this.savedBenchmarkText = bm.benchmark;
-      this.goalTitle = bm.goalTitle;
+      this.goalCategory = bm.goalCategory;
       this.createdByName = bm.createdByName;
       this.createdAt = bm.createdAt;
       this.updatedAt = bm.updatedAt;
@@ -156,13 +156,13 @@ export class BenchmarkCardFull implements OnDestroy {
   }
 
   // *****************************************************************
-  // Loads the goal title for a new benchmark.
+  // Loads the goal category for a new benchmark.
   // *****************************************************************
-  private loadGoalTitle() {
+  private loadGoalCategory() {
     this.studentService.getGoalsForStudent(this.studentId).then(result => {
       if (result.success && result.payload) {
         const goal = result.payload.goals.find(g => g.goalId === this.goalId);
-        this.goalTitle = goal?.title ?? '';
+        this.goalCategory = goal?.category ?? '';
       }
     });
   }

@@ -17,7 +17,7 @@ export class AddProgressEvent {
   // ************************** Constructor **************************
 
   constructor() {
-    this.goalTitle.set(this.route.snapshot.queryParamMap.get('goalTitle') ?? '');
+    this.goalCategory.set(this.route.snapshot.queryParamMap.get('goalCategory') ?? '');
     this.studentIdentifier.set(this.route.snapshot.queryParamMap.get('studentIdentifier') ?? '');
     this.studentId = this.route.snapshot.paramMap.get('studentId') ?? '';
     this.goalId = this.route.snapshot.paramMap.get('goalId') ?? '';
@@ -32,7 +32,7 @@ export class AddProgressEvent {
   private readonly studentId: string;
   private readonly goalId: string;
 
-  protected readonly goalTitle = signal('');
+  protected readonly goalCategory = signal('');
   protected readonly studentIdentifier = signal('');
   protected readonly notes = signal('');
   protected readonly error = signal<string | null>(null);

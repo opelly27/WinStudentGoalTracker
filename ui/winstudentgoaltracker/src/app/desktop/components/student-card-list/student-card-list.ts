@@ -44,6 +44,7 @@ export class StudentCardList {
   onStudentCreated(student: StudentCardDto) {
     this.students.update(list => this.sortByIdentifier([...list, student]));
     this.showAddModal.set(false);
+    this.studentService.notifyDataChanged();
   }
 
   onModalCancelled() {

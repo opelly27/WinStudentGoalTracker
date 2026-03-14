@@ -120,7 +120,7 @@ export class Home implements OnDestroy {
     if (!result.success || !result.payload) return [];
 
     return result.payload.goals.map(goal => ({
-      label: goal.title,
+      label: goal.category,
       routerLink: ['/students', studentId, 'goals', goal.goalId],
       childCount: 2,
       children: [

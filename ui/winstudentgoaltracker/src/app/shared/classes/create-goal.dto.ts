@@ -1,6 +1,6 @@
 export interface CreateGoalDto {
-    title: string;
     description: string;
     category: string;
+    baseline: string;
     goalParentId: string | null;
 }

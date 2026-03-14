@@ -39,18 +39,18 @@ export class GoalCardFull implements OnDestroy {
   protected readonly saving = signal(false);
 
   // Form fields
-  protected title = '';
   protected description = '';
   protected category = '';
+  protected baseline = '';
 
   // Read-only metadata
   protected progressEventCount = 0;
   protected benchmarkCount = 0;
 
   // Snapshot
-  private savedTitle = '';
   private savedDescription = '';
   private savedCategory = '';
+  private savedBaseline = '';
 
   // ************************** Properties ***************************
 
@@ -58,9 +58,9 @@ export class GoalCardFull implements OnDestroy {
   // Returns true if form values differ from the saved snapshot.
   // *****************************************************************
   hasChanges(): boolean {
-    return this.title !== this.savedTitle
-      || this.description !== this.savedDescription
-      || this.category !== this.savedCategory;
+    return this.description !== this.savedDescription
+      || this.category !== this.savedCategory
+      || this.baseline !== this.savedBaseline;
   }
 
   // ************************ Public Methods *************************
@@ -76,17 +76,17 @@ export class GoalCardFull implements OnDestroy {
     this.successMessage.set(null);
 
     const result = await this.studentService.updateGoal(this.studentId, this.goalId, {
-      title: this.title,
       description: this.description,
       category: this.category,
+      baseline: this.baseline,
     });
 
     this.saving.set(false);
 
     if (result.success) {
-      this.savedTitle = this.title;
       this.savedDescription = this.description;
       this.savedCategory = this.category;
+      this.savedBaseline = this.baseline;
       this.successMessage.set('Changes saved.');
     } else {
       this.errorMessage.set(result.message);
@@ -97,15 +97,15 @@ export class GoalCardFull implements OnDestroy {
   // Reverts form fields to the last-saved snapshot.
   // *****************************************************************
   onCancel() {
-    this.title = this.savedTitle;
     this.description = this.savedDescription;
     this.category = this.savedCategory;
+    this.baseline = this.savedBaseline;
     this.errorMessage.set(null);
     this.successMessage.set(null);
   }
 
   onBack() {
-    this.router.navigate(['/students', this.studentId]);
+    this.router.navigate(['/students', this.studentId, 'goals']);
   }
 
   onProgressEvents() {
@@ -139,15 +139,15 @@ export class GoalCardFull implements OnDestroy {
         return;
       }
 
-      this.title = goal.title;
       this.description = goal.description;
       this.category = goal.category;
+      this.baseline = goal.baseline;
       this.progressEventCount = goal.progressEventCount;
       this.benchmarkCount = goal.benchmarkCount;
 
-      this.savedTitle = goal.title;
       this.savedDescription = goal.description;
       this.savedCategory = goal.category;
+      this.savedBaseline = goal.baseline;
       this.loaded.set(true);
     });
   }

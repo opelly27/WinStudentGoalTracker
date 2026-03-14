@@ -43,4 +43,23 @@ public class UserRepository
             new { p_id_user = idUser.ToString() },
             commandType: CommandType.StoredProcedure);
     }
+
+    // *****************************************************************
+    // Updates the password hash and salt for the given user.
+    // Returns true if the user was found and updated.
+    // *****************************************************************
+    public async Task<bool> SetPasswordAsync(Guid userId, string passwordHash, string passwordSalt)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.QuerySingleOrDefaultAsync<int>(
+            "sp_User_SetPassword",
+            new
+            {
+                p_id_user = userId.ToString(),
+                p_password_hash = passwordHash,
+                p_password_salt = passwordSalt
+            },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
 }
