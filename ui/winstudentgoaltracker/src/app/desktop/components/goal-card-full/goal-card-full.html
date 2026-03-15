@@ -15,8 +15,8 @@
 @if (loaded()) {
 <div class="detail-card">
     <div class="field">
-        <label class="field-label" for="baseline">Baseline</label>
-        <input id="baseline" class="field-input" type="text" [(ngModel)]="baseline" />
+        <label class="field-label" for="category">Category</label>
+        <input id="category" class="field-input" type="text" [(ngModel)]="category" />
     </div>
     <div class="field">
         <label class="field-label" for="description">Description</label>
@@ -24,8 +24,9 @@
             placeholder="Enter description..."></textarea>
     </div>
     <div class="field">
-        <label class="field-label" for="category">Category</label>
-        <input id="category" class="field-input" type="text" [(ngModel)]="category" />
+        <label class="field-label" for="baseline">Baseline</label>
+        <textarea id="baseline" class="field-input field-textarea" [(ngModel)]="baseline" rows="3"
+            placeholder="Enter baseline..."></textarea>
     </div>
     <div class="actions">
         <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>

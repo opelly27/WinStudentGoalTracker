@@ -113,7 +113,7 @@ export class GoalCardFull implements OnDestroy {
   }
 
   onBenchmarks() {
-    this.router.navigate(['/students', this.studentId, 'benchmarks']);
+    this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'benchmarks']);
   }
 
   ngOnDestroy() {

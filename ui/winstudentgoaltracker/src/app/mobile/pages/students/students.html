@@ -1,5 +1,12 @@
+@if (loaded() && students().length === 0) {
+<div class="empty-state">
+    <p>You don't currently have any students.</p>
+    <p>Please log into the <strong>desktop app</strong> to add your students.</p>
+</div>
+} @else {
 <div class="card-grid">
     @for (student of students(); track student.studentId) {
     <app-student-card [student]="student" />
     }
 </div>
+}

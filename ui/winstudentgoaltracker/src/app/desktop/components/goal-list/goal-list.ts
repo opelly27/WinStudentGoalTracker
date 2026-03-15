@@ -50,6 +50,7 @@ export class GoalList implements OnDestroy {
         this.goals.update(list => [...list, goal]);
         this.showAddModal.set(false);
         this.studentService.notifyDataChanged();
+        this.router.navigate(['/students', this.studentId, 'goals', goal.goalId]);
     }
 
     onModalCancelled() {

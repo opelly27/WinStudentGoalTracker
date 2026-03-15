@@ -82,6 +82,7 @@ export class BenchmarkCardFull implements OnDestroy {
       if (result.success) {
         this.successMessage.set('Benchmark created.');
         this.savedBenchmarkText = this.benchmarkText;
+        this.studentService.notifyDataChanged();
         if (result.payload?.benchmarkId) {
           this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'benchmarks', result.payload.benchmarkId]);
         }

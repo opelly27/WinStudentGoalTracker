@@ -22,6 +22,7 @@ export class Students {
 
   private readonly studentService = inject(StudentService);
   protected readonly students = signal<StudentCardDto[]>([]);
+  protected readonly loaded = signal(false);
 
   public errorMessage = signal<String | null>(null);
 
@@ -46,6 +47,7 @@ export class Students {
       else
       {
         this.students.set(data.payload || []);
+        this.loaded.set(true);
       }
     });
   }

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { StudentCard } from '../student-card/student-card';
 import { AddStudentModal } from '../add-student-modal/add-student-modal';
 import { DummyStudentService } from '../../../shared/services/dummy-student.service';
@@ -24,6 +25,7 @@ export class StudentCardList {
   // ************************** Declarations *************************
 
   private readonly studentService = inject(StudentService);
+  private readonly router = inject(Router);
   protected readonly students = signal<StudentCardDto[]>([]);
   protected readonly displayMode = signal<DisplayMode>('card');
   protected readonly showAddModal = signal(false);
@@ -45,6 +47,7 @@ export class StudentCardList {
     this.students.update(list => this.sortByIdentifier([...list, student]));
     this.showAddModal.set(false);
     this.studentService.notifyDataChanged();
+    this.router.navigate(['/students', student.studentId]);
   }
 
   onModalCancelled() {

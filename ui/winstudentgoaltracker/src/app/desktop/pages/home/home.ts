@@ -153,6 +153,7 @@ export class Home implements OnDestroy {
       .filter(b => b.goalId === goalId)
       .map(b => ({
         label: b.benchmark,
+        routerLink: ['/students', studentId, 'goals', goalId, 'benchmarks', b.benchmarkId],
       }));
   }
 
