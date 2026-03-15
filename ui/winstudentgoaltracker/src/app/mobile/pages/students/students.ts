@@ -46,7 +46,10 @@ export class Students {
       }
       else
       {
-        this.students.set(data.payload || []);
+        const sorted = (data.payload || []).sort((a, b) =>
+          a.identifier.localeCompare(b.identifier, undefined, { sensitivity: 'base' })
+        );
+        this.students.set(sorted);
         this.loaded.set(true);
       }
     });
