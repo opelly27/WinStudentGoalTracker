@@ -256,6 +256,7 @@ public class StudentRepository
                 GoalId = r.GoalId,
                 GoalCategory = r.GoalCategory,
                 Benchmark = r.Benchmark,
+                ShortName = r.ShortName,
                 CreatedByName = r.CreatedByName,
                 CreatedAt = r.CreatedAt,
                 UpdatedAt = r.UpdatedAt
@@ -277,7 +278,8 @@ public class StudentRepository
                 p_id_benchmark = newId.ToString(),
                 p_id_goal = goalId.ToString(),
                 p_id_user_created = userId.ToString(),
-                p_benchmark = dto.Benchmark
+                p_benchmark = dto.Benchmark,
+                p_short_name = dto.ShortName
             },
             commandType: CommandType.StoredProcedure);
 
@@ -288,6 +290,7 @@ public class StudentRepository
             BenchmarkId = newId,
             GoalId = goalId,
             Benchmark = dto.Benchmark,
+            ShortName = dto.ShortName,
             CreatedAt = DateTime.UtcNow
         };
     }
@@ -295,7 +298,7 @@ public class StudentRepository
     // *****************************************************************
     // Updates a benchmark's text and returns whether rows were affected.
     // *****************************************************************
-    public async Task<bool> UpdateBenchmarkAsync(Guid benchmarkId, string benchmarkText)
+    public async Task<bool> UpdateBenchmarkAsync(Guid benchmarkId, UpdateBenchmarkDto dto)
     {
         using var db = Connection;
         var rowsAffected = await db.ExecuteScalarAsync<int>(
@@ -303,7 +306,8 @@ public class StudentRepository
             new
             {
                 p_id_benchmark = benchmarkId.ToString(),
-                p_benchmark = benchmarkText
+                p_benchmark = dto.Benchmark,
+                p_short_name = dto.ShortName
             },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;

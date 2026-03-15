@@ -3,7 +3,8 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_Benchmark_Insert`(
     IN p_id_benchmark CHAR(36),
     IN p_id_goal CHAR(36),
     IN p_id_user_created CHAR(36),
-    IN p_benchmark TEXT
+    IN p_benchmark TEXT,
+    IN p_short_name VARCHAR(50)
 )
 BEGIN
     INSERT INTO benchmark
@@ -12,6 +13,7 @@ BEGIN
         id_goal,
         id_user_created,
         benchmark,
+        short_name,
         created_at,
         updated_at
     )
@@ -21,6 +23,7 @@ BEGIN
         p_id_goal,
         p_id_user_created,
         p_benchmark,
+        p_short_name,
         UTC_TIMESTAMP(),
         NULL
     );
@@ -29,6 +32,7 @@ BEGIN
         id_goal,
         id_user_created,
         benchmark,
+        short_name,
         created_at,
         updated_at
     FROM benchmark

@@ -15,13 +15,17 @@
 @if (loaded()) {
 <div class="detail-card">
     <div class="field">
-        <span class="field-label">Goal</span>
-        <span class="field-value">{{ goalCategory }}</span>
+        <span class="field-label">Goal: {{ goalCategory }}</span>
     </div>
     <div class="field">
         <label class="field-label" for="benchmarkText">Benchmark</label>
         <textarea id="benchmarkText" class="field-input field-textarea" [(ngModel)]="benchmarkText" rows="4"
             placeholder="Enter benchmark text..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label" for="shortName">Short Name</label>
+        <input id="shortName" class="field-input" type="text" [(ngModel)]="shortName" maxlength="50"
+            placeholder="Optional" />
     </div>
     @if (!isNew()) {
     <div class="metadata">

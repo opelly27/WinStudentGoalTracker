@@ -42,9 +42,11 @@ export class BenchmarkCardFull implements OnDestroy {
   protected readonly successMessage = signal<string | null>(null);
   protected readonly saving = signal(false);
 
-  // Form field
+  // Form fields
   protected benchmarkText = '';
+  protected shortName = '';
   private savedBenchmarkText = '';
+  private savedShortName = '';
 
   // Read-only metadata
   protected goalCategory = '';
@@ -58,7 +60,8 @@ export class BenchmarkCardFull implements OnDestroy {
   // Returns true if the benchmark text has unsaved changes.
   // *****************************************************************
   hasChanges(): boolean {
-    return this.benchmarkText !== this.savedBenchmarkText;
+    return this.benchmarkText !== this.savedBenchmarkText
+      || this.shortName !== this.savedShortName;
   }
 
   // ************************ Public Methods *************************
@@ -77,11 +80,13 @@ export class BenchmarkCardFull implements OnDestroy {
       const result = await this.studentService.createBenchmark(this.studentId, {
         goalId: this.goalId,
         benchmark: this.benchmarkText,
+        shortName: this.shortName || undefined,
       });
       this.saving.set(false);
       if (result.success) {
         this.successMessage.set('Benchmark created.');
         this.savedBenchmarkText = this.benchmarkText;
+        this.savedShortName = this.shortName;
         this.studentService.notifyDataChanged();
         if (result.payload?.benchmarkId) {
           this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'benchmarks', result.payload.benchmarkId]);
@@ -90,11 +95,19 @@ export class BenchmarkCardFull implements OnDestroy {
         this.errorMessage.set(result.message);
       }
     } else {
-      const result = await this.studentService.updateBenchmark(this.studentId, this.benchmarkId!, this.benchmarkText);
+      const shortNameChanged = this.shortName !== this.savedShortName;
+      const result = await this.studentService.updateBenchmark(this.studentId, this.benchmarkId!, this.benchmarkText, this.shortName || undefined);
       this.saving.set(false);
       if (result.success) {
         this.savedBenchmarkText = this.benchmarkText;
+        this.savedShortName = this.shortName;
         this.successMessage.set('Changes saved.');
+        if (shortNameChanged) {
+          this.studentService.updateSidebarLabel(
+            ['/students', this.studentId, 'goals', this.goalId, 'benchmarks', this.benchmarkId!],
+            this.shortName || this.benchmarkText
+          );
+        }
       } else {
         this.errorMessage.set(result.message);
       }
@@ -106,12 +119,13 @@ export class BenchmarkCardFull implements OnDestroy {
   // *****************************************************************
   onCancel() {
     this.benchmarkText = this.savedBenchmarkText;
+    this.shortName = this.savedShortName;
     this.errorMessage.set(null);
     this.successMessage.set(null);
   }
 
   onBack() {
-    this.router.navigate(['/students', this.studentId, 'benchmarks']);
+    this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'benchmarks']);
   }
 
   ngOnDestroy() {
@@ -127,7 +141,9 @@ export class BenchmarkCardFull implements OnDestroy {
     if (!this.benchmarkId) {
       this.isNew.set(true);
       this.benchmarkText = '';
+      this.shortName = '';
       this.savedBenchmarkText = '';
+      this.savedShortName = '';
       this.loadGoalCategory();
       this.loaded.set(true);
       return;
@@ -147,7 +163,9 @@ export class BenchmarkCardFull implements OnDestroy {
       }
 
       this.benchmarkText = bm.benchmark;
+      this.shortName = bm.shortName ?? '';
       this.savedBenchmarkText = bm.benchmark;
+      this.savedShortName = bm.shortName ?? '';
       this.goalCategory = bm.goalCategory;
       this.createdByName = bm.createdByName;
       this.createdAt = bm.createdAt;

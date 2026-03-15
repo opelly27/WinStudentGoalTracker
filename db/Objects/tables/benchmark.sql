@@ -3,6 +3,7 @@ CREATE TABLE `benchmark` (
   `id_goal` char(36) NOT NULL,
   `id_user_created` char(36) NOT NULL,
   `benchmark` text NOT NULL,
+  `short_name` varchar(50) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id_benchmark`)

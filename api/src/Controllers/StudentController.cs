@@ -551,7 +551,7 @@ public class StudentController : BaseController
             });
         }
 
-        var updated = await _studentRepository.UpdateBenchmarkAsync(idBenchmark, dto.Benchmark);
+        var updated = await _studentRepository.UpdateBenchmarkAsync(idBenchmark, dto);
 
         return Ok(new ResponseResult<object>
         {

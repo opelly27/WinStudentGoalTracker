@@ -7,6 +7,7 @@ BEGIN
         b.`id_goal`             AS `goalId`,
         g.`category`            AS `goalCategory`,
         b.`benchmark`           AS `benchmark`,
+        b.`short_name`          AS `shortName`,
         u.`name`                AS `createdByName`,
         b.`created_at`          AS `createdAt`,
         b.`updated_at`          AS `updatedAt`

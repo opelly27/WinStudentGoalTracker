@@ -37,6 +37,11 @@ export class Home implements OnDestroy {
     ).subscribe(() => {
       this.expandToRoute(this.router.url);
     });
+
+    // Patch individual sidebar node labels without a full rebuild.
+    this.labelSub = this.studentService.sidebarLabelUpdate$.subscribe(update => {
+      this.patchNodeLabel(this.sidebarTree(), update.routerLink, update.label);
+    });
   }
 
   // ************************** Declarations *************************
@@ -45,6 +50,7 @@ export class Home implements OnDestroy {
   private readonly router = inject(Router);
   private readonly studentService = inject(StudentService);
   private readonly routeSub: Subscription;
+  private readonly labelSub: Subscription;
   protected readonly sidebarExpanded = signal(true);
   protected readonly sidebarTree = signal<SidebarNode[]>([]);
 
@@ -68,9 +74,27 @@ export class Home implements OnDestroy {
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
+    this.labelSub.unsubscribe();
   }
 
   // ********************** Support Procedures ***********************
+
+  // *****************************************************************
+  // Recursively walks the sidebar tree to find a node whose
+  // routerLink matches the given link, and updates its label.
+  // *****************************************************************
+  private patchNodeLabel(nodes: SidebarNode[], routerLink: string[], label: string): boolean {
+    for (const node of nodes) {
+      if (node.routerLink && node.routerLink.join('/') === routerLink.join('/')) {
+        node.label = label;
+        return true;
+      }
+      if (node.children && this.patchNodeLabel(node.children, routerLink, label)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // *****************************************************************
   // Loads student list, sorts by identifier, and builds the sidebar
@@ -125,9 +149,8 @@ export class Home implements OnDestroy {
       childCount: 2,
       children: [
         {
-          label: 'Progress Events',
+          label: goal.progressEventCount > 0 ? `Progress Events (${goal.progressEventCount})` : 'Progress Events',
           routerLink: ['/students', studentId, 'goals', goal.goalId, 'progress'],
-          childCount: goal.progressEventCount,
         },
         {
           label: 'Benchmarks',
@@ -152,7 +175,7 @@ export class Home implements OnDestroy {
     return result.payload.benchmarks
       .filter(b => b.goalId === goalId)
       .map(b => ({
-        label: b.benchmark,
+        label: b.shortName || b.benchmark,
         routerLink: ['/students', studentId, 'goals', goalId, 'benchmarks', b.benchmarkId],
       }));
   }

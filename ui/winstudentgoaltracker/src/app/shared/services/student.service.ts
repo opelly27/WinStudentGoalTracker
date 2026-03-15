@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../classes/api-result';
 import { ResponseResult } from '../classes/auth.models';
@@ -27,6 +27,10 @@ export class StudentService {
     // Incremented after any data mutation so subscribers can refresh.
     readonly dataVersion = signal(0);
 
+    // Emits targeted label updates for sidebar nodes without a full rebuild.
+    private readonly _sidebarLabelUpdate = new Subject<{ routerLink: string[]; label: string }>();
+    readonly sidebarLabelUpdate$ = this._sidebarLabelUpdate.asObservable();
+
     // ************************** Properties ***************************
 
     // ************************ Public Methods *************************
@@ -36,6 +40,14 @@ export class StudentService {
     // *****************************************************************
     notifyDataChanged() {
         this.dataVersion.update(v => v + 1);
+    }
+
+    // *****************************************************************
+    // Emits a targeted sidebar label update for a specific node,
+    // avoiding the full tree rebuild that notifyDataChanged triggers.
+    // *****************************************************************
+    updateSidebarLabel(routerLink: string[], label: string) {
+        this._sidebarLabelUpdate.next({ routerLink, label });
     }
 
     // *****************************************************************
@@ -186,7 +198,7 @@ export class StudentService {
     // *****************************************************************
     // Creates a new benchmark for a student.
     // *****************************************************************
-    async createBenchmark(studentId: string, data: { goalId: string; benchmark: string }): Promise<ApiResult<any>> {
+    async createBenchmark(studentId: string, data: { goalId: string; benchmark: string; shortName?: string }): Promise<ApiResult<any>> {
         try {
             const result = await firstValueFrom(
                 this.http.post<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks`, data)
@@ -202,10 +214,10 @@ export class StudentService {
     // *****************************************************************
     // Updates a benchmark's text.
     // *****************************************************************
-    async updateBenchmark(studentId: string, benchmarkId: string, benchmarkText: string): Promise<ApiResult<any>> {
+    async updateBenchmark(studentId: string, benchmarkId: string, benchmarkText: string, shortName?: string): Promise<ApiResult<any>> {
         try {
             const result = await firstValueFrom(
-                this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks/${benchmarkId}`, { benchmark: benchmarkText })
+                this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks/${benchmarkId}`, { benchmark: benchmarkText, shortName })
             );
             return result.success
                 ? ApiResult.ok(result.data)

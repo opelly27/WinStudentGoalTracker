@@ -8,6 +8,7 @@ export interface BenchmarkDto {
     goalId: string;
     goalCategory: string;
     benchmark: string;
+    shortName?: string;
     createdByName: string;
     createdAt: Date;
     updatedAt: Date | null;
