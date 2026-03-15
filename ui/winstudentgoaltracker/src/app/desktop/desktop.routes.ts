@@ -7,6 +7,7 @@ import { GoalCardFull } from './components/goal-card-full/goal-card-full';
 import { ProgressList } from './components/progress-list/progress-list';
 import { BenchmarkList } from './components/benchmark-list/benchmark-list';
 import { BenchmarkCardFull } from './components/benchmark-card-full/benchmark-card-full';
+import { ProgressEdit } from './components/progress-edit/progress-edit';
 
 export default [
     {
@@ -19,6 +20,8 @@ export default [
             { path: 'students/:studentId/goals', component: GoalList },
             { path: 'students/:studentId/goals/:goalId', component: GoalCardFull },
             { path: 'students/:studentId/goals/:goalId/progress', component: ProgressList },
+            { path: 'students/:studentId/goals/:goalId/progress/new', component: ProgressEdit },
+            { path: 'students/:studentId/goals/:goalId/progress/:progressEventId', component: ProgressEdit },
             { path: 'students/:studentId/goals/:goalId/benchmarks', component: BenchmarkList },
             { path: 'students/:studentId/goals/:goalId/benchmarks/new', component: BenchmarkCardFull },
             { path: 'students/:studentId/goals/:goalId/benchmarks/:benchmarkId', component: BenchmarkCardFull },

@@ -12,24 +12,30 @@
 
 @if (loaded()) {
 <div class="detail-card">
-    <div class="field">
-        <label class="field-label" for="identifier">Name</label>
-        <input id="identifier" class="field-input" type="text" [(ngModel)]="identifier" />
-    </div>
-    <div class="field">
-        <label class="field-label" for="nextIepDate">Next IEP Date</label>
-        <input id="nextIepDate" class="field-input" type="date" [(ngModel)]="nextIepDate" />
+    <div class="detail-card-header">
+        <span class="detail-card-title">Student</span>
     </div>
 
-    <div class="actions">
-        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
-        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
-            {{ saving() ? 'Saving...' : 'Save' }}
-        </button>
+    <div class="detail-card-body">
+        <div class="field">
+            <label class="field-label" for="identifier">Name</label>
+            <input id="identifier" class="field-input" type="text" [(ngModel)]="identifier" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="nextIepDate">Next IEP Date</label>
+            <input id="nextIepDate" class="field-input" type="date" [(ngModel)]="nextIepDate" />
+        </div>
+
+        <div class="actions">
+            <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+            <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+                {{ saving() ? 'Saving...' : 'Save' }}
+            </button>
+        </div>
     </div>
 
     <div class="card-footer">
-        <a class="detail-link" (click)="onGoals()">Goals</a>
+        <button class="footer-btn btn-dark-green" (click)="onGoals()">Goals</button>
         <span class="spacer"></span>
         @if (successMessage()) {
         <span class="success-label" [class.fade-out]="fading()">{{ successMessage() }}</span>

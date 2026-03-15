@@ -8,6 +8,10 @@ BEGIN
         description,
         category,
         baseline,
+        targetCompletionDate,
+        closeDate,
+        achieved,
+        closeNotes,
         progressEventCount
     FROM v_goal_card
     WHERE goalId = p_id_goal

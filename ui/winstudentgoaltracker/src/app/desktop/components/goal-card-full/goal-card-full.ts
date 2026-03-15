@@ -1,13 +1,14 @@
 import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 
 @Component({
   selector: 'app-goal-card-full',
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe],
   templateUrl: './goal-card-full.html',
   styleUrl: './goal-card-full.scss',
 })
@@ -42,6 +43,10 @@ export class GoalCardFull implements OnDestroy {
   protected description = '';
   protected category = '';
   protected baseline = '';
+  protected targetCompletionDate: string | null = null;
+  protected closeDate: string | null = null;
+  protected achieved: boolean | null = null;
+  protected closeNotes: string | null = null;
 
   // Read-only metadata
   protected progressEventCount = 0;
@@ -51,6 +56,10 @@ export class GoalCardFull implements OnDestroy {
   private savedDescription = '';
   private savedCategory = '';
   private savedBaseline = '';
+  private savedTargetCompletionDate: string | null = null;
+  private savedCloseDate: string | null = null;
+  private savedAchieved: boolean | null = null;
+  private savedCloseNotes: string | null = null;
 
   // ************************** Properties ***************************
 
@@ -60,7 +69,11 @@ export class GoalCardFull implements OnDestroy {
   hasChanges(): boolean {
     return this.description !== this.savedDescription
       || this.category !== this.savedCategory
-      || this.baseline !== this.savedBaseline;
+      || this.baseline !== this.savedBaseline
+      || this.targetCompletionDate !== this.savedTargetCompletionDate
+      || this.closeDate !== this.savedCloseDate
+      || this.achieved !== this.savedAchieved
+      || this.closeNotes !== this.savedCloseNotes;
   }
 
   // ************************ Public Methods *************************
@@ -79,6 +92,10 @@ export class GoalCardFull implements OnDestroy {
       description: this.description,
       category: this.category,
       baseline: this.baseline,
+      targetCompletionDate: this.targetCompletionDate,
+      closeDate: this.closeDate,
+      achieved: this.achieved,
+      closeNotes: this.closeNotes,
     });
 
     this.saving.set(false);
@@ -87,7 +104,12 @@ export class GoalCardFull implements OnDestroy {
       this.savedDescription = this.description;
       this.savedCategory = this.category;
       this.savedBaseline = this.baseline;
+      this.savedTargetCompletionDate = this.targetCompletionDate;
+      this.savedCloseDate = this.closeDate;
+      this.savedAchieved = this.achieved;
+      this.savedCloseNotes = this.closeNotes;
       this.successMessage.set('Changes saved.');
+      this.studentService.notifyDataChanged();
     } else {
       this.errorMessage.set(result.message);
     }
@@ -100,6 +122,10 @@ export class GoalCardFull implements OnDestroy {
     this.description = this.savedDescription;
     this.category = this.savedCategory;
     this.baseline = this.savedBaseline;
+    this.targetCompletionDate = this.savedTargetCompletionDate;
+    this.closeDate = this.savedCloseDate;
+    this.achieved = this.savedAchieved;
+    this.closeNotes = this.savedCloseNotes;
     this.errorMessage.set(null);
     this.successMessage.set(null);
   }
@@ -123,6 +149,14 @@ export class GoalCardFull implements OnDestroy {
   // ********************** Support Procedures ***********************
 
   // *****************************************************************
+  // Normalizes an API date string to YYYY-MM-DD for <input type="date">.
+  // *****************************************************************
+  private toDateInput(value: string | null): string | null {
+    if (!value) return null;
+    return value.substring(0, 10);
+  }
+
+  // *****************************************************************
   // Loads the goal by finding it in the student's goal list.
   // *****************************************************************
   private loadGoal() {
@@ -142,12 +176,20 @@ export class GoalCardFull implements OnDestroy {
       this.description = goal.description;
       this.category = goal.category;
       this.baseline = goal.baseline;
+      this.targetCompletionDate = this.toDateInput(goal.targetCompletionDate);
+      this.closeDate = this.toDateInput(goal.closeDate);
+      this.achieved = goal.achieved;
+      this.closeNotes = goal.closeNotes;
       this.progressEventCount = goal.progressEventCount;
       this.benchmarkCount = goal.benchmarkCount;
 
       this.savedDescription = goal.description;
       this.savedCategory = goal.category;
       this.savedBaseline = goal.baseline;
+      this.savedTargetCompletionDate = this.toDateInput(goal.targetCompletionDate);
+      this.savedCloseDate = this.toDateInput(goal.closeDate);
+      this.savedAchieved = goal.achieved;
+      this.savedCloseNotes = goal.closeNotes;
       this.loaded.set(true);
     });
   }

@@ -1,9 +1,7 @@
 namespace WinStudentGoalTracker.DataAccess;
 
-public class AddProgressEventDto
+public class UpdateProgressEventDto
 {
-    public Guid GoalId { get; set; }
     public string? Content { get; set; }
-    public bool IsSensitive { get; set; }
     public List<Guid>? BenchmarkIds { get; set; }
 }

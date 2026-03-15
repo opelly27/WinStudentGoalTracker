@@ -19,41 +19,41 @@ export class DummyStudentService {
         '1': {
             studentIdentifier: 'J.B',
             goals: [
-                { goalId: 'g1', goalParentId: null, description: 'Work on main-idea identification and inference skills across fiction and nonfiction texts.', category: 'Academics', baseline: '', progressEventCount: 5, benchmarkCount: 2 },
-                { goalId: 'g2', goalParentId: null, description: 'Finish all units in the algebra course including linear equations and graphing.', category: 'Academics', baseline: '', progressEventCount: 2, benchmarkCount: 0 },
-                { goalId: 'g3', goalParentId: null, description: 'Write a reflective journal entry each week to build writing fluency.', category: 'Communication', baseline: '', progressEventCount: 8, benchmarkCount: 1 },
+                { goalId: 'g1', goalParentId: null, description: 'Work on main-idea identification and inference skills across fiction and nonfiction texts.', category: 'Academics', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 5, benchmarkCount: 2 },
+                { goalId: 'g2', goalParentId: null, description: 'Finish all units in the algebra course including linear equations and graphing.', category: 'Academics', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 2, benchmarkCount: 0 },
+                { goalId: 'g3', goalParentId: null, description: 'Write a reflective journal entry each week to build writing fluency.', category: 'Communication', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 8, benchmarkCount: 1 },
             ],
         },
         '2': {
             studentIdentifier: 'M.K',
             goals: [
-                { goalId: 'g4', goalParentId: null, description: 'Prepare for and pass the industry certification exam by end of quarter.', category: 'Career Readiness', baseline: '', progressEventCount: 3, benchmarkCount: 0 },
-                { goalId: 'g5', goalParentId: null, description: 'Maintain consistent attendance throughout the term.', category: 'Behavior', baseline: '', progressEventCount: 0, benchmarkCount: 0 },
-                { goalId: 'g6', goalParentId: null, description: 'Log the required 40 hours at the assigned internship site.', category: 'Career Readiness', baseline: '', progressEventCount: 12, benchmarkCount: 0 },
-                { goalId: 'g7', goalParentId: null, description: 'Build a personal portfolio showcasing completed coursework and projects.', category: 'Career Readiness', baseline: '', progressEventCount: 1, benchmarkCount: 0 },
+                { goalId: 'g4', goalParentId: null, description: 'Prepare for and pass the industry certification exam by end of quarter.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 3, benchmarkCount: 0 },
+                { goalId: 'g5', goalParentId: null, description: 'Maintain consistent attendance throughout the term.', category: 'Behavior', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 0, benchmarkCount: 0 },
+                { goalId: 'g6', goalParentId: null, description: 'Log the required 40 hours at the assigned internship site.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 12, benchmarkCount: 0 },
+                { goalId: 'g7', goalParentId: null, description: 'Build a personal portfolio showcasing completed coursework and projects.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 1, benchmarkCount: 0 },
             ],
         },
         '3': {
             studentIdentifier: 'A.R',
             goals: [
-                { goalId: 'g8', goalParentId: null, description: 'Complete practice tests and study modules for GED math and reading sections.', category: 'Academics', baseline: '', progressEventCount: 6, benchmarkCount: 0 },
-                { goalId: 'g9', goalParentId: null, description: 'Attend the resume writing workshop and produce a final draft.', category: 'Career Readiness', baseline: '', progressEventCount: 0, benchmarkCount: 0 },
+                { goalId: 'g8', goalParentId: null, description: 'Complete practice tests and study modules for GED math and reading sections.', category: 'Academics', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 6, benchmarkCount: 0 },
+                { goalId: 'g9', goalParentId: null, description: 'Attend the resume writing workshop and produce a final draft.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 0, benchmarkCount: 0 },
             ],
         },
         '4': {
             studentIdentifier: 'T.W',
             goals: [
-                { goalId: 'g10', goalParentId: null, description: 'Present in front of the class at least once per month.', category: 'Communication', baseline: '', progressEventCount: 4, benchmarkCount: 0 },
-                { goalId: 'g11', goalParentId: null, description: 'Move up one placement level in math by the end of the semester.', category: 'Academics', baseline: '', progressEventCount: 7, benchmarkCount: 0 },
-                { goalId: 'g12', goalParentId: null, description: 'Learn and apply at least three de-escalation techniques.', category: 'Behavior', baseline: '', progressEventCount: 2, benchmarkCount: 0 },
-                { goalId: 'g13', goalParentId: null, description: 'Achieve a 30-day unbroken attendance streak.', category: 'Behavior', baseline: '', progressEventCount: 0, benchmarkCount: 0 },
-                { goalId: 'g14', goalParentId: null, description: 'Complete a job shadow day in a field of interest.', category: 'Career Readiness', baseline: '', progressEventCount: 1, benchmarkCount: 0 },
+                { goalId: 'g10', goalParentId: null, description: 'Present in front of the class at least once per month.', category: 'Communication', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 4, benchmarkCount: 0 },
+                { goalId: 'g11', goalParentId: null, description: 'Move up one placement level in math by the end of the semester.', category: 'Academics', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 7, benchmarkCount: 0 },
+                { goalId: 'g12', goalParentId: null, description: 'Learn and apply at least three de-escalation techniques.', category: 'Behavior', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 2, benchmarkCount: 0 },
+                { goalId: 'g13', goalParentId: null, description: 'Achieve a 30-day unbroken attendance streak.', category: 'Behavior', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 0, benchmarkCount: 0 },
+                { goalId: 'g14', goalParentId: null, description: 'Complete a job shadow day in a field of interest.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 1, benchmarkCount: 0 },
             ],
         },
         '5': {
             studentIdentifier: 'L.C',
             goals: [
-                { goalId: 'g15', goalParentId: null, description: 'Reach 40 WPM with 95% accuracy on typing assessments.', category: 'Career Readiness', baseline: '', progressEventCount: 3, benchmarkCount: 0 },
+                { goalId: 'g15', goalParentId: null, description: 'Reach 40 WPM with 95% accuracy on typing assessments.', category: 'Career Readiness', baseline: '', targetCompletionDate: null, closeDate: null, achieved: null, closeNotes: null, progressEventCount: 3, benchmarkCount: 0 },
             ],
         },
     };
@@ -75,6 +75,7 @@ export class DummyStudentService {
                 lastEntryDate: new Date('2026-02-21'),
                 goalCount: 3,
                 progressEventCount: 5,
+                benchmarkCount: 3,
             },
             {
                 studentId: '2',
@@ -83,6 +84,7 @@ export class DummyStudentService {
                 lastEntryDate: new Date('2026-02-25'),
                 goalCount: 4,
                 progressEventCount: 8,
+                benchmarkCount: 0,
             },
             {
                 studentId: '3',
@@ -91,6 +93,7 @@ export class DummyStudentService {
                 lastEntryDate: null,
                 goalCount: 2,
                 progressEventCount: 0,
+                benchmarkCount: 0,
             },
         ];
 
@@ -119,6 +122,10 @@ export class DummyStudentService {
             description: data.description,
             category: data.category,
             baseline: data.baseline,
+            targetCompletionDate: data.targetCompletionDate,
+            closeDate: null,
+            achieved: null,
+            closeNotes: null,
             progressEventCount: 0,
             benchmarkCount: 0,
         };

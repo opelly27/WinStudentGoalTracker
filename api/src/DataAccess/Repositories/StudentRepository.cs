@@ -84,21 +84,49 @@ public class StudentRepository
         return rowsAffected > 0;
     }
 
-    public async Task<bool> AddProgressEventAsync(Guid userId, AddProgressEventDto dto)
+    // *****************************************************************
+    // Saves a progress event (insert or update) and syncs benchmark
+    // associations in a single stored procedure call.
+    // *****************************************************************
+    public async Task<Guid?> SaveProgressEventAsync(
+        Guid progressEventId, Guid goalId, Guid userId,
+        string? content, bool isNew, List<Guid>? benchmarkIds)
     {
+        var idsCsv = benchmarkIds is { Count: > 0 }
+            ? string.Join(",", benchmarkIds.Select(id => id.ToString()))
+            : null;
+
         using var db = Connection;
-        var row = await db.QuerySingleOrDefaultAsync(
-            "sp_ProgressEvent_Insert",
+        var row = await db.QuerySingleOrDefaultAsync<dynamic>(
+            "sp_ProgressEvent_Save",
             new
             {
-                p_id_progress_event = Guid.NewGuid().ToString(),
-                p_id_goal = dto.GoalId.ToString(),
+                p_id_progress_event = progressEventId.ToString(),
+                p_id_goal = goalId.ToString(),
                 p_id_user_created = userId.ToString(),
-                p_content = dto.Content,
-                p_is_sensitive = dto.IsSensitive ? 1 : 0
+                p_content = content,
+                p_is_sensitive = 0,
+                p_is_new = isNew ? 1 : 0,
+                p_benchmark_ids = idsCsv
             },
             commandType: CommandType.StoredProcedure);
-        return row is not null;
+
+        if (row is null) return null;
+        return row.progressEventId is Guid g ? g : Guid.Parse((string)row.progressEventId);
+    }
+
+    // *****************************************************************
+    // Returns the benchmark IDs associated with a progress event.
+    // *****************************************************************
+    public async Task<List<Guid>> GetBenchmarkIdsForEventAsync(Guid progressEventId)
+    {
+        using var db = Connection;
+        var rows = await db.QueryAsync<dynamic>(
+            "sp_ProgressEventBenchmark_GetByEventId",
+            new { p_id_progress_event = progressEventId.ToString() },
+            commandType: CommandType.StoredProcedure);
+
+        return rows.Select(r => r.benchmarkId is Guid g ? g : Guid.Parse((string)r.benchmarkId)).ToList();
     }
 
     public async Task<Guid?> GetStudentIdForGoalAsync(Guid idGoal)
@@ -146,7 +174,8 @@ public class StudentRepository
                 p_id_user_created = userId.ToString(),
                 p_description = dto.Description,
                 p_category = dto.Category,
-                p_baseline = dto.Baseline
+                p_baseline = dto.Baseline,
+                p_target_completion_date = dto.TargetCompletionDate
             },
             commandType: CommandType.StoredProcedure);
 
@@ -159,6 +188,7 @@ public class StudentRepository
             Description = dto.Description,
             Category = dto.Category,
             Baseline = dto.Baseline,
+            TargetCompletionDate = dto.TargetCompletionDate,
             ProgressEventCount = 0
         };
     }
@@ -194,6 +224,10 @@ public class StudentRepository
                 Description = r.Description,
                 Category = r.Category,
                 Baseline = r.Baseline,
+                TargetCompletionDate = r.TargetCompletionDate,
+                CloseDate = r.CloseDate,
+                Achieved = r.Achieved,
+                CloseNotes = r.CloseNotes,
                 ProgressEventCount = r.ProgressEventCount,
                 BenchmarkCount = r.BenchmarkCount
             }).ToList()
@@ -216,7 +250,11 @@ public class StudentRepository
                 p_id_user_created = (string?)null,
                 p_description = dto.Description,
                 p_category = dto.Category,
-                p_baseline = dto.Baseline
+                p_baseline = dto.Baseline,
+                p_target_completion_date = dto.TargetCompletionDate,
+                p_close_date = dto.CloseDate,
+                p_achieved = dto.Achieved,
+                p_close_notes = dto.CloseNotes
             },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;

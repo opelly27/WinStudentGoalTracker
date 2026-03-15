@@ -7,7 +7,8 @@ BEGIN
         nextIepDate,
         lastEntryDate,
         goalCount,
-        progressEventCount
+        progressEventCount,
+        benchmarkCount
     FROM v_student_card
     WHERE studentId = p_id_student
     LIMIT 1;

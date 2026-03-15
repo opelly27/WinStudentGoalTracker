@@ -8,10 +8,6 @@
 <p class="error">{{ errorMessage() }}</p>
 }
 
-@if (successMessage()) {
-<p class="success">{{ successMessage() }}</p>
-}
-
 @if (loaded()) {
 <div class="detail-card">
     <div class="field">
@@ -45,4 +41,8 @@
         </button>
     </div>
 </div>
+}
+
+@if (successMessage()) {
+<p class="success">{{ successMessage() }}</p>
 }

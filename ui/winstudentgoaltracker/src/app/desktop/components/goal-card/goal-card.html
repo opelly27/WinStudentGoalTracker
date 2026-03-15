@@ -1,14 +1,24 @@
 <div class="card" (click)="onCardClick()">
     <div class="card-header">
-        <span class="category-badge">{{ goal().category }}</span>
-        <span class="event-count">{{ goal().progressEventCount }} events</span>
+        <span class="card-title">Goal: {{ goal().category }}</span>
+        @if (goal().closeDate !== null) {
+            <span class="closed-badge" [class.achieved]="goal().achieved === true">
+                {{ goal().achieved === true ? 'Closed ✓' : 'Closed ✗' }}
+            </span>
+        }
+        @if (goal().targetCompletionDate) {
+            <span class="event-count">Target: {{ goal().targetCompletionDate | date:'mediumDate' }}</span>
+        } @else {
+            <span class="event-count">No target date</span>
+        }
     </div>
 
-    <h3 class="title">{{ goal().category }}</h3>
-    <p class="description">{{ goal().description }}</p>
+    <div class="card-body">
+        <p class="description">{{ goal().description }}</p>
+    </div>
 
     <div class="card-footer">
-        <a class="footer-link" (click)="$event.stopPropagation(); onBenchmarksClick()">Benchmarks</a>
-        <a class="footer-link" (click)="$event.stopPropagation(); onProgressEventsClick()">Progress Events</a>
+        <button class="footer-btn btn-green" (click)="$event.stopPropagation(); onProgressEventsClick()">Progress Events</button>
+        <button class="footer-btn btn-blue" (click)="$event.stopPropagation(); onBenchmarksClick()">Benchmarks</button>
     </div>
 </div>

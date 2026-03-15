@@ -6,7 +6,8 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_Goal_Insert`(
     IN p_id_user_created CHAR(36),
     IN p_description TEXT,
     IN p_category VARCHAR(255),
-    IN p_baseline TEXT
+    IN p_baseline TEXT,
+    IN p_target_completion_date DATE
 )
 BEGIN
     INSERT INTO goal
@@ -18,6 +19,7 @@ BEGIN
         description,
         category,
         baseline,
+        target_completion_date,
         created_at,
         updated_at
     )
@@ -30,6 +32,7 @@ BEGIN
         p_description,
         p_category,
         p_baseline,
+        p_target_completion_date,
         UTC_TIMESTAMP(),
         UTC_TIMESTAMP()
     );
@@ -41,6 +44,7 @@ BEGIN
         description,
         category,
         baseline,
+        target_completion_date,
         created_at,
         updated_at
     FROM goal

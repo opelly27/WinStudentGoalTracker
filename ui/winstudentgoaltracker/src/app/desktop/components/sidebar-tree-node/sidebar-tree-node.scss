@@ -34,6 +34,11 @@
     flex-shrink: 0;
 }
 
+.toggle-placeholder {
+    width: calc(1rem + 2px);
+    flex-shrink: 0;
+}
+
 .node-label {
     flex: 1;
     font-size: 0.8125rem;

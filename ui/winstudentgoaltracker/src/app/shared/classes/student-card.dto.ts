@@ -5,4 +5,5 @@ export interface StudentCardDto {
     lastEntryDate: Date | null;
     goalCount: number;
     progressEventCount: number;
+    benchmarkCount: number;
 }

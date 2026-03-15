@@ -8,4 +8,5 @@ public class StudentResponse
     public DateTime? LastEntryDate { get; set; }
     public int GoalCount { get; set; }
     public int ProgressEventCount { get; set; }
+    public int BenchmarkCount { get; set; }
 }

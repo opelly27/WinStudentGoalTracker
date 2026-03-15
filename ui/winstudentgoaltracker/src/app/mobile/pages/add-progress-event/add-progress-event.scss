@@ -130,3 +130,14 @@
     border-radius: 8px;
     font-size: 0.875rem;
 }
+
+/* Scrollable benchmark region */
+.benchmark-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    margin-bottom: 1rem;
+}

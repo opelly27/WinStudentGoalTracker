@@ -42,6 +42,17 @@
             ></textarea>
         </div>
 
+        <div class="field">
+            <label for="targetCompletionDate">Target Completion Date</label>
+            <input
+                id="targetCompletionDate"
+                type="date"
+                [(ngModel)]="form.targetCompletionDate"
+                name="targetCompletionDate"
+            />
+        </div>
+
+        <!-- Parent goal dropdown hidden — may not be needed
         @if (parentGoalOptions().length > 0) {
             <div class="field">
                 <label for="goalParentId">Parent Goal <span class="optional">(optional)</span></label>
@@ -53,6 +64,7 @@
                 </select>
             </div>
         }
+        -->
 
         @if (errorMessage()) {
             <p class="error">{{ errorMessage() }}</p>

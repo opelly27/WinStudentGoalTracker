@@ -1,0 +1,46 @@
+.tile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tile:active {
+    background: #f5f5f5;
+}
+
+.tile.checked {
+    border-color: #4f46e5;
+    background: #eef2ff;
+}
+
+.check-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.tile.checked .check-indicator {
+    background: #4f46e5;
+    border-color: #4f46e5;
+}
+
+.tile-label {
+    font-size: 0.9375rem;
+    color: #333;
+    line-height: 1.3;
+}

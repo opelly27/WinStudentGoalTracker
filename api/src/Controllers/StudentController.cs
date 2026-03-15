@@ -294,8 +294,10 @@ public class StudentController : BaseController
             });
         }
 
-        var created = await _studentRepository.AddProgressEventAsync(userId, dto);
-        if (!created)
+        var newId = Guid.NewGuid();
+        var created = await _studentRepository.SaveProgressEventAsync(
+            newId, dto.GoalId, userId, dto.Content, isNew: true, dto.BenchmarkIds);
+        if (created is null)
         {
             return BadRequest(new ResponseResult
             {
@@ -304,10 +306,70 @@ public class StudentController : BaseController
             });
         }
 
-        return StatusCode(StatusCodes.Status201Created, new ResponseResult
+        return StatusCode(StatusCodes.Status201Created, new ResponseResult<object>
         {
             Success = true,
-            Message = "Progress event added successfully."
+            Message = "Progress event added successfully.",
+            Data = new { progressEventId = created.Value }
+        });
+    }
+
+    [HttpPut("{idStudent:guid}/progress-events/{idProgressEvent:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult>> UpdateProgressEvent(
+        Guid idStudent, Guid idProgressEvent, [FromBody] UpdateProgressEventDto dto)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        try
+        {
+            await _studentRepository.SaveProgressEventAsync(
+                idProgressEvent, Guid.Empty, userId, dto.Content, isNew: false, dto.BenchmarkIds);
+
+            return Ok(new ResponseResult
+            {
+                Success = true,
+                Message = "Progress event updated successfully."
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseResult
+            {
+                Success = false,
+                Message = $"[DIAG] {ex.GetType().Name}: {ex.Message} | Inner: {ex.InnerException?.Message}"
+            });
+        }
+    }
+
+    [HttpGet("progress-events/{idProgressEvent:guid}/benchmarks")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<List<Guid>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ResponseResult<List<Guid>>>> GetProgressEventBenchmarks(Guid idProgressEvent)
+    {
+        var benchmarkIds = await _studentRepository.GetBenchmarkIdsForEventAsync(idProgressEvent);
+
+        return Ok(new ResponseResult<List<Guid>>
+        {
+            Success = true,
+            Message = "Benchmark associations retrieved.",
+            Data = benchmarkIds
         });
     }
 

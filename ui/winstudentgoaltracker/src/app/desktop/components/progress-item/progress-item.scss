@@ -47,15 +47,17 @@
     text-align: right;
 }
 
-// .icon-btn {
-//     background: none;
-//     border: none;
-//     cursor: pointer;
-//     font-size: 1rem;
-//     color: #888;
-//     padding: 0.125rem;
-// }
-
-.icon-btn:hover {
+.edit-btn {
+    padding: 0.25rem 0.625rem;
+    background: transparent;
     color: #4f46e5;
+    border: 1px solid #4f46e5;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background: #eef2ff;
 }

@@ -2,12 +2,16 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_Goal_GetByStudentId`(IN p_id_student CHAR(36))
 BEGIN
     SELECT
-        s.`identifier`          AS `studentIdentifier`,
+        s.`identifier`              AS `studentIdentifier`,
         vc.`goalId`,
         vc.`goalParentId`,
         vc.`description`,
         vc.`category`,
         vc.`baseline`,
+        vc.`targetCompletionDate`,
+        vc.`closeDate`,
+        vc.`achieved`,
+        vc.`closeNotes`,
         vc.`progressEventCount`,
         vc.`benchmarkCount`
     FROM `v_goal_card` vc

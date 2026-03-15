@@ -1,10 +1,11 @@
 import { Component, inject, input } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 
 @Component({
     selector: 'app-goal-card',
-    imports: [],
+    imports: [DatePipe],
     templateUrl: './goal-card.html',
     styleUrl: './goal-card.scss',
 })

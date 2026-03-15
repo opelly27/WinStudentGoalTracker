@@ -114,13 +114,49 @@ export class StudentService {
         }
     }
 
-    async addProgressEvent(studentId: string, goalId: string, content: string): Promise<ApiResult> {
+    // *****************************************************************
+    // Creates a new progress event, optionally with benchmark
+    // associations. Returns the new progress event ID on success.
+    // *****************************************************************
+    async addProgressEvent(studentId: string, goalId: string, content: string, benchmarkIds?: string[]): Promise<ApiResult<any>> {
         try {
             const result = await firstValueFrom(
-                this.http.post<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/progress-event`, { goalId, content })
+                this.http.post<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/progress-event`, { goalId, content, benchmarkIds })
+            );
+            return result.success
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Updates a progress event's content and benchmark associations.
+    // *****************************************************************
+    async updateProgressEvent(studentId: string, progressEventId: string, content: string, benchmarkIds?: string[]): Promise<ApiResult> {
+        try {
+            const result = await firstValueFrom(
+                this.http.put<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/progress-events/${progressEventId}`, { content, benchmarkIds })
             );
             return result.success
                 ? ApiResult.empty()
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Returns benchmark IDs associated with a progress event.
+    // *****************************************************************
+    async getProgressEventBenchmarks(progressEventId: string): Promise<ApiResult<string[]>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<string[]>>(`${this.base}/api/Student/progress-events/${progressEventId}/benchmarks`)
+            );
+            return result.success
+                ? ApiResult.ok(result.data ?? [])
                 : ApiResult.fail(result.message);
         } catch (error) {
             return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
@@ -230,7 +266,15 @@ export class StudentService {
     // *****************************************************************
     // Updates a goal's description, category, and baseline.
     // *****************************************************************
-    async updateGoal(studentId: string, goalId: string, data: { description?: string; category?: string; baseline?: string }): Promise<ApiResult<any>> {
+    async updateGoal(studentId: string, goalId: string, data: {
+        description?: string;
+        category?: string;
+        baseline?: string;
+        targetCompletionDate?: string | null;
+        closeDate?: string | null;
+        achieved?: boolean | null;
+        closeNotes?: string | null;
+    }): Promise<ApiResult<any>> {
         try {
             const result = await firstValueFrom(
                 this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/goals/${goalId}`, data)

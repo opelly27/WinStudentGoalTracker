@@ -2,6 +2,8 @@
 <div class="node-row" [style.padding-left]="indent()">
     @if (hasToggle(node)) {
     <span class="toggle-indicator" (click)="onToggle(node, $event)">{{ node.expanded ? '−' : '+' }}</span>
+    } @else {
+    <span class="toggle-placeholder"></span>
     }
     @if (node.routerLink) {
     <a class="node-label" [routerLink]="node.routerLink" routerLinkActive="active"

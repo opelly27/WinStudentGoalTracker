@@ -3,4 +3,5 @@ export interface CreateGoalDto {
     category: string;
     baseline: string;
     goalParentId: string | null;
+    targetCompletionDate: string | null;
 }

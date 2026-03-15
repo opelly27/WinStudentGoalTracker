@@ -15,10 +15,19 @@
     <div class="form-card">
         <label class="field-label">Progress event notes</label>
         <textarea class="notes-input" placeholder="Type your message here." rows="5" [(ngModel)]="notes"></textarea>
-
-        <label class="field-label">Voice note</label>
-        <button class="voice-btn">🎙 Record voice note</button>
     </div>
+
+    @if (benchmarkItems().length > 0) {
+    <label class="field-label">Associated Benchmarks</label>
+    <div class="benchmark-scroll">
+        @for (bm of benchmarkItems(); track bm.benchmarkId) {
+        <app-toggle-benchmark
+            [label]="bm.label"
+            [checked]="bm.checked"
+            (toggled)="onToggleBenchmark(bm.benchmarkId)" />
+        }
+    </div>
+    }
 
     <!-- Save button -->
     <button class="save-btn" [disabled]="!canSave()" (click)="onSave()">

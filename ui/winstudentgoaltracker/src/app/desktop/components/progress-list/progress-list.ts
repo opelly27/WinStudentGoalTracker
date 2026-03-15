@@ -67,8 +67,7 @@ export class ProgressList implements OnDestroy {
   // ************************ Event Handlers *************************
 
   onAddProgressEvent() {
-    this.showAddModal.set(true);
-    // TODO: Wire up add-progress-event modal component
+    this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'progress', 'new']);
   }
 
   // *****************************************************************

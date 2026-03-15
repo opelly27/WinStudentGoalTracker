@@ -20,6 +20,7 @@ export class AddGoalModal {
 
     readonly studentId = input.required<string>();
     readonly existingGoals = input.required<StudentGoalItem[]>();
+    readonly nextIepDate = input<string | null>();
     readonly goalCreated = output<StudentGoalItem>();
     readonly cancelled = output<void>();
 
@@ -35,7 +36,18 @@ export class AddGoalModal {
         category: '',
         baseline: '',
         goalParentId: null,
+        targetCompletionDate: null,
     };
+
+    // *****************************************************************
+    // Pre-fills targetCompletionDate from the student's nextIepDate.
+    // *****************************************************************
+    ngOnInit() {
+        const iepDate = this.nextIepDate?.();
+        if (iepDate) {
+            this.form.targetCompletionDate = iepDate;
+        }
+    }
 
     // ************************** Properties ***************************
 

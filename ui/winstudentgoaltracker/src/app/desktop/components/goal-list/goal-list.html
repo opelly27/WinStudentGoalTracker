@@ -13,7 +13,7 @@
 }
 
 @if (showAddModal()) {
-<app-add-goal-modal [studentId]="studentId" [existingGoals]="goals()" (goalCreated)="onGoalCreated($event)"
+<app-add-goal-modal [studentId]="studentId" [existingGoals]="goals()" [nextIepDate]="nextIepDate()" (goalCreated)="onGoalCreated($event)"
     (cancelled)="onModalCancelled()" />
 }
 

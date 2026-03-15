@@ -32,6 +32,7 @@ export class GoalList implements OnDestroy {
 
     protected studentId!: string;
     protected readonly studentIdentifier = signal<string | null>(null);
+    protected readonly nextIepDate = signal<string | null>(null);
     protected readonly goals = signal<StudentGoalItem[]>([]);
     protected readonly showAddModal = signal(false);
     protected readonly errorMessage = signal<string | null>(null);
@@ -71,6 +72,13 @@ export class GoalList implements OnDestroy {
     // Loads goals for the student from the service.
     // *****************************************************************
     private loadGoals() {
+        this.studentService.getStudentById(this.studentId).then(studentResult => {
+            if (studentResult.success && studentResult.payload) {
+                const iep = studentResult.payload.nextIepDate;
+                this.nextIepDate.set(iep ? String(iep).substring(0, 10) : null);
+            }
+        });
+
         this.studentService.getGoalsForStudent(this.studentId).then(data => {
             if (!data.success) {
                 this.errorMessage.set(data.message);

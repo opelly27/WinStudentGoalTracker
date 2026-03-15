@@ -4,19 +4,18 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_Student_GetWithAssignments`(
     IN p_id_user CHAR(36)
 )
 BEGIN
-    -- Result set 1: All students in the program (card shape)
     SELECT
         vc.studentId,
         vc.identifier,
         vc.nextIepDate,
         vc.lastEntryDate,
         vc.goalCount,
-        vc.progressEventCount
+        vc.progressEventCount,
+        vc.benchmarkCount
     FROM v_student_card vc
     INNER JOIN student s ON s.id_student = vc.studentId
     WHERE s.id_program = p_id_program
     ORDER BY vc.studentId;
-    -- Result set 2: user_student assignments for the requesting user in this program
     SELECT
         us.id_user_student,
         us.id_user,

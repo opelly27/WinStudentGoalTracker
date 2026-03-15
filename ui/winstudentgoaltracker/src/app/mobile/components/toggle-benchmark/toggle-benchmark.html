@@ -1,0 +1,4 @@
+<div class="tile" [class.checked]="checked()" (click)="onTap()">
+    <span class="check-indicator">{{ checked() ? '✓' : '' }}</span>
+    <span class="tile-label">{{ label() }}</span>
+</div>

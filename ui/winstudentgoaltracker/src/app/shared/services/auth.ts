@@ -15,6 +15,8 @@ const STORAGE_KEYS = {
   JWT: 'auth_jwt',
   REFRESH_TOKEN: 'auth_refresh_token',
   SESSION_TOKEN: 'auth_session_token',
+  PROGRAM_NAME: 'auth_program_name',
+  SCHOOL_DISTRICT_NAME: 'auth_school_district_name',
 } as const;
 
 // Refresh the JWT this many seconds before it actually expires.
@@ -34,8 +36,8 @@ export class Auth {
   private readonly _sessionToken = signal<string | null>(this.loadSessionToken());
   private readonly _programs = signal<UserProgramSummary[]>([]);
   private readonly _isRefreshing = signal(false);
-  private readonly _programName = signal<string>('');
-  private readonly _schoolDistrictName = signal<string>('');
+  private readonly _programName = signal<string>(localStorage.getItem(STORAGE_KEYS.PROGRAM_NAME) ?? '');
+  private readonly _schoolDistrictName = signal<string>(localStorage.getItem(STORAGE_KEYS.SCHOOL_DISTRICT_NAME) ?? '');
 
   /** The currently authenticated user, parsed from the JWT. Null when logged out. */
   readonly user = computed<AuthUser | null>(() => {
@@ -198,6 +200,8 @@ export class Auth {
     // Store program context for header display
     this._programName.set(data.programName);
     this._schoolDistrictName.set(data.schoolDistrictName);
+    localStorage.setItem(STORAGE_KEYS.PROGRAM_NAME, data.programName);
+    localStorage.setItem(STORAGE_KEYS.SCHOOL_DISTRICT_NAME, data.schoolDistrictName);
 
     // Clear phase-1 artefacts
     localStorage.removeItem(STORAGE_KEYS.SESSION_TOKEN);
@@ -243,6 +247,8 @@ export class Auth {
     this._isRefreshing.set(false);
     this._programName.set('');
     this._schoolDistrictName.set('');
+    localStorage.removeItem(STORAGE_KEYS.PROGRAM_NAME);
+    localStorage.removeItem(STORAGE_KEYS.SCHOOL_DISTRICT_NAME);
   }
 
   private loadSessionToken(): string | null {
