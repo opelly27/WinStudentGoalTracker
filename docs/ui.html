@@ -3,93 +3,521 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coming Soon — WIN</title>
+  <meta
+    name="description"
+    content="WIN Student Goal Tracker user manual for teachers and program staff."
+  />
+  <meta name="theme-color" content="#111827" />
+  <title>WIN Student Goal Tracker - User Manual</title>
 
   <style>
+    :root{
+      --bg:#f5f7fa;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#4b5563;
+      --border:rgba(17,24,39,.08);
+      --shadow:0 8px 24px rgba(17,24,39,.08);
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --header:#111827;
+      --success:#16a34a;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+
     body{
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
       margin:0;
-      background:#f5f7fa;
-      color:#111827;
-      line-height:1.6;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.65;
     }
 
     header{
-      background:#111827;
+      background:var(--header);
       color:#fff;
-      padding:3rem 1.5rem;
+      padding:3rem 1.25rem 2.5rem;
       text-align:center;
     }
 
     header h1{
       margin:0;
-      font-size:clamp(2rem, 4vw, 2.5rem);
+      font-size:clamp(2rem,4vw,2.6rem);
+      line-height:1.15;
     }
 
-    main{
-      max-width:800px;
-      margin:3rem auto;
-      padding:0 1.5rem;
+    header p{
+      margin:.85rem auto 0;
+      max-width:760px;
+      color:rgba(255,255,255,.88);
+      font-size:1.05rem;
     }
 
-    .card{
-      background:#fff;
-      padding:2rem;
-      border-radius:14px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.06);
-      text-align:center;
-    }
-
-    .muted{
-      color:#374151;
-      margin-top:0.75rem;
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:.75rem;
+      margin-top:1.5rem;
     }
 
     .btn{
-      display:inline-block;
-      margin-top:1.5rem;
-      padding:0.8rem 1.1rem;
-      background:#1d4ed8;
-      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.8rem 1.05rem;
+      border-radius:12px;
       text-decoration:none;
-      border-radius:10px;
-      font-weight:800;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.08);
+      transition:.2s ease;
     }
 
-    .btn:hover{
-      background:#1e40af;
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
     }
 
-    footer{
+    .btn-primary:hover{
+      background:var(--primary-dark);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      color:var(--text);
+    }
+
+    .btn-secondary:hover{
+      background:#eef2ff;
+    }
+
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:1.25rem 1rem 3rem;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:1rem;
+    }
+
+    @media (min-width: 980px){
+      .layout{
+        grid-template-columns:280px 1fr;
+        align-items:start;
+      }
+
+      .toc{
+        position:sticky;
+        top:1rem;
+      }
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:1.25rem;
+    }
+
+    .toc h2,
+    .content h2{
+      margin-top:0;
+    }
+
+    .toc ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+
+    .toc li + li{
+      margin-top:.55rem;
+    }
+
+    .toc a{
+      color:var(--text);
+      text-decoration:none;
+    }
+
+    .toc a:hover{
+      color:var(--primary);
+    }
+
+    .toc .small{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:1rem;
+    }
+
+    .content section + section{
+      margin-top:1rem;
+    }
+
+    .section-title{
+      font-size:1.35rem;
+      margin:0 0 .5rem;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:1rem;
+    }
+
+    @media (min-width: 760px){
+      .grid.two{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    .info-list,
+    .content ol,
+    .content ul{
+      padding-left:1.2rem;
+    }
+
+    .info-list li,
+    .content li{
+      margin:.3rem 0;
+    }
+
+    .callout{
+      border-left:4px solid var(--primary);
+      background:#eff6ff;
+      padding:1rem;
+      border-radius:12px;
+      margin-top:1rem;
+    }
+
+    .callout.success{
+      border-left-color:var(--success);
+      background:#f0fdf4;
+    }
+
+    code{
+      background:#eef2ff;
+      padding:.15rem .4rem;
+      border-radius:6px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-size:.95em;
+    }
+
+    .steps{
+      margin-top:.75rem;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:.75rem;
+      margin-top:1rem;
+    }
+
+    @media (min-width: 760px){
+      .kpis{
+        grid-template-columns:repeat(4,1fr);
+      }
+    }
+
+    .kpi{
+      background:#f9fafb;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1rem;
       text-align:center;
-      padding:2rem 1rem;
-      font-size:0.9rem;
-      color:#374151;
+    }
+
+    .kpi strong{
+      display:block;
+      font-size:1.25rem;
+      margin-bottom:.25rem;
+    }
+
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      padding:2rem 1rem 3rem;
+      font-size:.95rem;
+    }
+
+    .back-link{
+      margin-top:1.25rem;
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
     }
   </style>
 </head>
-
 <body>
-
   <header>
-    <h1>Coming Soon</h1>
+    <h1>WIN Student Goal Tracker</h1>
+    <p>
+      User manual for teachers and program staff using the WIN platform to manage
+      students, goals, benchmarks, and progress events.
+    </p>
+
+    <div class="hero-actions">
+      <a
+        class="btn btn-primary"
+        href="https://win.opelly.me/login"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open Live Application
+      </a>
+      <a class="btn btn-secondary" href="/">
+        Back to Project Home
+      </a>
+    </div>
   </header>
 
   <main>
-    <div class="card">
-      <h2>User Interface Coming Soon</h2>
-      <p class="muted">
-        We are currently building out the User Interface documentation.
-        Please check back soon for updates.
-      </p>
+    <div class="layout">
+      <aside class="toc card">
+        <h2>Contents</h2>
+        <ul>
+          <li><a href="#overview">1. Overview</a></li>
+          <li><a href="#access">2. Accessing the Application</a></li>
+          <li><a href="#program">3. Selecting a Program</a></li>
+          <li><a href="#dashboard">4. Student Dashboard</a></li>
+          <li><a href="#add-student">5. Adding a Student</a></li>
+          <li><a href="#goals">6. Viewing Student Goals</a></li>
+          <li><a href="#benchmarks">7. Managing Benchmarks</a></li>
+          <li><a href="#events">8. Recording Progress Events</a></li>
+          <li><a href="#workflow">9. Typical Workflow</a></li>
+          <li><a href="#tips">10. Usage Notes</a></li>
+        </ul>
 
-      <a href="index.html" class="btn">Back to Home</a>
+        <p class="small">
+          Demo login:<br />
+          <code>opelly@gmail.com</code><br />
+          <code>1234</code>
+        </p>
+      </aside>
+
+      <div class="content">
+        <section id="overview" class="card">
+          <h2 class="section-title">1. Overview</h2>
+          <p class="muted">
+            The WIN Student Goal Tracker is a web-based application designed to
+            help teachers and program staff organize student progress in a
+            structured way. Users can review assigned students, create or review
+            goals, define benchmarks, and document progress events over time.
+          </p>
+
+          <div class="kpis">
+            <div class="kpi">
+              <strong>Students</strong>
+              Managed by teacher
+            </div>
+            <div class="kpi">
+              <strong>Goals</strong>
+              Tracked per student
+            </div>
+            <div class="kpi">
+              <strong>Benchmarks</strong>
+              Milestones per goal
+            </div>
+            <div class="kpi">
+              <strong>Events</strong>
+              Progress history
+            </div>
+          </div>
+
+          <div class="callout">
+            This manual focuses on the current application workflow shown in the
+            deployed prototype and implemented interface.
+          </div>
+        </section>
+
+        <section id="access" class="card">
+          <h2 class="section-title">2. Accessing the Application</h2>
+          <p>
+            To begin, open the login page at
+            <code>https://win.opelly.me/login</code>.
+          </p>
+
+          <div class="steps">
+            <ol>
+              <li>Enter your assigned email address.</li>
+              <li>Enter your password.</li>
+              <li>Click <strong>Sign in</strong>.</li>
+            </ol>
+          </div>
+
+          <div class="callout success">
+            After a successful login, the system will take you to the program
+            selection screen.
+          </div>
+        </section>
+
+        <section id="program" class="card">
+          <h2 class="section-title">3. Selecting a Program</h2>
+          <p class="muted">
+            After authentication, the system displays the list of programs
+            available to the logged-in user.
+          </p>
+
+          <ol>
+            <li>Review the available program cards.</li>
+            <li>Select <strong>WIN Program – Teacher (Primary)</strong>.</li>
+            <li>The application will open the main dashboard for that program.</li>
+          </ol>
+        </section>
+
+        <section id="dashboard" class="card">
+          <h2 class="section-title">4. Student Dashboard</h2>
+          <p>
+            The main dashboard displays the students assigned to the current
+            teacher or user.
+          </p>
+
+          <div class="grid two">
+            <div>
+              <h3>Information shown on each student card</h3>
+              <ul class="info-list">
+                <li>Student identifier</li>
+                <li>Expected graduation date</li>
+                <li>Number of goals</li>
+                <li>Number of progress events</li>
+                <li>Last activity date</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Navigation</h3>
+              <ul class="info-list">
+                <li>The left sidebar lists students for quick access.</li>
+                <li>Clicking a student opens that student’s detail view.</li>
+                <li>The dashboard serves as the main starting point for daily use.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="add-student" class="card">
+          <h2 class="section-title">5. Adding a Student</h2>
+          <p class="muted">
+            Teachers can add a new student record directly from the dashboard.
+          </p>
+
+          <ol>
+            <li>Click <strong>+ Add a Student</strong>.</li>
+            <li>Enter the <strong>Student Identifier</strong>.</li>
+            <li>Enter the <strong>Expected Graduation Date</strong>.</li>
+            <li>Click <strong>Add Student</strong> to save the record.</li>
+          </ol>
+
+          <p>
+            Once saved, the new student appears in the dashboard and sidebar.
+          </p>
+        </section>
+
+        <section id="goals" class="card">
+          <h2 class="section-title">6. Viewing Student Goals</h2>
+          <p>
+            Selecting a student opens the goals view for that student. Goals are
+            the main tracking objects used to measure student development and
+            progress.
+          </p>
+
+          <h3>Goal details may include</h3>
+          <ul>
+            <li>Goal category or label</li>
+            <li>Goal description</li>
+            <li>Associated benchmarks</li>
+            <li>Related progress events</li>
+          </ul>
+
+          <div class="callout">
+            Users can use this page to quickly review whether a student is making
+            progress and what supporting events have been documented.
+          </div>
+        </section>
+
+        <section id="benchmarks" class="card">
+          <h2 class="section-title">7. Managing Benchmarks</h2>
+          <p>
+            Benchmarks break a goal into smaller, measurable steps. This makes it
+            easier to see incremental progress over time.
+          </p>
+
+          <h3>To add a benchmark</h3>
+          <ol>
+            <li>Open the selected student’s goal.</li>
+            <li>Go to the <strong>Benchmarks</strong> section.</li>
+            <li>Enter the benchmark description.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
+
+          <h3>Example benchmark</h3>
+          <p><code>Complete Computing for Good</code></p>
+        </section>
+
+        <section id="events" class="card">
+          <h2 class="section-title">8. Recording Progress Events</h2>
+          <p class="muted">
+            Progress events document meaningful activities, milestones, or notes
+            related to a student’s goal.
+          </p>
+
+          <h3>Each progress event should capture</h3>
+          <ul>
+            <li>A brief description of the activity</li>
+            <li>The user who recorded the event</li>
+            <li>The date of the event</li>
+          </ul>
+
+          <h3>Example</h3>
+          <p><code>Took C4G – loved it!</code></p>
+
+          <div class="callout success">
+            Progress events create a historical record that can support follow-up,
+            reporting, and program evaluation.
+          </div>
+        </section>
+
+        <section id="workflow" class="card">
+          <h2 class="section-title">9. Typical Workflow</h2>
+          <ol>
+            <li>Log into the application.</li>
+            <li>Select the appropriate program.</li>
+            <li>Review the list of assigned students.</li>
+            <li>Add a student if needed.</li>
+            <li>Open a student record.</li>
+            <li>Review or create goals.</li>
+            <li>Add benchmarks to define milestones.</li>
+            <li>Record progress events as the student advances.</li>
+          </ol>
+        </section>
+
+        <section id="tips" class="card">
+          <h2 class="section-title">10. Usage Notes</h2>
+          <ul>
+            <li>Keep student identifiers consistent to avoid duplicate entries.</li>
+            <li>Update progress events regularly so the record stays current.</li>
+            <li>Use benchmarks to make large goals easier to track.</li>
+            <li>Review student cards often to spot inactivity or missing updates.</li>
+            <li>Log out when finished using the system on a shared device.</li>
+          </ul>
+
+          <a href="/" class="btn btn-primary back-link">Back to Project Home</a>
+        </section>
+      </div>
     </div>
   </main>
 
-  <footer>
+  <div class="footer">
     © 2026 WIN Student Goal Tracker
-  </footer>
-
+  </div>
 </body>
 </html>
