@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WIN Student Goal Tracker - Technical Documentation</title>
+
+<style>
+body {
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif;
+margin:0;
+background:#f5f7fa;
+color:#111827;
+line-height:1.6;
+}
+
+header{
+background:#111827;
+color:white;
+padding:3rem 1.5rem;
+text-align:center;
+}
+
+header h1{
+margin:0;
+font-size:2.4rem;
+}
+
+header p{
+opacity:.9;
+margin-top:.5rem;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:2rem 1rem 3rem;
+}
+
+.card{
+background:white;
+border-radius:14px;
+padding:1.5rem;
+margin-bottom:1rem;
+box-shadow:0 8px 20px rgba(0,0,0,.05);
+}
+
+h2{
+margin-top:0;
+}
+
+code{
+background:#eef2ff;
+padding:.2rem .4rem;
+border-radius:5px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:1rem;
+}
+
+th,td{
+padding:.7rem;
+border-bottom:1px solid #e5e7eb;
+text-align:left;
+}
+
+.btn{
+display:inline-block;
+margin-top:1rem;
+padding:.6rem 1rem;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:8px;
+}
+
+footer{
+text-align:center;
+padding:2rem;
+color:#6b7280;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+<h1>Technical Documentation</h1>
+<p>WIN Student Goal Tracker Architecture and Implementation</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>System Overview</h2>
+<p>
+The WIN Student Goal Tracker is a containerized web application designed to allow
+teachers and program staff to track student progress, goals, benchmarks, and
+events. The system follows a modern multi-tier architecture separating the
+frontend interface, backend services, and database layer.
+</p>
+</div>
+
+<div class="card">
+<h2>System Architecture</h2>
+
+<p>The system architecture is organized into four main components:</p>
+
+<pre>
+Browser
+   │
+   ▼
+Angular Frontend
+   │
+   ▼
+Traefik Reverse Proxy
+   │
+   ▼
+.NET Core API
+   │
+   ▼
+MySQL Database
+</pre>
+
+</div>
+
+<div class="card">
+<h2>Technology Stack</h2>
+
+<table>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>Frontend</td>
+<td>Angular 20</td>
+<td>User interface and client-side logic</td>
+</tr>
+
+<tr>
+<td>Backend</td>
+<td>.NET Core 9.0 (C#)</td>
+<td>Business logic and REST APIs</td>
+</tr>
+
+<tr>
+<td>ORM</td>
+<td>Dapper</td>
+<td>Lightweight database access</td>
+</tr>
+
+<tr>
+<td>Authentication</td>
+<td>JWT + Refresh Tokens</td>
+<td>Secure user authentication</td>
+</tr>
+
+<tr>
+<td>Database</td>
+<td>MySQL</td>
+<td>Persistent data storage</td>
+</tr>
+
+<tr>
+<td>Infrastructure</td>
+<td>Docker Containers</td>
+<td>Application deployment</td>
+</tr>
+
+<tr>
+<td>Reverse Proxy</td>
+<td>Traefik</td>
+<td>Routing and SSL certificate management</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+<h2>Authentication</h2>
+
+<p>
+The application uses <strong>JSON Web Tokens (JWT)</strong> for authentication.
+After login, the server generates a JWT token which is used to authenticate
+subsequent API requests.
+</p>
+
+<ul>
+<li>Access Tokens authenticate API requests</li>
+<li>Refresh Tokens extend user sessions</li>
+<li>Program-scoped tokens restrict access to authorized programs</li>
+</ul>
+
+</div>
+
+<div class="card">
+<h2>Database Design</h2>
+
+<p>The MySQL database stores the application data for students and progress tracking.</p>
+
+<ul>
+<li>Users</li>
+<li>Programs</li>
+<li>Students</li>
+<li>Goals</li>
+<li>Benchmarks</li>
+<li>Progress Events</li>
+</ul>
+
+<p>
+The backend uses <strong>Dapper ORM</strong> to execute SQL queries and map results
+to application objects.
+</p>
+
+</div>
+
+<div class="card">
+<h2>Infrastructure</h2>
+
+<p>
+The system is deployed using Docker containers on a Virtual Private Server (VPS).
+Each component runs in its own container to maintain separation and scalability.
+</p>
+
+<table>
+<tr>
+<th>Container</th>
+<th>Function</th>
+</tr>
+
+<tr>
+<td>Angular</td>
+<td>Frontend application</td>
+</tr>
+
+<tr>
+<td>.NET Core API</td>
+<td>Backend services</td>
+</tr>
+
+<tr>
+<td>MySQL</td>
+<td>Database server</td>
+</tr>
+
+<tr>
+<td>Traefik</td>
+<td>Reverse proxy and SSL manager</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+<h2>Deployment</h2>
+
+<p>
+The application is deployed using Docker containers orchestrated on a VPS.
+Traefik automatically handles HTTPS certificates and routes traffic to the
+appropriate container.
+</p>
+
+<pre>
+User Browser
+   │
+   ▼
+Traefik Reverse Proxy
+   │
+   ├── Angular Container
+   │
+   └── .NET Core API Container
+            │
+            ▼
+         MySQL Container
+</pre>
+
+</div>
+
+<a class="btn" href="/">Back to Project Home</a>
+
+</main>
+
+<footer>
+© 2026 WIN Student Goal Tracker
+</footer>
+
+</body>
+</html>
