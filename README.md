@@ -1,151 +1,206 @@
-# WIN – Student Support & Case Management System
-
-### Jump to the [Project Home Page](https://opelly27.github.io/WinStudentGoalTracker/Index.html)
-
-## Overview
-
-**WIN (Wellness & Intervention Network)** is a secure, role-based case management application designed to support student intervention documentation, service tracking, and compliance workflows.
-
-The system centralizes student support cases while maintaining auditability and regulatory documentation alignment.
-
-> ⚠️ Features marked as **TBD** are planned but not yet implemented.
+# WIN Student Goal Tracker
 
 
+The **WIN Student Goal Tracker** is a web-based platform that helps
+teachers and program staff manage students, track goals, define
+benchmarks, and record progress events.
 
-## Key Features
-- Student goal tracking
-- Progress monitoring dashboard
-- Instructor updates
-- Goal completion reporting
-- Accessible interface for diverse users
+This project was developed as part of the **Computing for Good (C4G)**
+initiative.
 
-## Current Prototype
-A Figma prototype demonstrates the initial user experience and interface design.
+------------------------------------------------------------------------
 
-## Evaluation
-Stakeholders can evaluate the prototype using the following survey:
+# Live Prototype
 
-## Future Work
-- Authentication
-- Goal analytics
-- Reporting dashboards
-- Integration with case management systems
----
+Access the deployed prototype:
 
-## Current Status
+https://win.opelly.me
 
-- **Version:** 0.1 (MVP Development)
-- **Environment:** Development
-- **Production Deployment:** TBD
-- **SIS Integration:** TBD
+Demo credentials:
 
----
+Email: opelly@gmail.com\
+Password: 1234
 
-## Implemented Features (MVP)
+------------------------------------------------------------------------
 
-- Student profile creation
-- Case creation and assignment
-- Case notes logging
-- Basic service tracking
-- Basic role-based access control (RBAC)
-- Basic activity logging
+# Key Features
 
----
+## User Authentication
 
-## Planned Features (Not Yet Implemented)
+-   Secure login system
+-   JWT authentication with refresh tokens
+-   Program-scoped authorization
 
-- Advanced reporting dashboards – TBD
-- Workflow automation – TBD
-- Notification engine – TBD
-- SIS integration – TBD
-- Automated compliance validation – TBD
-- Consent tracking module – TBD
-- Document versioning – TBD
-- Analytics & risk scoring – TBD
-- External agency portal – TBD
+## Student Management
 
----
+-   View assigned students
+-   Add new students
+-   Track graduation dates
 
-## Regulatory & Compliance Alignment
+## Goal Management
 
-WIN is designed to support documentation workflows aligned with:
+-   Create and manage goals
+-   Associate goals with individual students
 
-- IDEA (Individuals with Disabilities Education Act)
-- FERPA (Family Educational Rights and Privacy Act)
-- FAPE documentation requirements
+## Benchmarks
 
-### Current Compliance Capabilities
+-   Define milestones within a goal
+-   Break goals into measurable steps
 
-- Timestamped case notes
-- User action logging
-- Role-based access restrictions
+## Progress Events
 
-### Planned Compliance Enhancements (TBD)
+-   Record achievements and activities
+-   Maintain historical progress logs
 
-- Consent management tracking
-- Immutable record locking
-- Automated compliance reporting
-- Formal audit export reports
-- Record retention automation
+------------------------------------------------------------------------
 
----
+# System Architecture
 
-## User Roles
+User Browser\
+↓\
+Angular Frontend (Web Client)\
+↓\
+Reverse Proxy (SSL + Routing)\
+↓\
+.NET Core API (Business Logic)\
+↓\
+MySQL Database
 
-| Role | Status | Capabilities |
-|------|--------|-------------|
-| Administrator | Implemented | User management, full access |
-| Case Manager | Implemented | Manage cases, add notes |
-| Reviewer | Partial | Read-only access (expanded permissions TBD) |
-| Service Provider | Partial | Service logging (expanded features TBD) |
+------------------------------------------------------------------------
 
----
+# Technology Stack
 
-## Technical Architecture
+## Frontend
 
-### Backend
-- RESTful API – Implemented
-- Authentication (JWT-based) – Implemented
-- Role-based authorization – Implemented
-- Audit logging middleware – Basic version implemented
+Angular 20
 
-### Database
+Responsibilities: - UI rendering - API communication - Form validation -
+Responsive design
 
-Relational schema includes:
+## Backend
 
-- Students
-- Cases
-- Case Notes
-- Services
-- Users
-- Roles
-- Audit Logs (basic)
+.NET Core 9.0 (C#) with **Dapper ORM**
 
-Additional schema validation and optimization – TBD
+Responsibilities: - Business logic - Goal and benchmark management -
+Student progress tracking - REST API endpoints
 
----
+## Authentication
 
-## Security Controls
+JWT Authentication with Refresh Tokens
 
-### Implemented
+Features: - Token-based authentication - Refresh token lifecycle -
+Program-scoped authorization
 
-- HTTPS (environment dependent)
-- Role-based access control
-- Session authentication
+## Database
 
-### Planned (TBD)
+MySQL relational database storing:
 
-- Encryption at rest verification
-- Fine-grained field-level access control
-- File storage encryption
-- Automated security monitoring
-- Periodic security testing process
+-   Users
+-   Programs
+-   Students
+-   Goals
+-   Benchmarks
+-   Progress Events
 
----
+------------------------------------------------------------------------
 
-## Installation
+# Infrastructure
 
-```bash
-git clone https://github.com/your-org/win-app.git
-cd win-app
-npm install
+The system runs in **four Docker containers** on a VPS.
+
+  Container       Purpose
+  --------------- ---------------------
+  Angular         Web frontend
+  .NET Core API   Business logic
+  MySQL           Database
+  Traefik         Reverse proxy + SSL
+
+------------------------------------------------------------------------
+
+# User Guide
+
+## Login
+
+Navigate to:
+
+https://win.opelly.me/login
+
+Enter email and password and click **Sign in**.
+
+## Select Program
+
+Choose:
+
+WIN Program -- Teacher (Primary)
+
+## Student Dashboard
+
+The dashboard displays all assigned students with:
+
+-   Student identifier
+-   Graduation date
+-   Number of goals
+-   Number of progress events
+-   Last activity date
+
+## Add Student
+
+1.  Click **+ Add a Student**
+2.  Enter identifier
+3.  Enter expected graduation date
+4.  Click **Add Student**
+
+## Goals
+
+Each student can have multiple goals that track academic or program
+milestones.
+
+## Benchmarks
+
+Benchmarks break goals into measurable steps.
+
+Example:
+
+Complete Computing for Good
+
+## Progress Events
+
+Events document activities related to a goal.
+
+Example:
+
+Took C4G -- loved it!
+
+------------------------------------------------------------------------
+
+# Project Structure
+
+WinStudentGoalTracker ├── frontend ├── backend ├── database ├── docker
+└── README.md
+
+------------------------------------------------------------------------
+
+# Contributors
+
+  Name          Role
+  ------------- -----------------------------
+  Raul Rosado   Infrastructure & Governance
+  Armin         UX/UI & Product Strategy
+  Ivan          Full Stack Development
+  Oliver        Backend & Security
+  Vraj          Front-End & Integration
+
+------------------------------------------------------------------------
+
+# Partner Organization
+
+WIN Program
+
+The WIN Student Goal Tracker supports teachers in tracking student
+goals, benchmarks, and progress events.
+
+------------------------------------------------------------------------
+
+# License
+
+Educational and research use.
