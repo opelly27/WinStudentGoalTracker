@@ -182,13 +182,13 @@ WinStudentGoalTracker ├── frontend ├── backend ├── database �
 
 # Contributors
 
-  Name              Role
-  -------------     -----------------------------
-  Raul Rosado       Infrastructure & Governance
-  Armin Abaye       UX/UI & Product Strategy
-  Ivan Pelly        Full Stack Development
-  Oliver Pelly      Backend & Security
-  Vraj Patel        Front-End, Integration & AI
+| Name         | Role                           |
+|--------------|--------------------------------|
+| Raul Rosado  | Infrastructure & Governance    |
+| Armin Abaye  | UX/UI & Product Strategy       |
+| Ivan Pelly   | Full Stack Development         |
+| Oliver Pelly | Backend & Security             |
+| Vraj Patel   | Front-End, Integration & AI    |
 
 ------------------------------------------------------------------------
 
