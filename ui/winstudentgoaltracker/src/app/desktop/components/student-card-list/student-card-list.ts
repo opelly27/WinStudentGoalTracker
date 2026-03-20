@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { StudentCard } from '../student-card/student-card';
 import { AddStudentModal } from '../add-student-modal/add-student-modal';
 import { DummyStudentService } from '../../../shared/services/dummy-student.service';
@@ -10,7 +11,7 @@ export type DisplayMode = 'card' | 'list';
 
 @Component({
   selector: 'app-student-card-list',
-  imports: [StudentCard, AddStudentModal],
+  imports: [StudentCard, AddStudentModal, RouterLink, DatePipe],
   templateUrl: './student-card-list.html',
   styleUrl: './student-card-list.scss',
 })
@@ -38,6 +39,10 @@ export class StudentCardList {
   // ************************ Public Methods *************************
 
   // ************************ Event Handlers *************************
+
+  setDisplayMode(mode: DisplayMode) {
+    this.displayMode.set(mode);
+  }
 
   onAddStudent() {
     this.showAddModal.set(true);

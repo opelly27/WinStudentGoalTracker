@@ -1,6 +1,33 @@
 <div class="toolbar">
     <h1 class= "page-title"> My Students -  <span class="student-count"> {{ students().length}}</span></h1>
-    <button class="toolbar-btn" (click)="onAddStudent()">+ Add a Student</button>
+    <div class="toolbar-right">
+        <div class="view-toggle">
+            <button
+                class="toggle-btn"
+                [class.active]="displayMode() === 'card'"
+                (click)="setDisplayMode('card')"
+                title="Card view">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="3" y="3" width="8" height="8" rx="1"/>
+                    <rect x="13" y="3" width="8" height="8" rx="1"/>
+                    <rect x="3" y="13" width="8" height="8" rx="1"/>
+                    <rect x="13" y="13" width="8" height="8" rx="1"/>
+                </svg>
+            </button>
+            <button
+                class="toggle-btn"
+                [class.active]="displayMode() === 'list'"
+                (click)="setDisplayMode('list')"
+                title="List view">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="3" y="5" width="18" height="2" rx="1"/>
+                    <rect x="3" y="11" width="18" height="2" rx="1"/>
+                    <rect x="3" y="17" width="18" height="2" rx="1"/>
+                </svg>
+            </button>
+        </div>
+        <button class="toolbar-btn" (click)="onAddStudent()">+ Add a Student</button>
+    </div>
 </div>
 
 @if (showAddModal()) {
@@ -24,6 +51,37 @@
     </div>
     }
 } @else {
-<!-- List mode — to be implemented -->
-<p>List view coming soon.</p>
+    @if (loaded() && students().length === 0) {
+    <div class="empty-state">
+        <p>You don't have any students entered yet.</p>
+        <p>Click <strong>+ Add a Student</strong> in the upper right to get started.</p>
+    </div>
+    } @else {
+    <div class="student-list">
+        <div class="list-header">
+            <span class="col-name">Student</span>
+            <span class="col-iep">IEP Date</span>
+            <span class="col-entry">Last Entry</span>
+            <span class="col-stat">Goals</span>
+            <span class="col-stat">Events</span>
+            <span class="col-stat">Benchmarks</span>
+        </div>
+        @for (student of students(); track student.studentId) {
+        <div class="list-row" [routerLink]="['/students', student.studentId]">
+            <span class="col-name">🎓 {{ student.identifier }}</span>
+            <span class="col-iep">{{ student.nextIepDate | date:'M/d/yy' }}</span>
+            <span class="col-entry">
+                @if (student.lastEntryDate) {
+                    {{ student.lastEntryDate | date:'M/d/yy' }}
+                } @else {
+                    <span class="no-entry">No entries yet</span>
+                }
+            </span>
+            <span class="col-stat">{{ student.goalCount }}</span>
+            <span class="col-stat">{{ student.progressEventCount }}</span>
+            <span class="col-stat">{{ student.benchmarkCount }}</span>
+        </div>
+        }
+    </div>
+    }
 }

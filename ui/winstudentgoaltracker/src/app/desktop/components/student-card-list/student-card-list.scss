@@ -17,6 +17,45 @@
     flex-shrink: 0;
 }
 
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-toggle {
+    display: flex;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+
+    &:hover {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+    &.active {
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+     & + & {
+        border-left: 1px solid #d1d5db;
+    }
+}
+
 .page-title {
     font-size: 24px;
     font-weight: 600;
@@ -45,6 +84,76 @@
     gap: 1rem;
     overflow-y: auto;
     flex: 1;
+}
+
+.student-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex: 1;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.list-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+.list-row {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: #f5f3ff;
+    }
+}
+
+.col-name {
+    flex: 2;
+    font-weight: 600;
+    color: #1f2937;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.col-iep,
+.col-entry {
+    flex: 1;
+    color: #4b5563;
+    font-size: 0.875rem;
+}
+
+.col-stat {
+    flex: 0 0 80px;
+    text-align: center;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.no-entry {
+    color: #9ca3af;
+    font-style: italic;
 }
 
 .empty-state {
