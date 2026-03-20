@@ -10,6 +10,15 @@ initiative.
 
 ------------------------------------------------------------------------
 
+# Peer Reviewers
+
+Check out the instructions and [survey here](https://docs.google.com/forms/d/e/1FAIpQLSc53xGhgQvq-ory-oU7sQ8M09nl_jJfPLh-1ABgjcfLxKNDHQ/viewform?usp=publish-editor)
+
+Thanks for reviewing our project. To reserve a login email address, go to the [reservation page](https://docs.google.com/spreadsheets/d/1051YfaPs00l0q9iTB2zqYXtPOV6qGr23lhSmrfAjm3o/edit?gid=0#gid=0) and following the instructions there to reserve a login credential. Our site is located at https://win.opelly.me, and the password for all reviewer logins is 1234
+
+
+------------------------------------------------------------------------
+
 # Live Prototype
 
 Access the deployed prototype:
@@ -182,13 +191,13 @@ WinStudentGoalTracker ├── frontend ├── backend ├── database �
 
 # Contributors
 
-  Name          Role
-  ------------- -----------------------------
-  Raul Rosado   Infrastructure & Governance
-  Armin         UX/UI & Product Strategy
-  Ivan          Full Stack Development
-  Oliver        Backend & Security
-  Vraj          Front-End & Integration
+| Name         | Role                           |
+|--------------|--------------------------------|
+| Raul Rosado  | Infrastructure & Governance    |
+| Armin Abaye  | UX/UI & Product Strategy       |
+| Ivan Pelly   | Full Stack Development         |
+| Oliver Pelly | Backend & Security             |
+| Vraj Patel   | Front-End, Integration & AI    |
 
 ------------------------------------------------------------------------
 
