@@ -1,7 +1,9 @@
 <div class="card">
     <p class="content">{{ event().content }}</p>
     <div class="action-icons">
-        <button class="edit-btn" (click)="onEdit()">Edit</button>
+        <button hlmBtn variant="outline" size="sm" (click)="onEdit()">
+            <ng-icon hlm name="lucidePencil" size="sm" /> Edit
+        </button>
         <!-- <button class="icon-btn" title="Delete">&#128465;</button> -->
     </div>
     <span class="author">{{ event().createdByName }}</span>

@@ -1,11 +1,16 @@
 import { Component, inject, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideActivity, lucideListChecks } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 
 @Component({
     selector: 'app-goal-card',
-    imports: [DatePipe],
+    imports: [DatePipe, NgIcon, HlmIcon, HlmButton],
+    providers: [provideIcons({ lucideActivity, lucideListChecks })],
     templateUrl: './goal-card.html',
     styleUrl: './goal-card.scss',
 })

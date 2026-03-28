@@ -2,13 +2,19 @@ import { Component, computed, inject, signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { ProgressItem } from '../progress-item/progress-item';
 import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
 import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
   selector: 'app-progress-list',
-  imports: [ProgressItem],
+  imports: [ProgressItem, NgIcon, HlmIcon, HlmButton, HlmInput],
+  providers: [provideIcons({ lucideArrowUp, lucidePlus, lucideX })],
   templateUrl: './progress-list.html',
   styleUrl: './progress-list.scss',
 })

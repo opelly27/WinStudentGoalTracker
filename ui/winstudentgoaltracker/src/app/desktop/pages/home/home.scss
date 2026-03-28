@@ -62,7 +62,13 @@
 .body {
     display: flex;
     flex: 1;
+    min-height: 0;
     overflow: hidden;
+}
+
+/* Spartan HlmSidebarWrapper defaults to min-h-svh; keep within header/footer shell */
+.body[data-slot='sidebar-wrapper'] {
+    min-height: 0 !important;
 }
 
 .sidebar {
@@ -78,6 +84,21 @@
 
 .sidebar.expanded {
     width: 260px;
+    overflow-y: auto;
+}
+
+/* collapsible=none sidebar uses h-svh; constrain to the body row */
+:host ::ng-deep .spartan-sidebar-host {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100%;
+    width: 100% !important;
+    max-width: 100%;
+}
+
+.spartan-sidebar-scroll {
+    min-height: 0;
+    flex: 1;
     overflow-y: auto;
 }
 

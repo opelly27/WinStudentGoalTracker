@@ -6,14 +6,22 @@
         <button class="logout-btn" (click)="onLogout()">Log Out</button>
     </header>
 
-    <!-- Body: Sidebar + Main -->
-    <div class="body">
-        <nav class="sidebar" [class.expanded]="sidebarExpanded()">
-            <a class="nav-item" routerLink="/students">Home</a>
-            <app-sidebar-tree-node [nodes]="sidebarTree()" [depth]="0" />
-        </nav>
+    <!-- Body: Sidebar + Main (Spartan sidebar shell; collapse still driven by sidebarExpanded) -->
+    <div class="body" hlmSidebarWrapper>
+        <div class="sidebar" [class.expanded]="sidebarExpanded()">
+            <hlm-sidebar [collapsible]="'none'" class="spartan-sidebar-host">
+                <div hlmSidebarContent class="spartan-sidebar-scroll">
+                    <div hlmSidebarGroup>
+                        <div hlmSidebarGroupContent>
+                            <a class="nav-item" routerLink="/students">Home</a>
+                            <app-sidebar-tree-node [nodes]="sidebarTree()" [depth]="0" />
+                        </div>
+                    </div>
+                </div>
+            </hlm-sidebar>
+        </div>
 
-        <main class="content">
+        <main hlmSidebarInset class="content">
             <router-outlet />
         </main>
     </div>

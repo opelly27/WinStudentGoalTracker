@@ -1,5 +1,7 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Benchmarks</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Benchmarks
+    </button>
     <span class="toolbar-title">{{ isNew() ? 'New Benchmark' : 'Benchmark Detail' }}</span>
     <span class="spacer"></span>
 </div>
@@ -15,12 +17,12 @@
     </div>
     <div class="field">
         <label class="field-label" for="benchmarkText">Benchmark</label>
-        <textarea id="benchmarkText" class="field-input field-textarea" [(ngModel)]="benchmarkText" rows="4"
+        <textarea hlmInput id="benchmarkText" class="w-full" [(ngModel)]="benchmarkText" rows="4"
             placeholder="Enter benchmark text..."></textarea>
     </div>
     <div class="field">
         <label class="field-label" for="shortName">Short Name</label>
-        <input id="shortName" class="field-input" type="text" [(ngModel)]="shortName" maxlength="50"
+        <input hlmInput id="shortName" type="text" class="w-full" [(ngModel)]="shortName" maxlength="50"
             placeholder="Optional" />
     </div>
     @if (!isNew()) {
@@ -35,8 +37,8 @@
     </div>
     }
     <div class="actions">
-        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
-        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+        <button hlmBtn variant="outline" size="sm" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+        <button hlmBtn size="sm" (click)="onSave()" [disabled]="!hasChanges() || saving()">
             {{ saving() ? 'Saving...' : 'Save' }}
         </button>
     </div>

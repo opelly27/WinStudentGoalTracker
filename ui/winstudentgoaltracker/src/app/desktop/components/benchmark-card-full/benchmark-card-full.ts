@@ -3,12 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { StudentService } from '../../../shared/services/student.service';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
 
 @Component({
   selector: 'app-benchmark-card-full',
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, NgIcon, HlmIcon, HlmButton, HlmInput],
+  providers: [provideIcons({ lucideArrowUp })],
   templateUrl: './benchmark-card-full.html',
   styleUrl: './benchmark-card-full.scss',
 })

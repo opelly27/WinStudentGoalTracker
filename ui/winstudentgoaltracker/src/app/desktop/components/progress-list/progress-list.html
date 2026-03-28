@@ -1,8 +1,12 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Goal</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goal
+    </button>
     <span class="toolbar-title">Progress Events</span>
     <span class="spacer"></span>
-    <button class="toolbar-btn" (click)="onAddProgressEvent()">+ Add Progress Event</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onAddProgressEvent()">
+        <ng-icon hlm name="lucidePlus" size="sm" /> Add Progress Event
+    </button>
 </div>
 
 <!-- <img class="hero-image" src="/slalomcropped.png" alt="Slalom" /> -->
@@ -16,10 +20,12 @@
         }
     </h2>
     <div class="search-box">
-        <input type="text" class="search-input" placeholder="Search..." [value]="rawSearchText()"
+        <input hlmInput type="text" placeholder="Search..." [value]="rawSearchText()"
             (input)="onSearchInput($any($event.target).value)" />
         @if (rawSearchText()) {
-        <button class="clear-btn" (click)="onClearSearch()">&times;</button>
+        <button hlmBtn variant="ghost" size="icon-sm" (click)="onClearSearch()">
+            <ng-icon hlm name="lucideX" size="sm" />
+        </button>
         }
     </div>
 </div>

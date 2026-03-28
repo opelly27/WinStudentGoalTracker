@@ -2,12 +2,17 @@ import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideTarget } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 
 @Component({
   selector: 'app-student-card-full',
-  imports: [FormsModule],
+  imports: [FormsModule, NgIcon, HlmIcon, HlmButton],
+  providers: [provideIcons({ lucideArrowUp, lucideTarget })],
   templateUrl: './student-card-full.html',
   styleUrl: './student-card-full.scss',
 })

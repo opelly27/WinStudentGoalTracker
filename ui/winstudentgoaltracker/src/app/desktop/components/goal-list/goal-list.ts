@@ -1,6 +1,10 @@
 import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucidePlus, lucideSparkles } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { StudentService } from '../../../shared/services/student.service';
 import { GoalCard } from '../goal-card/goal-card';
@@ -8,7 +12,8 @@ import { AddGoalModal } from '../add-goal-modal/add-goal-modal';
 
 @Component({
     selector: 'app-goal-list',
-    imports: [GoalCard, AddGoalModal],
+    imports: [GoalCard, AddGoalModal, NgIcon, HlmIcon, HlmButton],
+    providers: [provideIcons({ lucideArrowUp, lucidePlus, lucideSparkles })],
     templateUrl: './goal-list.html',
     styleUrl: './goal-list.scss',
 })

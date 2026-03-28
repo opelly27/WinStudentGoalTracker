@@ -1,5 +1,7 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Goals</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goals
+    </button>
     <span class="toolbar-title">Goal Detail</span>
     <span class="spacer"></span>
 </div>
@@ -18,28 +20,28 @@
     <div class="card-body">
         <div class="field">
             <label class="field-label" for="category">Category</label>
-            <input id="category" class="field-input" type="text" [(ngModel)]="category" />
+            <input hlmInput id="category" type="text" class="w-full" [(ngModel)]="category" />
         </div>
         <div class="field">
             <label class="field-label" for="description">Description</label>
-            <textarea id="description" class="field-input field-textarea" [(ngModel)]="description" rows="4"
+            <textarea hlmInput id="description" class="w-full" [(ngModel)]="description" rows="4"
                 placeholder="Enter description..."></textarea>
         </div>
         <div class="field">
             <label class="field-label" for="baseline">Baseline</label>
-            <textarea id="baseline" class="field-input field-textarea" [(ngModel)]="baseline" rows="3"
+            <textarea hlmInput id="baseline" class="w-full" [(ngModel)]="baseline" rows="3"
                 placeholder="Enter baseline..."></textarea>
         </div>
         <div class="field">
             <label class="field-label" for="targetCompletionDate">Target Completion Date</label>
-            <input id="targetCompletionDate" class="field-input" type="date" [(ngModel)]="targetCompletionDate" />
+            <input hlmInput id="targetCompletionDate" type="date" class="w-full" [(ngModel)]="targetCompletionDate" />
         </div>
 
         @if (closeDate !== null) {
         <div class="close-section">
             <div class="field">
                 <label class="field-label" for="closeDate">Close Date</label>
-                <input id="closeDate" class="field-input" type="date" [(ngModel)]="closeDate" />
+                <input hlmInput id="closeDate" type="date" class="w-full" [(ngModel)]="closeDate" />
             </div>
             <div class="field field-row">
                 <label class="field-label" for="achieved">Achieved</label>
@@ -48,7 +50,7 @@
             @if (achieved === false) {
             <div class="field">
                 <label class="field-label" for="closeNotes">Close Notes <span class="required">*</span></label>
-                <textarea id="closeNotes" class="field-input field-textarea" [(ngModel)]="closeNotes" rows="3"
+                <textarea hlmInput id="closeNotes" class="w-full" [(ngModel)]="closeNotes" rows="3"
                     placeholder="Explain why the goal was not achieved..." required></textarea>
             </div>
             }
@@ -56,16 +58,20 @@
         }
 
         <div class="actions">
-            <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
-            <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+            <button hlmBtn variant="outline" size="sm" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+            <button hlmBtn size="sm" (click)="onSave()" [disabled]="!hasChanges() || saving()">
                 {{ saving() ? 'Saving...' : 'Save' }}
             </button>
         </div>
     </div>
 
     <div class="card-footer">
-        <button class="footer-btn btn-green" (click)="onProgressEvents()">Progress Events</button>
-        <button class="footer-btn btn-blue" (click)="onBenchmarks()">Benchmarks</button>
+        <button hlmBtn variant="outline" size="sm" (click)="onProgressEvents()">
+            <ng-icon hlm name="lucideActivity" size="sm" /> Progress Events
+        </button>
+        <button hlmBtn variant="outline" size="sm" (click)="onBenchmarks()">
+            <ng-icon hlm name="lucideListChecks" size="sm" /> Benchmarks
+        </button>
     </div>
 </div>
 }

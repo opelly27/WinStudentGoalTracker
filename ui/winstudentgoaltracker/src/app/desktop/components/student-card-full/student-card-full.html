@@ -1,5 +1,7 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Students</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Students
+    </button>
     <span class="toolbar-title">Student Detail</span>
     <span class="spacer"></span>
 </div>
@@ -27,15 +29,17 @@
         </div>
 
         <div class="actions">
-            <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
-            <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+            <button hlmBtn variant="outline" size="sm" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+            <button hlmBtn size="sm" (click)="onSave()" [disabled]="!hasChanges() || saving()">
                 {{ saving() ? 'Saving...' : 'Save' }}
             </button>
         </div>
     </div>
 
     <div class="card-footer">
-        <button class="footer-btn btn-dark-green" (click)="onGoals()">Goals</button>
+        <button hlmBtn variant="outline" size="sm" (click)="onGoals()">
+            <ng-icon hlm name="lucideTarget" size="sm" /> Goals
+        </button>
         <span class="spacer"></span>
         @if (successMessage()) {
         <span class="success-label" [class.fade-out]="fading()">{{ successMessage() }}</span>

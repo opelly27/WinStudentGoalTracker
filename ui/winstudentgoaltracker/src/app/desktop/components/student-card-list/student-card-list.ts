@@ -1,6 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLayoutGrid, lucideList, lucidePlus } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
 import { StudentCard } from '../student-card/student-card';
 import { AddStudentModal } from '../add-student-modal/add-student-modal';
 import { DummyStudentService } from '../../../shared/services/dummy-student.service';
@@ -11,7 +15,8 @@ export type DisplayMode = 'card' | 'list';
 
 @Component({
   selector: 'app-student-card-list',
-  imports: [StudentCard, AddStudentModal, RouterLink, DatePipe],
+  imports: [StudentCard, AddStudentModal, RouterLink, DatePipe, HlmButton, NgIcon, HlmIcon],
+  providers: [provideIcons({ lucideLayoutGrid, lucideList, lucidePlus })],
   templateUrl: './student-card-list.html',
   styleUrl: './student-card-list.scss',
 })

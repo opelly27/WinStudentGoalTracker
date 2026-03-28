@@ -18,7 +18,11 @@
     </div>
 
     <div class="card-footer">
-        <button class="footer-btn btn-green" (click)="$event.stopPropagation(); onProgressEventsClick()">Progress Events</button>
-        <button class="footer-btn btn-blue" (click)="$event.stopPropagation(); onBenchmarksClick()">Benchmarks</button>
+        <button hlmBtn variant="outline" size="sm" (click)="$event.stopPropagation(); onProgressEventsClick()">
+            <ng-icon hlm name="lucideActivity" size="sm" /> Progress Events
+        </button>
+        <button hlmBtn variant="outline" size="sm" (click)="$event.stopPropagation(); onBenchmarksClick()">
+            <ng-icon hlm name="lucideListChecks" size="sm" /> Benchmarks
+        </button>
     </div>
 </div>

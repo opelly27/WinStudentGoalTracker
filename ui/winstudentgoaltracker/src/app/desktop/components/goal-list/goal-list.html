@@ -1,8 +1,12 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Student</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Student
+    </button>
     <span class="toolbar-title">Goals</span>
     <span class="spacer"></span>
-    <button class="toolbar-btn" (click)="onAddGoal()">+ Add a Goal</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onAddGoal()">
+        <ng-icon hlm name="lucidePlus" size="sm" /> Add a Goal
+    </button>
 </div>
 
 <!-- <img class="hero-image" src="/hurdlescropped.png" alt="Hurdles" /> -->
@@ -36,5 +40,7 @@
 
 <footer class="goal-footer">
     <span class="spacer"></span>
-    <button class="toolbar-btn"> ⭐ Generate progress report</button>
+    <button hlmBtn variant="outline" size="sm">
+        <ng-icon hlm name="lucideSparkles" size="sm" /> Generate progress report
+    </button>
 </footer>

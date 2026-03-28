@@ -1,7 +1,11 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Goal</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goal
+    </button>
     <span class="spacer"></span>
-    <button class="toolbar-btn" (click)="onAddBenchmark()">+ Add a Benchmark</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onAddBenchmark()">
+        <ng-icon hlm name="lucidePlus" size="sm" /> Add a Benchmark
+    </button>
 </div>
 
 @if (goalCategory()) {

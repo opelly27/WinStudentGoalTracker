@@ -3,12 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideActivity, lucideListChecks } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 
 @Component({
   selector: 'app-goal-card-full',
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, NgIcon, HlmIcon, HlmButton, HlmInput],
+  providers: [provideIcons({ lucideArrowUp, lucideActivity, lucideListChecks })],
   templateUrl: './goal-card-full.html',
   styleUrl: './goal-card-full.scss',
 })

@@ -1,6 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <span class="goal-badge">{{ benchmark().goalCategory }}</span>
+        <span class="inline-flex items-center rounded-full border border-green-300 bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+            {{ benchmark().goalCategory }}
+        </span>
         @if (benchmark().updatedAt) {
         <span class="date">Updated: {{ benchmark().updatedAt | date:'M/d/yy' }}</span>
         } @else {

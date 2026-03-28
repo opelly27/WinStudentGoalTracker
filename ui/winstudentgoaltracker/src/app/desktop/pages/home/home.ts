@@ -7,10 +7,11 @@ import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { SidebarNode } from '../../../shared/classes/sidebar-node';
 import { SidebarTreeNode } from '../../components/sidebar-tree-node/sidebar-tree-node';
+import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterOutlet, RouterLink, SidebarTreeNode],
+  imports: [RouterOutlet, RouterLink, SidebarTreeNode, HlmSidebarImports],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

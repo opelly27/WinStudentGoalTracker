@@ -1,8 +1,18 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@spartan-ng/helm/button": ["libs/spartan-ng-helm/button.ts"],
+      "@spartan-ng/helm/icon": ["libs/spartan-ng-helm/icon.ts"],
+      "@spartan-ng/helm/input": ["libs/spartan-ng-helm/input.ts"],
+      "@spartan-ng/helm/separator": ["libs/spartan-ng-helm/separator.ts"],
+      "@spartan-ng/helm/sheet": ["libs/spartan-ng-helm/sheet.ts"],
+      "@spartan-ng/helm/sidebar": ["libs/spartan-ng-helm/sidebar.ts"],
+      "@spartan-ng/helm/skeleton": ["libs/spartan-ng-helm/skeleton.ts"],
+      "@spartan-ng/helm/tooltip": ["libs/spartan-ng-helm/tooltip.ts"],
+      "@spartan-ng/helm/utils": ["libs/spartan-ng-helm/utils.ts"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
