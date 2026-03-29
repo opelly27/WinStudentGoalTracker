@@ -1,6 +1,6 @@
 <div class="toolbar">
     <button hlmBtn variant="outline" size="sm" (click)="onBack()">
-        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goals
+        <ng-icon hlm name="lucideArrowLeft" size="sm" /> Goals
     </button>
     <span class="toolbar-title">Goal Detail</span>
     <span class="spacer"></span>
@@ -24,12 +24,12 @@
         </div>
         <div class="field">
             <label class="field-label" for="description">Description</label>
-            <textarea hlmInput id="description" class="w-full" [(ngModel)]="description" rows="4"
+            <textarea hlmTextarea id="description" class="w-full" [(ngModel)]="description" rows="4"
                 placeholder="Enter description..."></textarea>
         </div>
         <div class="field">
             <label class="field-label" for="baseline">Baseline</label>
-            <textarea hlmInput id="baseline" class="w-full" [(ngModel)]="baseline" rows="3"
+            <textarea hlmTextarea id="baseline" class="w-full" [(ngModel)]="baseline" rows="4"
                 placeholder="Enter baseline..."></textarea>
         </div>
         <div class="field">
@@ -50,7 +50,7 @@
             @if (achieved === false) {
             <div class="field">
                 <label class="field-label" for="closeNotes">Close Notes <span class="required">*</span></label>
-                <textarea hlmInput id="closeNotes" class="w-full" [(ngModel)]="closeNotes" rows="3"
+                <textarea hlmTextarea id="closeNotes" class="w-full" [(ngModel)]="closeNotes" rows="3"
                     placeholder="Explain why the goal was not achieved..." required></textarea>
             </div>
             }

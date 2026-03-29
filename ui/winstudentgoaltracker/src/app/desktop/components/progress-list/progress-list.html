@@ -1,32 +1,36 @@
 <div class="toolbar">
     <button hlmBtn variant="outline" size="sm" (click)="onBack()">
-        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goal
+        <ng-icon hlm name="lucideArrowLeft" size="sm" /> Goals
     </button>
     <span class="toolbar-title">Progress Events</span>
-    <span class="spacer"></span>
-    <button hlmBtn variant="outline" size="sm" (click)="onAddProgressEvent()">
-        <ng-icon hlm name="lucidePlus" size="sm" /> Add Progress Event
-    </button>
 </div>
 
 <!-- <img class="hero-image" src="/slalomcropped.png" alt="Slalom" /> -->
 
 @if (studentIdentifier() && goalCategory()) {
 <div class="header-row">
-    <h2 class="section-header">
-        Student: {{ studentIdentifier() }} &nbsp;&nbsp; Goal: {{ goalCategory() }}
-        @if (isFiltered()) {
-        <span class="filter-count">(showing {{ filteredEvents().length }} of {{ events().length }})</span>
-        }
-    </h2>
-    <div class="search-box">
-        <input hlmInput type="text" placeholder="Search..." [value]="rawSearchText()"
-            (input)="onSearchInput($any($event.target).value)" />
-        @if (rawSearchText()) {
-        <button hlmBtn variant="ghost" size="icon-sm" (click)="onClearSearch()">
-            <ng-icon hlm name="lucideX" size="sm" />
+    <div class="header-left">
+        <h2 class="section-header">
+            <span class="section-label">Student: </span>{{ studentIdentifier() }}
+            <span class="section-label section-goal-label">  Goal: </span>{{ goalCategory() }}
+            @if (isFiltered()) {
+            <span class="filter-count">(showing {{ filteredEvents().length }} of {{ events().length }})</span>
+            }
+        </h2>
+    </div>
+    <div class="header-right">
+        <div class="search-box">
+            <input hlmInput type="text" placeholder="Search..." [value]="rawSearchText()"
+                (input)="onSearchInput($any($event.target).value)" />
+            @if (rawSearchText()) {
+            <button hlmBtn variant="ghost" size="icon-sm" (click)="onClearSearch()">
+                <ng-icon hlm name="lucideX" size="sm" />
+            </button>
+            }
+        </div>
+        <button hlmBtn variant="outline" size="sm" (click)="onAddProgressEvent()">
+            <ng-icon hlm name="lucidePlus" size="sm" /> Add Progress Event
         </button>
-        }
     </div>
 </div>
 }

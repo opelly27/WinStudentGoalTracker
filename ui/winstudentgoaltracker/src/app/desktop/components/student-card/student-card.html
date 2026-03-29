@@ -1,20 +1,35 @@
-<div class="card" [routerLink]="['/students', student().studentId]">
+<div class="card" [routerLink]="['/students', student().studentId, 'goals']">
     <h2 class="identifier">🎓 {{ student().identifier }}</h2>
 
     <div class="meta">
-        <span class="last-entry">IEP Date: {{ student().nextIepDate | date:'M/d/yy'}}</span>
-        <span class="last-entry">
-            @if (student().lastEntryDate) {
-            Last entry: {{ student().lastEntryDate | date:'M/d/yy' }}
-            } @else {
-            No entries yet
-            }
-        </span>
+        <div class="meta-col">
+            <span class="meta-label">IEP Date</span>
+            <span class="meta-value">{{ student().nextIepDate | date:'M/d/yy' }}</span>
+        </div>
+        <div class="meta-col">
+            <span class="meta-label">Last entry</span>
+            <span class="meta-value">
+                @if (student().lastEntryDate) {
+                    {{ student().lastEntryDate | date:'M/d/yy' }}
+                } @else {
+                    No entries yet
+                }
+            </span>
+        </div>
     </div>
 
     <div class="stats">
-        <span>Goals: {{ student().goalCount }}</span>
-        <span>Events: {{ student().progressEventCount }}</span>
-        <span>Benchmarks: {{ student().benchmarkCount }}</span>
+        <div class="stat-col">
+            <span hlmBadge variant="secondary">Goals</span>
+            <span class="stat-value">{{ student().goalCount }}</span>
+        </div>
+        <div class="stat-col">
+            <span hlmBadge variant="secondary">Benchmarks</span>
+            <span class="stat-value">{{ student().benchmarkCount }}</span>
+        </div>
+        <div class="stat-col">
+            <span hlmBadge variant="secondary">Events</span>
+            <span class="stat-value">{{ student().progressEventCount }}</span>
+        </div>
     </div>
 </div>

@@ -1,12 +1,19 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { CreateGoalDto } from '../../../shared/classes/create-goal.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
     selector: 'app-add-goal-modal',
-    imports: [FormsModule],
+    imports: [FormsModule, NgIcon, HlmIcon, HlmButton, HlmInput, HlmTextarea],
+    providers: [provideIcons({ lucideX })],
     templateUrl: './add-goal-modal.html',
     styleUrl: './add-goal-modal.scss',
 })

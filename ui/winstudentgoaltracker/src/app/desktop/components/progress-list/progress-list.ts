@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUp, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { lucideArrowLeft, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -14,7 +14,7 @@ import { StudentService } from '../../../shared/services/student.service';
 @Component({
   selector: 'app-progress-list',
   imports: [ProgressItem, NgIcon, HlmIcon, HlmButton, HlmInput],
-  providers: [provideIcons({ lucideArrowUp, lucidePlus, lucideX })],
+  providers: [provideIcons({ lucideArrowLeft, lucidePlus, lucideX })],
   templateUrl: './progress-list.html',
   styleUrl: './progress-list.scss',
 })
@@ -80,7 +80,7 @@ export class ProgressList implements OnDestroy {
   // Navigates back to the parent goal detail.
   // *****************************************************************
   onBack() {
-    this.router.navigate(['/students', this.studentId, 'goals', this.goalId]);
+    this.router.navigate(['/students', this.studentId, 'goals']);
   }
 
   // *****************************************************************

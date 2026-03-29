@@ -1,18 +1,20 @@
 <div class="toolbar">
     <button hlmBtn variant="outline" size="sm" (click)="onBack()">
-        <ng-icon hlm name="lucideArrowUp" size="sm" /> Goal
+        <ng-icon hlm name="lucideArrowLeft" size="sm" /> Goals
     </button>
-    <span class="spacer"></span>
+    <span class="toolbar-title">Benchmarks</span>
+</div>
+
+<div class="section-row">
+    @if (goalCategory()) {
+    <h2 class="section-header"><span class="section-label">Benchmarks for </span>{{ goalCategory() }}</h2>
+    } @else {
+    <h2 class="section-header">Benchmarks</h2>
+    }
     <button hlmBtn variant="outline" size="sm" (click)="onAddBenchmark()">
         <ng-icon hlm name="lucidePlus" size="sm" /> Add a Benchmark
     </button>
 </div>
-
-@if (goalCategory()) {
-<h2 class="section-header">Benchmarks for {{ goalCategory() }}</h2>
-} @else {
-<h2 class="section-header">Benchmarks</h2>
-}
 
 @if (errorMessage()) {
 <p class="error">{{ errorMessage() }}</p>
@@ -22,7 +24,7 @@
 <div class="empty-state">
     <p>Benchmarks are milestones on the way to achieving a goal. They are optional in this system.</p>
     <p>No benchmarks yet.</p>
-    <p>Click <strong>+ Add a Benchmark</strong> in the upper right to get started.</p>
+    <p>Click <strong>Add a Benchmark</strong> above to get started.</p>
 </div>
 } @else {
 <div class="card-grid">

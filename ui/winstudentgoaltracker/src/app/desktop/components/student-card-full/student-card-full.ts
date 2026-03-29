@@ -6,12 +6,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowUp, lucideTarget } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 
 @Component({
   selector: 'app-student-card-full',
-  imports: [FormsModule, NgIcon, HlmIcon, HlmButton],
+  imports: [FormsModule, NgIcon, HlmIcon, HlmButton, HlmInput],
   providers: [provideIcons({ lucideArrowUp, lucideTarget })],
   templateUrl: './student-card-full.html',
   styleUrl: './student-card-full.scss',

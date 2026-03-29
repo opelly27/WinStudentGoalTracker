@@ -3,16 +3,19 @@
 <div class="modal">
     <div class="modal-header">
         <h2 class="modal-title">Add Student</h2>
-        <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+        <button hlmBtn variant="ghost" size="icon-sm" (click)="onCancel()" aria-label="Close">
+            <ng-icon hlm name="lucideX" size="sm" />
+        </button>
     </div>
 
     <form class="modal-body" (ngSubmit)="onSubmit()" #studentForm="ngForm">
 
         <div class="field">
             <label for="identifier">Student</label>
-            <input
+            <input hlmInput
                 id="identifier"
                 type="text"
+                class="w-full"
                 [(ngModel)]="form.identifier"
                 name="identifier"
                 required
@@ -43,9 +46,10 @@
 
         <div class="field">
             <label for="nextIepDate">Next IEP Date</label>
-            <input
+            <input hlmInput
                 id="nextIepDate"
                 type="date"
+                class="w-full"
                 [(ngModel)]="form.nextIepDate"
                 name="nextIepDate"
             />
@@ -56,8 +60,8 @@
         }
 
         <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-            <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid || isSubmitting()">
+            <button hlmBtn type="button" variant="outline" size="sm" (click)="onCancel()">Cancel</button>
+            <button hlmBtn type="submit" size="sm" [disabled]="studentForm.invalid || isSubmitting()">
                 {{ isSubmitting() ? 'Saving...' : 'Add Student' }}
             </button>
         </div>

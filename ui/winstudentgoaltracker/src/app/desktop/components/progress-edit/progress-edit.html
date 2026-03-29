@@ -1,5 +1,7 @@
 <div class="toolbar">
-    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Progress Events</button>
+    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
+        <ng-icon hlm name="lucideArrowUp" size="sm" /> Progress Events
+    </button>
     <span class="toolbar-title">{{ isNew() ? 'New Progress Event' : 'Edit Progress Event' }}</span>
     <span class="spacer"></span>
 </div>
@@ -15,7 +17,7 @@
     </div>
     <div class="field">
         <label class="field-label" for="content">Notes</label>
-        <textarea id="content" class="field-input field-textarea" [(ngModel)]="content" rows="5"
+        <textarea hlmTextarea id="content" class="w-full" [(ngModel)]="content" rows="5"
             placeholder="Enter progress event notes..."></textarea>
     </div>
 
@@ -44,8 +46,8 @@
     </div>
     }
     <div class="actions">
-        <button class="toolbar-btn" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
-        <button class="toolbar-btn save-btn" (click)="onSave()" [disabled]="!hasChanges() || saving()">
+        <button hlmBtn variant="outline" size="sm" (click)="onCancel()" [disabled]="!hasChanges()">Cancel</button>
+        <button hlmBtn size="sm" (click)="onSave()" [disabled]="!hasChanges() || saving()">
             {{ saving() ? 'Saving...' : 'Save' }}
         </button>
     </div>

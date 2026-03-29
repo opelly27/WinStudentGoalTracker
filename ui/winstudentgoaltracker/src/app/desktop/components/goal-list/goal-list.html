@@ -1,19 +1,26 @@
 <div class="toolbar">
-    <button hlmBtn variant="outline" size="sm" (click)="onBack()">
-        <ng-icon hlm name="lucideArrowUp" size="sm" /> Student
-    </button>
     <span class="toolbar-title">Goals</span>
-    <span class="spacer"></span>
-    <button hlmBtn variant="outline" size="sm" (click)="onAddGoal()">
-        <ng-icon hlm name="lucidePlus" size="sm" /> Add a Goal
-    </button>
 </div>
 
 <!-- <img class="hero-image" src="/hurdlescropped.png" alt="Hurdles" /> -->
 
-
 @if (studentIdentifier()) {
-<h2 class="section-header">Student: {{ studentIdentifier() }}</h2>
+<div class="student-header">
+    <div class="student-header-left">
+        <h2 class="section-header"><span class="section-label">Student: </span>{{ studentIdentifier() }}</h2>
+        <div class="student-actions">
+            <button hlmBtn variant="outline" (click)="onBack()">
+                <ng-icon hlm name="lucideSquarePen" size="sm" /> Student details
+            </button>
+            <button hlmBtn (click)="onAddGoal()">
+                <ng-icon hlm name="lucideSquarePen" size="sm" /> Add a goal
+            </button>
+        </div>
+    </div>
+    <button hlmBtn variant="outline" size="sm">
+        <ng-icon hlm name="lucideSparkles" size="sm" /> Generate progress report
+    </button>
+</div>
 }
 
 @if (showAddModal()) {
@@ -28,7 +35,7 @@
 @if (goals().length === 0 && !errorMessage()) {
 <div class="empty-state">
     <p>No goals yet.</p>
-    <p>Click <strong>+ Add a Goal</strong> in the upper right to get started.</p>
+    <p>Click <strong>Add a goal</strong> above to get started.</p>
 </div>
 } @else {
 <div class="card-grid">
@@ -38,9 +45,3 @@
 </div>
 }
 
-<footer class="goal-footer">
-    <span class="spacer"></span>
-    <button hlmBtn variant="outline" size="sm">
-        <ng-icon hlm name="lucideSparkles" size="sm" /> Generate progress report
-    </button>
-</footer>

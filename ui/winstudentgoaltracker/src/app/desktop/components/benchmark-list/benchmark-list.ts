@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUp, lucidePlus } from '@ng-icons/lucide';
+import { lucideArrowLeft, lucidePlus } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
@@ -11,7 +11,7 @@ import { BenchmarkCard } from '../benchmark-card/benchmark-card';
 @Component({
   selector: 'app-benchmark-list',
   imports: [BenchmarkCard, NgIcon, HlmIcon, HlmButton],
-  providers: [provideIcons({ lucideArrowUp, lucidePlus })],
+  providers: [provideIcons({ lucideArrowLeft, lucidePlus })],
   templateUrl: './benchmark-list.html',
   styleUrl: './benchmark-list.scss',
 })
@@ -49,11 +49,7 @@ export class BenchmarkList {
   }
 
   onBack() {
-    if (this.goalId) {
-      this.router.navigate(['/students', this.studentId, 'goals', this.goalId]);
-    } else {
-      this.router.navigate(['/students', this.studentId, 'goals']);
-    }
+    this.router.navigate(['/students', this.studentId, 'goals']);
   }
 
   // ********************** Support Procedures ***********************

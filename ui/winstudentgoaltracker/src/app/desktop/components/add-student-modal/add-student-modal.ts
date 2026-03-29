@@ -1,12 +1,18 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { CreateStudentDto } from '../../../shared/classes/create-student.dto';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
     selector: 'app-add-student-modal',
-    imports: [FormsModule],
+    imports: [FormsModule, NgIcon, HlmIcon, HlmButton, HlmInput],
+    providers: [provideIcons({ lucideX })],
     templateUrl: './add-student-modal.html',
     styleUrl: './add-student-modal.scss',
 })

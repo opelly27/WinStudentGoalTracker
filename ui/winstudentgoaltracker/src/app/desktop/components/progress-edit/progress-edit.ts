@@ -3,6 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { StudentService } from '../../../shared/services/student.service';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
 
@@ -14,7 +20,8 @@ interface BenchmarkCheckItem {
 
 @Component({
   selector: 'app-progress-edit',
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, NgIcon, HlmIcon, HlmButton, HlmInput, HlmTextarea],
+  providers: [provideIcons({ lucideArrowUp })],
   templateUrl: './progress-edit.html',
   styleUrl: './progress-edit.scss',
 })

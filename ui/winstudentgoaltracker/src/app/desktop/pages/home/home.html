@@ -8,6 +8,9 @@
 
     <!-- Body: Sidebar + Main (Spartan sidebar shell; collapse still driven by sidebarExpanded) -->
     <div class="body" hlmSidebarWrapper>
+        @if (sidebarExpanded()) {
+        <div class="sidebar-backdrop" (click)="onToggleSidebar()"></div>
+        }
         <div class="sidebar" [class.expanded]="sidebarExpanded()">
             <hlm-sidebar [collapsible]="'none'" class="spartan-sidebar-host">
                 <div hlmSidebarContent class="spartan-sidebar-scroll">

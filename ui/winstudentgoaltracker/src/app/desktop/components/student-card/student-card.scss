@@ -1,6 +1,6 @@
 :host {
     display: block;
-    width: 280px;
+    width: 100%;
 }
 
 .card {
@@ -10,6 +10,9 @@
     padding: 1.5rem;
     cursor: pointer;
     transition: box-shadow 0.15s ease, transform 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .card:hover {
@@ -18,31 +21,49 @@
 }
 
 .identifier {
-    margin: 0 0 0.75rem;
+    margin: 0;
     font-size: 1.5rem;
     text-align: center;
 }
 
 .meta {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.meta-label {
     font-size: 0.875rem;
     color: #666;
 }
 
-.badge {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 0.8125rem;
+.meta-value {
+    font-size: 0.875rem;
     color: #333;
+    font-weight: 500;
 }
 
 .stats {
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.stat-value {
     font-size: 0.875rem;
     font-weight: 500;
     color: #333;
