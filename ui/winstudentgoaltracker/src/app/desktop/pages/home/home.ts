@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { SidebarNode } from '../../../shared/classes/sidebar-node';
 import { SidebarTreeNode } from '../../components/sidebar-tree-node/sidebar-tree-node';
-import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
+import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 @Component({
   selector: 'app-home',
@@ -50,9 +50,12 @@ export class Home implements OnDestroy {
   protected readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly studentService = inject(StudentService);
+  protected readonly sidebarService = inject(HlmSidebarService);
   private readonly routeSub: Subscription;
   private readonly labelSub: Subscription;
-  protected readonly sidebarExpanded = signal(true);
+  protected readonly sidebarExpanded = computed(() =>
+    this.sidebarService.isMobile() ? this.sidebarService.openMobile() : this.sidebarService.open()
+  );
   protected readonly sidebarTree = signal<SidebarNode[]>([]);
 
   // ************************** Properties ***************************
@@ -62,7 +65,7 @@ export class Home implements OnDestroy {
   // ************************ Event Handlers *************************
 
   onToggleSidebar() {
-    this.sidebarExpanded.update(v => !v);
+    this.sidebarService.toggleSidebar();
   }
 
   // *****************************************************************

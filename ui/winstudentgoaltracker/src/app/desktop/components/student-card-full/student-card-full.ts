@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUp, lucideTarget } from '@ng-icons/lucide';
+import { lucideArrowUp, lucideTarget, lucideHouse } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -13,7 +13,7 @@ import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 @Component({
   selector: 'app-student-card-full',
   imports: [FormsModule, NgIcon, HlmIcon, HlmButton, HlmInput],
-  providers: [provideIcons({ lucideArrowUp, lucideTarget })],
+  providers: [provideIcons({ lucideArrowUp, lucideTarget, lucideHouse })],
   templateUrl: './student-card-full.html',
   styleUrl: './student-card-full.scss',
 })
