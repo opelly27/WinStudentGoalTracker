@@ -8,6 +8,7 @@ BEGIN
         vc.studentId,
         vc.identifier,
         vc.nextIepDate,
+        vc.firstEntryDate,
         vc.lastEntryDate,
         vc.goalCount,
         vc.progressEventCount,

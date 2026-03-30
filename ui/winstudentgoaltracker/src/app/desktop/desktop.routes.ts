@@ -8,6 +8,8 @@ import { ProgressList } from './components/progress-list/progress-list';
 import { BenchmarkList } from './components/benchmark-list/benchmark-list';
 import { BenchmarkCardFull } from './components/benchmark-card-full/benchmark-card-full';
 import { ProgressEdit } from './components/progress-edit/progress-edit';
+import { Reports } from './components/reports/reports';
+import { StudentProgressReport } from './components/student-progress-report/student-progress-report';
 
 export default [
     {
@@ -26,6 +28,8 @@ export default [
             { path: 'students/:studentId/goals/:goalId/benchmarks/new', component: BenchmarkCardFull },
             { path: 'students/:studentId/goals/:goalId/benchmarks/:benchmarkId', component: BenchmarkCardFull },
             { path: 'students/:studentId/benchmarks', component: BenchmarkList },
+            { path: 'reports', component: Reports },
+            { path: 'reports/student-progress', component: StudentProgressReport },
         ],
     },
 ] satisfies Routes;

@@ -1,0 +1,57 @@
+<div class="toolbar">
+    <button class="toolbar-btn back-btn" (click)="onBack()">&#8593; Reports</button>
+    <span class="toolbar-title">Student Progress Report</span>
+    <span class="spacer"></span>
+</div>
+
+<div class="detail-card">
+    <div class="card-header">
+        <span class="card-title">Report Parameters</span>
+    </div>
+
+    <div class="card-body">
+        <div class="field">
+            <label class="field-label" for="student">Student</label>
+            <select id="student" class="field-input" [(ngModel)]="selectedStudentId" (ngModelChange)="onStudentChange()">
+                <option value="">-- Select a student --</option>
+                @for (student of students(); track student.studentId) {
+                    <option [value]="student.studentId">{{ student.identifier }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="date-row">
+            <div class="field">
+                <label class="field-label" for="fromDate">From Date</label>
+                <input id="fromDate" class="field-input" type="date" [(ngModel)]="fromDate" />
+            </div>
+            <div class="field">
+                <label class="field-label" for="toDate">To Date</label>
+                <input id="toDate" class="field-input" type="date" [(ngModel)]="toDate" />
+            </div>
+        </div>
+
+        @if (goalItems().length > 0) {
+            <div class="field">
+                <label class="field-label">Goals to Include</label>
+                <div class="goal-checklist">
+                    @for (goal of goalItems(); track goal.goalId) {
+                        <label class="goal-check-item" (click)="onToggleGoal(goal.goalId); $event.preventDefault()">
+                            <input type="checkbox" [checked]="goal.checked" tabindex="-1" />
+                            <span>{{ goal.category }}</span>
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="actions">
+            <button
+                class="toolbar-btn run-btn"
+                (click)="onRun()"
+                [disabled]="!selectedStudentId || !fromDate || !toDate || running()">
+                {{ running() ? 'Generating...' : 'Run' }}
+            </button>
+        </div>
+    </div>
+</div>
