@@ -621,4 +621,48 @@ public class StudentController : BaseController
             Message = updated ? "Changes applied successfully." : "No changes were applied."
         });
     }
+
+    [HttpGet("{idStudent:guid}/progress-report")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<string>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<string>>> GetProgressReport(
+        Guid idStudent, [FromQuery] DateTime fromDate, [FromQuery] DateTime toDate, [FromQuery] string? goalIds = null)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<string>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var report = await _studentRepository.GetProgressReportAsync(idStudent, fromDate, toDate, goalIds);
+        if (report is null)
+        {
+            return NotFound(new ResponseResult<string>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var markdown = ProgressReportBuilder.BuildMarkdown(report, fromDate, toDate);
+
+        return Ok(new ResponseResult<string>
+        {
+            Success = true,
+            Message = "Progress report generated successfully.",
+            Data = markdown
+        });
+    }
 }

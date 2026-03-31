@@ -136,6 +136,10 @@ export class Home implements OnDestroy {
           loadChildren: () => this.loadGoalNodes(s.studentId),
         }] : undefined,
       })),
+    },
+    {
+      label: 'Reports',
+      routerLink: ['/reports'],
     }];
   }
 

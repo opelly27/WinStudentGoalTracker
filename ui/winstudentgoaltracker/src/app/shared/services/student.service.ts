@@ -11,6 +11,7 @@ import { StudentCardDto } from '../classes/student-card.dto';
 import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
 import { ProgressEventDto } from '../classes/progress-event.dto';
 import { StudentBenchmarkSummary } from '../classes/benchmark.dto';
+import { StudentProgressReportDto } from '../classes/student-progress-report.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -173,6 +174,29 @@ export class StudentService {
             );
             return result.success
                 ? ApiResult.ok(result.data ?? [])
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Returns a full progress report for a student within a date
+    // range, including goals, events, and benchmark associations.
+    // *****************************************************************
+    async getStudentProgressReport(studentId: string, fromDate: string, toDate: string, goalIds?: string): Promise<ApiResult<string>> {
+        try {
+            const params: any = { fromDate, toDate };
+            if (goalIds) params.goalIds = goalIds;
+
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<string>>(
+                    `${this.base}/api/Student/${studentId}/progress-report`,
+                    { params }
+                )
+            );
+            return result.success && result.data
+                ? ApiResult.ok(result.data)
                 : ApiResult.fail(result.message);
         } catch (error) {
             return ApiResult.fail(describeHttpError(error as HttpErrorResponse));

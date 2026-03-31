@@ -351,4 +351,54 @@ public class StudentRepository
         return rowsAffected > 0;
     }
 
+    // *****************************************************************
+    // Returns a full progress report for a student within the given
+    // date range. Calls sp_ProgressReport_GetByStudentId which returns
+    // two result sets: goals and progress events with benchmark names.
+    // *****************************************************************
+    public async Task<StudentProgressReportResponse?> GetProgressReportAsync(
+        Guid studentId, DateTime fromDate, DateTime toDate, string? goalIds = null)
+    {
+        var student = await GetByIdAsync(studentId);
+        if (student is null) return null;
+
+        using var db = Connection;
+        using var multi = await db.QueryMultipleAsync(
+            "sp_ProgressReport_GetByStudentId",
+            new
+            {
+                p_id_student = studentId.ToString(),
+                p_from_date = fromDate.ToString("yyyy-MM-dd"),
+                p_to_date = toDate.ToString("yyyy-MM-dd"),
+                p_goal_ids = goalIds
+            },
+            commandType: CommandType.StoredProcedure);
+
+        var goalRows = (await multi.ReadAsync<dbProgressReportGoalRow>()).ToList();
+        var eventRows = (await multi.ReadAsync<dbProgressReportRow>()).ToList();
+
+        var eventsByGoal = eventRows.GroupBy(e => e.GoalId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        return new StudentProgressReportResponse
+        {
+            StudentIdentifier = student.Identifier,
+            Goals = goalRows.Select(g => new ProgressReportGoal
+            {
+                GoalId = g.GoalId,
+                Category = g.Category,
+                Description = g.Description,
+                ProgressEvents = eventsByGoal.TryGetValue(g.GoalId, out var events)
+                    ? events.Select(e => new ProgressReportEvent
+                    {
+                        ProgressEventId = e.ProgressEventId,
+                        Content = e.Content,
+                        CreatedAt = e.CreatedAt,
+                        BenchmarkNames = e.BenchmarkNames
+                    }).ToList()
+                    : []
+            }).ToList()
+        };
+    }
+
 }
