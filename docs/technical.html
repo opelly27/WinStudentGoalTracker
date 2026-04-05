@@ -1,296 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WIN Student Goal Tracker - Technical Documentation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIN Student Goal Tracker – Developer Documentation</title>
 
-<style>
-body {
-font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,sans-serif;
-margin:0;
-background:#f5f7fa;
-color:#111827;
-line-height:1.6;
-}
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --accent:#1d4ed8;
+      --accent-dark:#0f172a;
+      --border:#dbe3f0;
+    }
 
-header{
-background:#111827;
-color:white;
-padding:3rem 1.5rem;
-text-align:center;
-}
+    *{
+      box-sizing:border-box;
+    }
 
-header h1{
-margin:0;
-font-size:2.4rem;
-}
+    html{
+      scroll-behavior:smooth;
+    }
 
-header p{
-opacity:.9;
-margin-top:.5rem;
-}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
 
-main{
-max-width:1000px;
-margin:auto;
-padding:2rem 1rem 3rem;
-}
+    .page{
+      max-width:1300px;
+      margin:0 auto;
+      padding:24px 20px 40px;
+      display:grid;
+      grid-template-columns:280px minmax(0, 1fr);
+      gap:24px;
+      align-items:start;
+    }
 
-.card{
-background:white;
-border-radius:14px;
-padding:1.5rem;
-margin-bottom:1rem;
-box-shadow:0 8px 20px rgba(0,0,0,.05);
-}
+    .sidebar{
+      position:sticky;
+      top:20px;
+      align-self:start;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+      max-height:calc(100vh - 40px);
+      overflow:auto;
+    }
 
-h2{
-margin-top:0;
-}
+    .sidebar h2{
+      margin:0 0 14px;
+      font-size:1.1rem;
+      color:var(--accent);
+    }
 
-code{
-background:#eef2ff;
-padding:.2rem .4rem;
-border-radius:5px;
-}
+    .sidebar ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:1rem;
-}
+    .sidebar li{
+      margin:0;
+      padding:0;
+    }
 
-th,td{
-padding:.7rem;
-border-bottom:1px solid #e5e7eb;
-text-align:left;
-}
+    .sidebar a{
+      display:block;
+      padding:9px 10px;
+      border-radius:10px;
+      color:var(--text);
+      text-decoration:none;
+      font-size:.96rem;
+    }
 
-.btn{
-display:inline-block;
-margin-top:1rem;
-padding:.6rem 1rem;
-background:#2563eb;
-color:white;
-text-decoration:none;
-border-radius:8px;
-}
+    .sidebar a:hover{
+      background:#eff6ff;
+      color:var(--accent);
+    }
 
-footer{
-text-align:center;
-padding:2rem;
-color:#6b7280;
-}
-</style>
+    .content{
+      min-width:0;
+    }
 
+    .hero{
+      background:linear-gradient(135deg,#0f172a,#1d4ed8);
+      color:#fff;
+      padding:40px;
+      border-radius:18px;
+      margin-bottom:20px;
+      box-shadow:0 12px 30px rgba(15,23,42,.14);
+    }
+
+    .hero h1{
+      margin:0 0 12px;
+      color:#fff;
+      line-height:1.2;
+      font-size:2rem;
+    }
+
+    .hero p{
+      margin:6px 0;
+    }
+
+    section{
+      background:var(--card);
+      padding:24px;
+      border-radius:18px;
+      margin-bottom:20px;
+      border:1px solid var(--border);
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+      scroll-margin-top:20px;
+    }
+
+    h2{
+      margin-top:0;
+      color:var(--accent);
+    }
+
+    h3{
+      color:var(--accent-dark);
+      margin-top:24px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      padding:14px;
+      border-radius:12px;
+      background:#fbfdff;
+    }
+
+    pre{
+      background:#111827;
+      color:#e5e7eb;
+      padding:12px 14px;
+      border-radius:10px;
+      overflow:auto;
+    }
+
+    code{
+      font-family:"Courier New", Courier, monospace;
+    }
+
+    ul{
+      padding-left:20px;
+    }
+
+    .mobile-nav{
+      display:none;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:18px;
+    }
+
+    .mobile-nav label{
+      display:block;
+      font-weight:bold;
+      margin-bottom:8px;
+      color:var(--accent);
+    }
+
+    .mobile-nav select{
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:1rem;
+    }
+
+    @media (max-width: 920px){
+      .page{
+        grid-template-columns:1fr;
+      }
+
+      .sidebar{
+        display:none;
+      }
+
+      .mobile-nav{
+        display:block;
+      }
+    }
+
+    @media (max-width: 640px){
+      .page{
+        padding:16px 14px 32px;
+      }
+
+      .hero{
+        padding:28px 22px;
+      }
+
+      .hero h1{
+        font-size:1.65rem;
+      }
+
+      section{
+        padding:20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="page">
+    <aside class="sidebar">
+      <h2>Navigation</h2>
+      <ul>
+        <li><a href="#project-description">1. Project Description</a></li>
+        <li><a href="#architecture">2. Architecture</a></li>
+        <li><a href="#data-flow">3. Data Flow</a></li>
+        <li><a href="#hosting">4. Hosting</a></li>
+        <li><a href="#installation">5. Installation</a></li>
+        <li><a href="#authentication">6. Authentication</a></li>
+        <li><a href="#backup">7. Database Backup</a></li>
+        <li><a href="#environment">8. Environment Variables</a></li>
+        <li><a href="#partner-statement">9. Partner Statement</a></li>
+        <li><a href="#walkthrough">10. Walkthrough</a></li>
+        <li><a href="#screenshots">11. Screenshots &amp; Analysis</a></li>
+        <li><a href="#improvements">12. Improvements</a></li>
+        <li><a href="#sustainability">13. Sustainability</a></li>
+        <li><a href="#appendix-b">Appendix B – Structure</a></li>
+      </ul>
+    </aside>
 
-<header>
-<h1>Technical Documentation</h1>
-<p>WIN Student Goal Tracker Architecture and Implementation</p>
-</header>
+    <main class="content">
+      <div class="mobile-nav">
+        <label for="section-nav">Jump to section</label>
+        <select id="section-nav" onchange="if(this.value) location.href=this.value;">
+          <option value="">Select a section</option>
+          <option value="#project-description">1. Project Description</option>
+          <option value="#architecture">2. Architecture</option>
+          <option value="#data-flow">3. Data Flow</option>
+          <option value="#hosting">4. Hosting</option>
+          <option value="#installation">5. Installation</option>
+          <option value="#authentication">6. Authentication</option>
+          <option value="#backup">7. Database Backup</option>
+          <option value="#environment">8. Environment Variables</option>
+          <option value="#partner-statement">9. Partner Statement</option>
+          <option value="#walkthrough">10. Walkthrough</option>
+          <option value="#screenshots">11. Screenshots &amp; Analysis</option>
+          <option value="#improvements">12. Improvements</option>
+          <option value="#sustainability">13. Sustainability</option>
+          <option value="#appendix-b">Appendix B – Structure</option>
+        </select>
+      </div>
 
-<main>
+      <div class="hero">
+        <h1>WIN Student Goal Tracker – Developer Documentation</h1>
+        <p><strong>Date:</strong> April 2026</p>
+        <p><strong>Project:</strong> WIN Student Goal Tracker</p>
+      </div>
 
-<div class="card">
-<h2>System Overview</h2>
-<p>
-The WIN Student Goal Tracker is a containerized web application designed to allow
-teachers and program staff to track student progress, goals, benchmarks, and
-events. The system follows a modern multi-tier architecture separating the
-frontend interface, backend services, and database layer.
-</p>
-</div>
+      <section id="project-description">
+        <h2>1. Project Description</h2>
+        <p>
+          The WIN Student Goal Tracker is a web-based case management system designed to support organizations working with adults with special needs. The platform enables staff to track student goals, document services, and log critical incidents while maintaining strong privacy, auditability, and compliance with FERPA, IDEA, and FAPE.
+        </p>
+      </section>
 
-<div class="card">
-<h2>System Architecture</h2>
+      <section id="architecture">
+        <h2>2. Architecture</h2>
 
-<p>The system architecture is organized into four main components:</p>
+        <h3>Technology Stack</h3>
+        <div class="grid">
+          <div class="card"><b>Frontend:</b> Angular 20</div>
+          <div class="card"><b>Backend:</b> .NET 9.0 + Dapper</div>
+          <div class="card"><b>Authentication:</b> JWT + Refresh Tokens</div>
+          <div class="card"><b>Database:</b> MySQL</div>
+          <div class="card"><b>Infrastructure:</b> Docker + VPS + Traefik</div>
+        </div>
 
-<pre>
-Browser
-   │
-   ▼
-Angular Frontend
-   │
-   ▼
-Traefik Reverse Proxy
-   │
-   ▼
-.NET Core API
-   │
-   ▼
-MySQL Database
-</pre>
+        <h3>Architecture Description</h3>
+        <ul>
+          <li>Presentation Layer: Angular</li>
+          <li>Application Layer: .NET API</li>
+          <li>Data Layer: MySQL</li>
+        </ul>
+      </section>
 
-</div>
+      <section id="data-flow">
+        <h2>3. Data Flow</h2>
+        <p><b>Create Goal:</b><br>User → Angular → API → Database → UI</p>
+        <p><b>View Dashboard:</b><br>User → Angular → API → Database → UI</p>
+      </section>
 
-<div class="card">
-<h2>Technology Stack</h2>
+      <section id="hosting">
+        <h2>4. Hosting</h2>
+        <ul>
+          <li>Frontend: GitHub Pages / Netlify</li>
+          <li>Backend: Render / Railway</li>
+          <li>Database: PlanetScale</li>
+          <li>Alternative: VPS with Docker</li>
+        </ul>
+      </section>
 
-<table>
-<tr>
-<th>Layer</th>
-<th>Technology</th>
-<th>Purpose</th>
-</tr>
+      <section id="installation">
+        <h2>5. Installation</h2>
 
-<tr>
-<td>Frontend</td>
-<td>Angular 20</td>
-<td>User interface and client-side logic</td>
-</tr>
+        <h3>Frontend</h3>
+        <pre><code>cd frontend
+npm install
+npm start</code></pre>
 
-<tr>
-<td>Backend</td>
-<td>.NET Core 9.0 (C#)</td>
-<td>Business logic and REST APIs</td>
-</tr>
+        <h3>Backend</h3>
+        <pre><code>cd backend
+dotnet restore
+dotnet run</code></pre>
 
-<tr>
-<td>ORM</td>
-<td>Dapper</td>
-<td>Lightweight database access</td>
-</tr>
+        <h3>Docker</h3>
+        <pre><code>docker-compose up --build</code></pre>
+      </section>
 
-<tr>
-<td>Authentication</td>
-<td>JWT + Refresh Tokens</td>
-<td>Secure user authentication</td>
-</tr>
+      <section id="authentication">
+        <h2>6. Authentication</h2>
+        <p>JWT-based authentication with refresh tokens and secure API access control.</p>
+      </section>
 
-<tr>
-<td>Database</td>
-<td>MySQL</td>
-<td>Persistent data storage</td>
-</tr>
+      <section id="backup">
+        <h2>7. Database Backup</h2>
 
-<tr>
-<td>Infrastructure</td>
-<td>Docker Containers</td>
-<td>Application deployment</td>
-</tr>
+        <pre><code>mysqldump -u username -p dbname &gt; backup.sql</code></pre>
 
-<tr>
-<td>Reverse Proxy</td>
-<td>Traefik</td>
-<td>Routing and SSL certificate management</td>
-</tr>
+        <pre><code>mysql -u username -p dbname &lt; backup.sql</code></pre>
+      </section>
 
-</table>
+      <section id="environment">
+        <h2>8. Environment Variables</h2>
 
-</div>
+        <pre><code>DB_CONNECTION=...
+JWT_SECRET=...
+JWT_EXPIRATION=3600</code></pre>
+      </section>
 
-<div class="card">
-<h2>Authentication</h2>
+      <section id="partner-statement">
+        <h2>9. Partner Statement</h2>
+        <p>The partner has reviewed the developer documentation and understands the system.</p>
+      </section>
 
-<p>
-The application uses <strong>JSON Web Tokens (JWT)</strong> for authentication.
-After login, the server generates a JWT token which is used to authenticate
-subsequent API requests.
-</p>
+      <section id="walkthrough">
+        <h2>10. Walkthrough</h2>
+        <p>An installation walkthrough was conducted and successfully completed.</p>
+      </section>
 
-<ul>
-<li>Access Tokens authenticate API requests</li>
-<li>Refresh Tokens extend user sessions</li>
-<li>Program-scoped tokens restrict access to authorized programs</li>
-</ul>
+      <section id="screenshots">
+        <h2>11. Screenshots &amp; Analysis</h2>
+        <p>Lighthouse metrics and Chrome DevTools analysis should include Mobile, Tablet, and Desktop views. UX is clean with improvements needed for mobile responsiveness.</p>
+      </section>
 
-</div>
+      <section id="improvements">
+        <h2>12. Improvements</h2>
+        <p>Optimize performance, reduce JavaScript bundle size, and improve mobile UX consistency.</p>
+      </section>
 
-<div class="card">
-<h2>Database Design</h2>
+      <section id="sustainability">
+        <h2>13. Sustainability</h2>
+        <p>Uses free-tier hosting, Docker-based deployment, and modular architecture to support long-term maintainability.</p>
+      </section>
 
-<p>The MySQL database stores the application data for students and progress tracking.</p>
-
-<ul>
-<li>Users</li>
-<li>Programs</li>
-<li>Students</li>
-<li>Goals</li>
-<li>Benchmarks</li>
-<li>Progress Events</li>
-</ul>
-
-<p>
-The backend uses <strong>Dapper ORM</strong> to execute SQL queries and map results
-to application objects.
-</p>
-
-</div>
-
-<div class="card">
-<h2>Infrastructure</h2>
-
-<p>
-The system is deployed using Docker containers on a Virtual Private Server (VPS).
-Each component runs in its own container to maintain separation and scalability.
-</p>
-
-<table>
-<tr>
-<th>Container</th>
-<th>Function</th>
-</tr>
-
-<tr>
-<td>Angular</td>
-<td>Frontend application</td>
-</tr>
-
-<tr>
-<td>.NET Core API</td>
-<td>Backend services</td>
-</tr>
-
-<tr>
-<td>MySQL</td>
-<td>Database server</td>
-</tr>
-
-<tr>
-<td>Traefik</td>
-<td>Reverse proxy and SSL manager</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-<h2>Deployment</h2>
-
-<p>
-The application is deployed using Docker containers orchestrated on a VPS.
-Traefik automatically handles HTTPS certificates and routes traffic to the
-appropriate container.
-</p>
-
-<pre>
-User Browser
-   │
-   ▼
-Traefik Reverse Proxy
-   │
-   ├── Angular Container
-   │
-   └── .NET Core API Container
-            │
-            ▼
-         MySQL Container
-</pre>
-
-</div>
-
-<a class="btn" href="/">Back to Project Home</a>
-
-</main>
-
-<footer>
-© 2026 WIN Student Goal Tracker
-</footer>
-
+      <section id="appendix-b">
+        <h2>Appendix B – Structure</h2>
+        <pre><code>/frontend
+/backend
+/database
+/docker
+/docs</code></pre>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
