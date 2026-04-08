@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
@@ -41,12 +41,17 @@ export class Workspace {
             }
         });
 
-        // When dataVersion changes and we have a student loaded, refresh
+        // When dataVersion changes and we have a student loaded, refresh.
+        // Use untracked() for studentId so this effect only re-runs on
+        // dataVersion changes — route params already handle studentId changes.
         let initialized = false;
         effect(() => {
             this.studentService.dataVersion();
-            if (initialized && this.studentId()) {
-                this.loadStudentData(this.studentId()!);
+            if (initialized) {
+                const id = untracked(() => this.studentId());
+                if (id) {
+                    this.loadStudentData(id);
+                }
             }
             initialized = true;
         });
