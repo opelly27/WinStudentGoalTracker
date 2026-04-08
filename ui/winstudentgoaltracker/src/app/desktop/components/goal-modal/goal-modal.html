@@ -1,0 +1,32 @@
+<app-modal-shell [title]="modalTitle" (closed)="closed.emit()">
+    <div class="field">
+        <label class="field-label">Category</label>
+        <input class="field-input" type="text" [(ngModel)]="form.category"
+            placeholder="e.g. Reading, Math, Behavior…" />
+    </div>
+    <div class="field">
+        <label class="field-label">Baseline</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="form.baseline"
+            placeholder="Enter baseline..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label">Goal</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="form.description"
+            placeholder="Enter goal..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label">Target Completion Date</label>
+        <input class="field-input" type="date" [(ngModel)]="form.targetCompletionDate" />
+    </div>
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSubmit()" [disabled]="isSubmitting() || !form.category.trim()">
+            {{ isSubmitting() ? 'Saving...' : submitLabel }}
+        </button>
+    </div>
+</app-modal-shell>

@@ -2,48 +2,42 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 24px 28px;
 }
 
 .toolbar {
     display: flex;
     align-items: center;
-    position: relative;
     gap: 0.75rem;
-    height: 40px;
-    padding-right: 0.5rem;
-    border-radius: 8px;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
     flex-shrink: 0;
 }
 
 .toolbar-btn {
-    padding: 0.375rem 0.75rem;
+    padding: 6px 14px;
     background: transparent;
-    color: #4f46e5;
-    border: 1px solid #4f46e5;
-    border-radius: 6px;
-    font-size: 0.875rem;
+    color: var(--accent-indigo);
+    border: 1px solid var(--accent-indigo);
+    border-radius: var(--radius-md);
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-}
+    font-family: inherit;
 
-.toolbar-btn:hover {
-    background: #eef2ff;
-}
+    &:hover {
+        background: #EEF2FF;
+    }
 
-.back-btn {
-    margin-left: 0.5rem;
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 .toolbar-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     font-weight: 600;
-    font-size: 1.25rem;
-    color: #333;
+    font-size: 18px;
+    color: var(--text-primary);
 }
 
 .spacer {
@@ -51,9 +45,9 @@
 }
 
 .detail-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
     max-width: 600px;
     overflow: hidden;
 }
@@ -61,48 +55,41 @@
 .card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.625rem 1.25rem;
-    background: #f8f9fa;
-    border-bottom: 1px solid #ddd;
+    padding: 14px 22px;
+    background: var(--bg-page);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .card-title {
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 22px;
 }
 
 .field {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 14px;
 }
 
 .field-label {
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 600;
     color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 4px;
 }
 
 .field-input {
-    padding: 0.375rem 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 8px 10px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
     font-family: inherit;
-    font-size: 0.9375rem;
+    font-size: 13px;
     outline: none;
-}
-
-.field-input:focus {
-    border-color: #4f46e5;
 }
 
 .date-row {
@@ -115,8 +102,8 @@
 }
 
 .goal-checklist {
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
@@ -124,41 +111,37 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    padding: 8px 12px;
     cursor: pointer;
-    font-size: 0.9375rem;
+    font-size: 13px;
 
     &:hover {
-        background: #f5f5f5;
+        background: var(--bg-hover);
     }
 
     & + & {
-        border-top: 1px solid #eee;
+        border-top: 1px solid var(--border-color);
     }
 
     input[type="checkbox"] {
         pointer-events: none;
+        accent-color: var(--accent-indigo-light);
     }
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 0.5rem;
+    margin-top: 8px;
 }
 
 .run-btn {
-    background: #4f46e5;
-    color: #fff;
-    border-color: #4f46e5;
+    background: var(--accent-indigo) !important;
+    color: #fff !important;
+    border-color: var(--accent-indigo) !important;
     min-width: 6rem;
-}
 
-.run-btn:hover {
-    background: #4338ca;
-}
-
-.toolbar-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    &:hover {
+        background: #3730A3 !important;
+    }
 }

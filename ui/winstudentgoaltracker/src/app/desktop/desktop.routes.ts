@@ -1,15 +1,9 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
-import { StudentCardList } from './components/student-card-list/student-card-list';
-import { StudentCardFull } from './components/student-card-full/student-card-full';
-import { GoalList } from './components/goal-list/goal-list';
-import { GoalCardFull } from './components/goal-card-full/goal-card-full';
-import { ProgressList } from './components/progress-list/progress-list';
-import { BenchmarkList } from './components/benchmark-list/benchmark-list';
-import { BenchmarkCardFull } from './components/benchmark-card-full/benchmark-card-full';
-import { ProgressEdit } from './components/progress-edit/progress-edit';
+import { Workspace } from './components/workspace/workspace';
 import { Reports } from './components/reports/reports';
 import { StudentProgressReport } from './components/student-progress-report/student-progress-report';
+import { BenchmarkCardFull } from './components/benchmark-card-full/benchmark-card-full';
 
 export default [
     {
@@ -17,17 +11,11 @@ export default [
         component: Home,
         children: [
             { path: '', redirectTo: 'students', pathMatch: 'full' },
-            { path: 'students', component: StudentCardList },
-            { path: 'students/:studentId', component: StudentCardFull },
-            { path: 'students/:studentId/goals', component: GoalList },
-            { path: 'students/:studentId/goals/:goalId', component: GoalCardFull },
-            { path: 'students/:studentId/goals/:goalId/progress', component: ProgressList },
-            { path: 'students/:studentId/goals/:goalId/progress/new', component: ProgressEdit },
-            { path: 'students/:studentId/goals/:goalId/progress/:progressEventId', component: ProgressEdit },
-            { path: 'students/:studentId/goals/:goalId/benchmarks', component: BenchmarkList },
+            { path: 'students', component: Workspace },
+            { path: 'students/:studentId', component: Workspace },
+            { path: 'students/:studentId/goals/:goalId', component: Workspace },
+            // Benchmark creation still uses the dedicated page (no create-benchmark modal yet)
             { path: 'students/:studentId/goals/:goalId/benchmarks/new', component: BenchmarkCardFull },
-            { path: 'students/:studentId/goals/:goalId/benchmarks/:benchmarkId', component: BenchmarkCardFull },
-            { path: 'students/:studentId/benchmarks', component: BenchmarkList },
             { path: 'reports', component: Reports },
             { path: 'reports/student-progress', component: StudentProgressReport },
         ],

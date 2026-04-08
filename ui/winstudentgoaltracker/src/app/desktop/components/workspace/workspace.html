@@ -1,0 +1,125 @@
+@if (!student()) {
+<div class="empty-panel">
+    <span class="empty-text">Select a student</span>
+</div>
+} @else {
+<!-- Modals -->
+@if (showGoalModal()) {
+<app-goal-modal [studentId]="studentId()!"
+    [goal]="showGoalModal() === 'add' ? null : $any(showGoalModal())"
+    [nextIepDate]="nextIepDate()"
+    (goalCreated)="onGoalCreated($event)" (saved)="onGoalSaved()"
+    (closed)="showGoalModal.set(null)" />
+}
+@if (showEditBenchmarkModal()) {
+<app-edit-benchmark-modal [studentId]="studentId()!" [benchmark]="showEditBenchmarkModal()!"
+    (saved)="onEditBenchmarkSaved()" (closed)="showEditBenchmarkModal.set(null)" />
+}
+@if (showEditEventModal()) {
+<app-edit-event-modal [studentId]="studentId()!" [goalId]="selectedGoal()!.goalId"
+    [benchmarks]="goalBenchmarks()"
+    [event]="showEditEventModal() === 'new' ? null : $any(showEditEventModal())" (saved)="onEventSaved()"
+    (closed)="showEditEventModal.set(null)" />
+}
+
+<!-- Student Header -->
+<div class="student-header">
+    <div class="student-info">
+        <h1 class="student-name">{{ student()!.identifier }}</h1>
+        <span class="student-iep">IEP {{ formatDate(student()!.nextIepDate) }}</span>
+    </div>
+    <div class="goal-tabs">
+        <button class="goal-tab add-goal" (click)="onAddGoal()">+ Goal</button>
+        @for (g of goals(); track g.goalId) {
+        <button class="goal-tab" [class.active]="selectedGoalId() === g.goalId || (selectedGoal()?.goalId === g.goalId)"
+            (click)="onSelectGoal(g.goalId)">
+            {{ g.category }}
+        </button>
+        }
+    </div>
+</div>
+
+<!-- Goal Detail -->
+@if (selectedGoal()) {
+<div class="workspace-body">
+    <!-- Goal Card -->
+    <div class="goal-card">
+        <div class="goal-card-header">
+            <span class="goal-badge">{{ selectedGoal()!.category }} Goal</span>
+            <button class="edit-icon" (click)="onEditGoal()" aria-label="Edit goal">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#999" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
+                </svg>
+            </button>
+            @if (selectedGoal()!.targetCompletionDate) {
+            <span class="goal-due">Due {{ formatDate(selectedGoal()!.targetCompletionDate) }}</span>
+            }
+        </div>
+        <p class="goal-description">{{ selectedGoal()!.description }}</p>
+    </div>
+
+    <!-- Sub Tabs -->
+    <div class="sub-tabs">
+        <button class="sub-tab" [class.active]="activeTab() === 'benchmarks'"
+            (click)="onTabChange('benchmarks')">
+            Benchmarks ({{ goalBenchmarks().length }})
+        </button>
+        <button class="sub-tab" [class.active]="activeTab() === 'progress'"
+            (click)="onTabChange('progress')">
+            Progress Events ({{ sortedProgressEvents().length }})
+        </button>
+    </div>
+
+    <!-- Benchmarks Tab -->
+    @if (activeTab() === 'benchmarks') {
+    <div class="tab-content">
+        <button class="add-btn" (click)="onAddBenchmark()">+ Add Benchmark</button>
+        @for (b of goalBenchmarks(); track b.benchmarkId) {
+        <div class="benchmark-card">
+            <div class="benchmark-header">
+                <span class="benchmark-name">{{ b.shortName || b.benchmark }}</span>
+                <button class="edit-icon" (click)="onEditBenchmark(b)" aria-label="Edit benchmark">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#999" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
+                    </svg>
+                </button>
+            </div>
+            <p class="benchmark-desc">{{ b.benchmark }}</p>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Progress Tab -->
+    @if (activeTab() === 'progress') {
+    <div class="tab-content timeline">
+        <button class="add-btn" (click)="onNewEvent()">+ Log Progress Event</button>
+        <div class="timeline-line"></div>
+        @for (ev of sortedProgressEvents(); track ev.progressEventId) {
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="event-date">{{ formatDate(ev.createdAt) }}</span>
+                    <button class="edit-icon" (click)="onEditEvent(ev)" aria-label="Edit event">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#bbb" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="event-content">{{ ev.content }}</p>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+} @else {
+<div class="empty-panel">
+    <span class="empty-text">Add a goal to get started</span>
+</div>
+}
+}

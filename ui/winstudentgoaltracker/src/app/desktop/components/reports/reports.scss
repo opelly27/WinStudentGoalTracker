@@ -2,50 +2,46 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-}
-
-.toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-    padding-right: 0.5rem;
-    border-radius: 8px;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 1rem;
-    flex-shrink: 0;
+    padding: 24px 28px;
 }
 
 .page-title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
-    margin-left: 0.75rem;
+    margin: 0 0 20px;
 }
 
 .card-grid {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 1rem;
+    gap: 12px;
 }
 
 .card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 20px 24px;
     cursor: pointer;
-    transition: box-shadow 0.15s ease, transform 0.15s ease;
+    width: 280px;
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 
     &:hover {
-        box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
-        transform: translateY(-2px);
+        border-color: var(--accent-indigo-light);
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
     }
 
     h2 {
-        margin: 0;
-        font-size: 1.125rem;
+        margin: 0 0 6px;
+        font-size: 15px;
         font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.5;
     }
 }

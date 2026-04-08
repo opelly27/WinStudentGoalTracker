@@ -1,13 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
+/* ─── Design Tokens ─── */
+:root {
+    --font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    --bg-page: #F8F8F6;
+    --bg-surface: #FFFFFF;
+    --bg-hover: #F0F0EC;
+    --border-color: #E5E5E0;
+    --border-muted: #D5D5D0;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --text-muted: #888;
+    --text-faint: #999;
+    --text-dim: #bbb;
+    --accent-indigo: #4338CA;
+    --accent-indigo-light: #6366F1;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 10px;
+    --radius-2xl: 12px;
+    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.2);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+}
+
+/* ─── Reset ─── */
 html,
 body {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden;
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 input[type="date"] {
     font-family: inherit;
+}
+
+/* ─── Focus Styles ─── */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent-indigo) !important;
+    box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.12);
+}
+
+/* ─── Scrollbar (subtle) ─── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d5d5d0;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
 }

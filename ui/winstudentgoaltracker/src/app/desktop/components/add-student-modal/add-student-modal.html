@@ -1,66 +1,22 @@
-<div class="overlay" (click)="onCancel()"></div>
-
-<div class="modal">
-    <div class="modal-header">
-        <h2 class="modal-title">Add Student</h2>
-        <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+<app-modal-shell title="Add Student" (closed)="cancelled.emit()">
+    <div class="field">
+        <label class="field-label">Name</label>
+        <input class="field-input" type="text" [(ngModel)]="form.identifier"
+            placeholder="Initials or other non-personally identifiable label" />
+    </div>
+    <div class="field">
+        <label class="field-label">Next IEP Date</label>
+        <input class="field-input" type="date" [(ngModel)]="form.nextIepDate" />
     </div>
 
-    <form class="modal-body" (ngSubmit)="onSubmit()" #studentForm="ngForm">
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
 
-        <div class="field">
-            <label for="identifier">Student</label>
-            <input
-                id="identifier"
-                type="text"
-                [(ngModel)]="form.identifier"
-                name="identifier"
-                required
-                placeholder="Initials or other non-personally identifiable label"
-            />
-        </div>
-
-        <!-- <div class="field">
-            <label for="programYear">Program Year</label>
-            <input   
-                id="programYear"
-                type="number"
-                [(ngModel)]="form.programYear"
-                name="programYear"
-                placeholder="e.g. 2025"
-            />
-        </div>
-
-        <div class="field">
-            <label for="enrollmentDate">Enrollment Date</label>
-            <input
-                id="enrollmentDate"
-                type="date"
-                [(ngModel)]="form.enrollmentDate"
-                name="enrollmentDate"
-            />
-        </div> -->
-
-        <div class="field">
-            <label for="nextIepDate">Next IEP Date</label>
-            <input
-                id="nextIepDate"
-                type="date"
-                [(ngModel)]="form.nextIepDate"
-                name="nextIepDate"
-            />
-        </div>
-
-        @if (errorMessage()) {
-            <p class="error">{{ errorMessage() }}</p>
-        }
-
-        <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-            <button type="submit" class="btn btn-primary" [disabled]="studentForm.invalid || isSubmitting()">
-                {{ isSubmitting() ? 'Saving...' : 'Add Student' }}
-            </button>
-        </div>
-
-    </form>
-</div>
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelled.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSubmit()" [disabled]="isSubmitting() || !form.identifier.trim()">
+            {{ isSubmitting() ? 'Saving...' : 'Add Student' }}
+        </button>
+    </div>
+</app-modal-shell>
