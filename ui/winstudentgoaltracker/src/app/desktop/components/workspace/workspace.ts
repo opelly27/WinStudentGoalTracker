@@ -28,6 +28,7 @@ export class Workspace {
             const goalId = params.get('goalId');
 
             if (studentId && studentId !== this.studentId()) {
+                this.selectedGoalId.set(null);
                 this.studentId.set(studentId);
                 this.loadStudentData(studentId);
             } else if (!studentId) {

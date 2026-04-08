@@ -28,7 +28,11 @@
         </div>
 
         <div class="student-list">
-            @for (s of students(); track s.studentId) {
+            @for (group of groupedStudents(); track group.label) {
+            @if (group.label) {
+            <div class="group-header">{{ group.label }}</div>
+            }
+            @for (s of group.students; track s.studentId) {
             <div class="student-item" [class.active]="selectedStudentId() === s.studentId"
                 (click)="onSelectStudent(s)">
                 <div class="student-item-info">
@@ -37,9 +41,6 @@
                     </div>
                     <div class="student-item-meta">
                         IEP: {{ formatDate(s.nextIepDate) }}
-                        @if (showAll() && s.ownerName) {
-                        <span class="owner-tag">· {{ s.ownerName }}</span>
-                        }
                     </div>
                 </div>
                 <button class="edit-pencil" (click)="onEditStudent(s, $event)" aria-label="Edit student">
@@ -49,6 +50,7 @@
                     </svg>
                 </button>
             </div>
+            }
             }
         </div>
 

@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { Auth } from '../../../shared/services/auth';
 import { StudentService } from '../../../shared/services/student.service';
@@ -41,6 +41,39 @@ export class Home {
     protected readonly showAll = signal(false);
     protected readonly showAddStudentModal = signal(false);
     protected readonly editingStudent = signal<StudentCardDto | null>(null);
+
+    // Groups students by owner when "All" is active.
+    protected readonly groupedStudents = computed(() => {
+        const all = this.students();
+        if (!this.showAll()) {
+            return [{ label: null, students: all }];
+        }
+
+        const mine = all.filter(s => s.isMine);
+        const others = all.filter(s => !s.isMine);
+
+        // Group others by ownerName.
+        const byOwner = new Map<string, StudentCardDto[]>();
+        for (const s of others) {
+            const key = s.ownerName || 'Unknown';
+            const list = byOwner.get(key) || [];
+            list.push(s);
+            byOwner.set(key, list);
+        }
+
+        const groups: { label: string | null; students: StudentCardDto[] }[] = [];
+        if (mine.length) {
+            groups.push({ label: 'My Students', students: mine });
+        }
+        // Sort other teachers alphabetically.
+        const sortedKeys = [...byOwner.keys()].sort((a, b) =>
+            a.localeCompare(b, undefined, { sensitivity: 'base' })
+        );
+        for (const key of sortedKeys) {
+            groups.push({ label: key, students: byOwner.get(key)! });
+        }
+        return groups;
+    });
 
     // ************************ Event Handlers *************************
 
