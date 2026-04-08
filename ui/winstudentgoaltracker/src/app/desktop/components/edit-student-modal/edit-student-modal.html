@@ -1,0 +1,21 @@
+<app-modal-shell title="Edit Student" (closed)="closed.emit()">
+    <div class="field">
+        <label class="field-label">Name</label>
+        <input class="field-input" type="text" [(ngModel)]="identifier" />
+    </div>
+    <div class="field">
+        <label class="field-label">IEP Date</label>
+        <input class="field-input" type="date" [(ngModel)]="nextIepDate" />
+    </div>
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : 'Save' }}
+        </button>
+    </div>
+</app-modal-shell>

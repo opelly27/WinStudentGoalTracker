@@ -1,0 +1,21 @@
+<app-modal-shell title="Edit Benchmark" (closed)="closed.emit()">
+    <div class="field">
+        <label class="field-label">Short Name</label>
+        <input class="field-input" type="text" [(ngModel)]="shortName" />
+    </div>
+    <div class="field">
+        <label class="field-label">Description</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="benchmarkText"></textarea>
+    </div>
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : 'Save' }}
+        </button>
+    </div>
+</app-modal-shell>

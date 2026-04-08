@@ -1,0 +1,21 @@
+.benchmark-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    border: 1.5px solid #D5D5D0;
+    background: #FFF;
+    color: #666;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+.tall {
+    min-height: 90px !important;
+}

@@ -1,0 +1,36 @@
+<app-modal-shell [title]="isNew ? 'Log Progress Event' : 'Edit Progress Event'" (closed)="closed.emit()">
+    <div class="field">
+        <label class="field-label">Description</label>
+        <textarea class="field-input field-textarea tall" [(ngModel)]="content"
+            placeholder="Enter progress notes..."></textarea>
+    </div>
+
+    @if (benchmarks().length > 0) {
+    <div class="field">
+        <label class="field-label">Related Benchmarks (optional)</label>
+        <div class="benchmark-chips">
+            @for (b of benchmarks(); track b.benchmarkId) {
+            <button class="chip" [class.selected]="isBenchmarkSelected(b.benchmarkId)"
+                [style.border-color]="isBenchmarkSelected(b.benchmarkId) ? colors.border : '#D5D5D0'"
+                [style.background]="isBenchmarkSelected(b.benchmarkId) ? colors.bg : '#FFF'"
+                [style.color]="isBenchmarkSelected(b.benchmarkId) ? colors.text : '#666'"
+                [style.font-weight]="isBenchmarkSelected(b.benchmarkId) ? '600' : '400'"
+                (click)="toggleBenchmark(b.benchmarkId)">
+                {{ b.shortName || b.benchmark }}
+            </button>
+            }
+        </div>
+    </div>
+    }
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSave()" [disabled]="saving()">
+            {{ saving() ? 'Saving...' : (isNew ? 'Log' : 'Save') }}
+        </button>
+    </div>
+</app-modal-shell>

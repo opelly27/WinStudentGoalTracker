@@ -125,7 +125,7 @@ export class BenchmarkCardFull implements OnDestroy {
   }
 
   onBack() {
-    this.router.navigate(['/students', this.studentId, 'goals', this.goalId, 'benchmarks']);
+    this.router.navigate(['/students', this.studentId, 'goals', this.goalId]);
   }
 
   ngOnDestroy() {

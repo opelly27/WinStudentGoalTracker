@@ -1,83 +1,32 @@
-<div class="overlay" (click)="onCancel()"></div>
-
-<div class="modal">
-    <div class="modal-header">
-        <h2 class="modal-title">Add Goal</h2>
-        <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+<app-modal-shell title="Add Goal" (closed)="cancelled.emit()">
+    <div class="field">
+        <label class="field-label">Category</label>
+        <input class="field-input" type="text" [(ngModel)]="form.category"
+            placeholder="e.g. Reading, Math, Behavior…" />
+    </div>
+    <div class="field">
+        <label class="field-label">Baseline</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="form.baseline"
+            placeholder="Enter baseline..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label">Goal</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="form.description"
+            placeholder="Enter goal..."></textarea>
+    </div>
+    <div class="field">
+        <label class="field-label">Target Completion Date</label>
+        <input class="field-input" type="date" [(ngModel)]="form.targetCompletionDate" />
     </div>
 
-    <form class="modal-body" (ngSubmit)="onSubmit()" #goalForm="ngForm">
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
 
-        <div class="field">
-            <label for="category">Category<span class="required">*</span></label>
-            <input
-                id="category"
-                type="text"
-                [(ngModel)]="form.category"
-                name="category"
-                required
-                placeholder="e.g. Academics"
-            />
-        </div>
-
-        <div class="field">
-            <label for="baseline">Baseline</label>
-            <textarea
-                id="baseline"
-                [(ngModel)]="form.baseline"
-                name="baseline"
-                rows="3"
-                placeholder="Enter baseline..."
-            ></textarea>
-        </div>
-
-        
-        <div class="field">
-            <label for="description">Goal</label>
-            <textarea
-                id="description"
-                [(ngModel)]="form.description"
-                name="description"
-                rows="3"
-                placeholder="Enter goal..."
-            ></textarea>
-        </div>
-
-
-        <div class="field">
-            <label for="targetCompletionDate">Target Completion Date</label>
-            <input
-                id="targetCompletionDate"
-                type="date"
-                [(ngModel)]="form.targetCompletionDate"
-                name="targetCompletionDate"
-            />
-        </div>
-
-        <!-- Parent goal dropdown hidden — may not be needed
-        @if (parentGoalOptions().length > 0) {
-            <div class="field">
-                <label for="goalParentId">Parent Goal <span class="optional">(optional)</span></label>
-                <select id="goalParentId" [(ngModel)]="form.goalParentId" name="goalParentId">
-                    <option [ngValue]="null">None</option>
-                    @for (goal of parentGoalOptions(); track goal.goalId) {
-                        <option [ngValue]="goal.goalId">{{ goal.category }}</option>
-                    }
-                </select>
-            </div>
-        }
-        -->
-
-        @if (errorMessage()) {
-            <p class="error">{{ errorMessage() }}</p>
-        }
-
-        <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-            <button type="submit" class="btn btn-primary" [disabled]="goalForm.invalid || isSubmitting()">
-                {{ isSubmitting() ? 'Saving...' : 'Add Goal' }}
-            </button>
-        </div>
-
-    </form>
-</div>
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelled.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSubmit()" [disabled]="isSubmitting() || !form.category.trim()">
+            {{ isSubmitting() ? 'Saving...' : 'Add Goal' }}
+        </button>
+    </div>
+</app-modal-shell>

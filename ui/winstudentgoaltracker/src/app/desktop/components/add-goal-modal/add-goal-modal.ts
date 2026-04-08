@@ -1,21 +1,17 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ModalShell } from '../modal-shell/modal-shell';
 import { CreateGoalDto } from '../../../shared/classes/create-goal.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { StudentService } from '../../../shared/services/student.service';
 
 @Component({
     selector: 'app-add-goal-modal',
-    imports: [FormsModule],
+    imports: [FormsModule, ModalShell],
     templateUrl: './add-goal-modal.html',
     styleUrl: './add-goal-modal.scss',
 })
 export class AddGoalModal {
-
-    // ************************** Constructor **************************
-
-    // ************************** Declarations *************************
-
     private readonly studentService = inject(StudentService);
 
     readonly studentId = input.required<string>();
@@ -27,10 +23,6 @@ export class AddGoalModal {
     protected readonly isSubmitting = signal(false);
     protected readonly errorMessage = signal<string | null>(null);
 
-    protected readonly parentGoalOptions = computed(() =>
-        this.existingGoals().filter(g => g.goalParentId === null)
-    );
-
     protected form: CreateGoalDto = {
         description: '',
         category: '',
@@ -39,9 +31,6 @@ export class AddGoalModal {
         targetCompletionDate: null,
     };
 
-    // *****************************************************************
-    // Pre-fills targetCompletionDate from the student's nextIepDate.
-    // *****************************************************************
     ngOnInit() {
         const iepDate = this.nextIepDate?.();
         if (iepDate) {
@@ -49,18 +38,12 @@ export class AddGoalModal {
         }
     }
 
-    // ************************** Properties ***************************
-
-    // ************************ Public Methods *************************
-
-    // ************************ Event Handlers *************************
-
     async onSubmit() {
+        if (!this.form.category.trim()) return;
         this.errorMessage.set(null);
         this.isSubmitting.set(true);
 
         const result = await this.studentService.createGoal(this.studentId(), this.form);
-
         this.isSubmitting.set(false);
 
         if (!result.success) {
@@ -70,10 +53,4 @@ export class AddGoalModal {
 
         this.goalCreated.emit(result.payload!);
     }
-
-    onCancel() {
-        this.cancelled.emit();
-    }
-
-    // ********************** Support Procedures ***********************
 }
