@@ -19,6 +19,7 @@ export class GoalCard {
     private readonly route = inject(ActivatedRoute);
 
     readonly goal = input.required<StudentGoalItem>();
+    readonly goalNumber = input<number>(0);
 
     // ************************** Properties ***************************
 

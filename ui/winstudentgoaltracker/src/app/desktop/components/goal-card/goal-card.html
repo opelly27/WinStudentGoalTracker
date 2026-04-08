@@ -14,7 +14,11 @@
     </div>
 
     <div class="card-body">
-        <p class="description">{{ goal().description }}</p>
+        @if (goalNumber() > 0) {
+            <p class="description"><strong>Goal {{ goalNumber() }}:</strong> {{ goal().description }}</p>
+        } @else {
+            <p class="description">{{ goal().description }}</p>
+        }
     </div>
 
     <div class="card-footer">

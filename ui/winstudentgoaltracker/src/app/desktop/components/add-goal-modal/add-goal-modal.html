@@ -21,17 +21,6 @@
         </div>
 
         <div class="field">
-            <label for="description">Description</label>
-            <textarea
-                id="description"
-                [(ngModel)]="form.description"
-                name="description"
-                rows="3"
-                placeholder="Describe the goal..."
-            ></textarea>
-        </div>
-
-        <div class="field">
             <label for="baseline">Baseline</label>
             <textarea
                 id="baseline"
@@ -41,6 +30,19 @@
                 placeholder="Enter baseline..."
             ></textarea>
         </div>
+
+        
+        <div class="field">
+            <label for="description">Goal</label>
+            <textarea
+                id="description"
+                [(ngModel)]="form.description"
+                name="description"
+                rows="3"
+                placeholder="Enter goal..."
+            ></textarea>
+        </div>
+
 
         <div class="field">
             <label for="targetCompletionDate">Target Completion Date</label>

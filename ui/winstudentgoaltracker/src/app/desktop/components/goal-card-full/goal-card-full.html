@@ -20,16 +20,18 @@
             <label class="field-label" for="category">Category</label>
             <input id="category" class="field-input" type="text" [(ngModel)]="category" />
         </div>
-        <div class="field">
-            <label class="field-label" for="description">Description</label>
-            <textarea id="description" class="field-input field-textarea" [(ngModel)]="description" rows="4"
-                placeholder="Enter description..."></textarea>
-        </div>
+
         <div class="field">
             <label class="field-label" for="baseline">Baseline</label>
             <textarea id="baseline" class="field-input field-textarea" [(ngModel)]="baseline" rows="3"
                 placeholder="Enter baseline..."></textarea>
         </div>
+        <div class="field">
+            <label class="field-label" for="description">Goal</label>
+            <textarea id="description" class="field-input field-textarea" [(ngModel)]="description" rows="4"
+                placeholder="Enter goal..."></textarea>
+        </div>
+
         <div class="field">
             <label class="field-label" for="targetCompletionDate">Target Completion Date</label>
             <input id="targetCompletionDate" class="field-input" type="date" [(ngModel)]="targetCompletionDate" />

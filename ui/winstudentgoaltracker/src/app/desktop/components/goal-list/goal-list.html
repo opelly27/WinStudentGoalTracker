@@ -28,8 +28,8 @@
 </div>
 } @else {
 <div class="card-grid">
-    @for (goal of goals(); track goal.goalId) {
-    <app-goal-card [goal]="goal" />
+    @for (goal of goals(); track goal.goalId; let i = $index) {
+    <app-goal-card [goal]="goal" [goalNumber]="i + 1" />
     }
 </div>
 }
