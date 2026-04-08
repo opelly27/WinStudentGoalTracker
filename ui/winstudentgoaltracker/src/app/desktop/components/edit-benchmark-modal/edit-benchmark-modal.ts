@@ -14,7 +14,10 @@ export class EditBenchmarkModal {
     private readonly studentService = inject(StudentService);
 
     readonly studentId = input.required<string>();
-    readonly benchmark = input.required<BenchmarkDto>();
+    readonly goalId = input.required<string>();
+
+    /** null for new benchmark, populated for edit */
+    readonly benchmark = input<BenchmarkDto | null>(null);
     readonly saved = output<void>();
     readonly closed = output<void>();
 
@@ -24,31 +27,60 @@ export class EditBenchmarkModal {
     protected shortName = '';
     protected benchmarkText = '';
 
+    protected get isEditMode(): boolean {
+        return !!this.benchmark();
+    }
+
+    protected get modalTitle(): string {
+        return this.isEditMode ? 'Edit Benchmark' : 'Add Benchmark';
+    }
+
+    protected get submitLabel(): string {
+        return this.isEditMode ? 'Save' : 'Add Benchmark';
+    }
+
     ngOnInit() {
         const b = this.benchmark();
-        this.shortName = b.shortName ?? '';
-        this.benchmarkText = b.benchmark;
+        if (b) {
+            this.shortName = b.shortName ?? '';
+            this.benchmarkText = b.benchmark;
+        }
     }
 
     async onSave() {
-        if (!this.shortName.trim()) return;
+        if (!this.benchmarkText.trim()) return;
         this.saving.set(true);
         this.errorMessage.set(null);
 
-        const result = await this.studentService.updateBenchmark(
-            this.studentId(),
-            this.benchmark().benchmarkId,
-            this.benchmarkText,
-            this.shortName,
-        );
+        if (this.isEditMode) {
+            const result = await this.studentService.updateBenchmark(
+                this.studentId(),
+                this.benchmark()!.benchmarkId,
+                this.benchmarkText,
+                this.shortName || undefined,
+            );
+            this.saving.set(false);
 
-        this.saving.set(false);
-
-        if (result.success) {
-            this.studentService.notifyDataChanged();
-            this.saved.emit();
+            if (result.success) {
+                this.studentService.notifyDataChanged();
+                this.saved.emit();
+            } else {
+                this.errorMessage.set(result.message);
+            }
         } else {
-            this.errorMessage.set(result.message);
+            const result = await this.studentService.createBenchmark(this.studentId(), {
+                goalId: this.goalId(),
+                benchmark: this.benchmarkText,
+                shortName: this.shortName || undefined,
+            });
+            this.saving.set(false);
+
+            if (result.success) {
+                this.studentService.notifyDataChanged();
+                this.saved.emit();
+            } else {
+                this.errorMessage.set(result.message);
+            }
         }
     }
 }

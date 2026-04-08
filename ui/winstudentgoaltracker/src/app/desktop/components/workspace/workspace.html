@@ -12,7 +12,8 @@
     (closed)="showGoalModal.set(null)" />
 }
 @if (showEditBenchmarkModal()) {
-<app-edit-benchmark-modal [studentId]="studentId()!" [benchmark]="showEditBenchmarkModal()!"
+<app-edit-benchmark-modal [studentId]="studentId()!" [goalId]="selectedGoal()!.goalId"
+    [benchmark]="showEditBenchmarkModal() === 'new' ? null : $any(showEditBenchmarkModal())"
     (saved)="onEditBenchmarkSaved()" (closed)="showEditBenchmarkModal.set(null)" />
 }
 @if (showEditEventModal()) {

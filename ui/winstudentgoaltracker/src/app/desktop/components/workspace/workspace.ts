@@ -73,7 +73,7 @@ export class Workspace {
 
     // Modal states
     protected readonly showGoalModal = signal<StudentGoalItem | 'add' | null>(null);
-    protected readonly showEditBenchmarkModal = signal<BenchmarkDto | null>(null);
+    protected readonly showEditBenchmarkModal = signal<BenchmarkDto | 'new' | null>(null);
     protected readonly showEditEventModal = signal<ProgressEventDto | null | 'new'>(null);
 
     // ************************** Properties ***************************
@@ -148,8 +148,7 @@ export class Workspace {
     }
 
     onAddBenchmark() {
-        // Navigate to the new benchmark route (still uses the old page for creation)
-        this.router.navigate(['/students', this.studentId(), 'goals', this.selectedGoal()!.goalId, 'benchmarks', 'new']);
+        this.showEditBenchmarkModal.set('new');
     }
 
     onNewEvent() {
