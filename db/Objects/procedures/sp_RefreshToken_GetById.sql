@@ -4,6 +4,7 @@ BEGIN
     SELECT
         id_refresh_token,
         id_user,
+        id_program,
         token_hash,
         token_salt,
         expires_at,
