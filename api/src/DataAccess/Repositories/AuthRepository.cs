@@ -67,7 +67,7 @@ public class AuthRepository
         string? userAgent)
     {
         using var db = Connection;
-        var result = await db.QuerySingleOrDefaultAsync<string?>(
+        var result = await db.QuerySingleOrDefaultAsync<Guid?>(
             "sp_RefreshToken_Replace",
             new
             {
@@ -82,6 +82,6 @@ public class AuthRepository
                 p_user_agent = userAgent
             },
             commandType: CommandType.StoredProcedure);
-        return result != null ? Guid.Parse(result) : null;
+        return result;
     }
 }
