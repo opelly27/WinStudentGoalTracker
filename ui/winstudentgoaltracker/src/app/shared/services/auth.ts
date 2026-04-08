@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, Observable, of, Subject, tap } from 'rxjs';
+import { catchError, finalize, Observable, of, shareReplay, Subject, tap } from 'rxjs';
 import {
   AuthUser,
   LoginResponse,
@@ -64,6 +64,7 @@ export class Auth {
   readonly sessionExpired$ = new Subject<void>();
 
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
+  private refreshInFlight$: Observable<ResponseResult<TokenRefreshResponse>> | null = null;
 
   // --------------- Accessors ---------------
 
@@ -138,15 +139,17 @@ export class Auth {
       return of({ success: false, message: 'No refresh token.' });
     }
 
-    if (this._isRefreshing()) {
-      return EMPTY;
+    // If a refresh is already in flight, share the same observable
+    // so all callers wait for the single refresh and only one
+    // refresh token rotation happens on the backend.
+    if (this.refreshInFlight$) {
+      return this.refreshInFlight$;
     }
 
     this._isRefreshing.set(true);
 
-    return this.api.refreshToken({ refreshToken: token }).pipe(
+    this.refreshInFlight$ = this.api.refreshToken({ refreshToken: token }).pipe(
       tap((res) => {
-        this._isRefreshing.set(false);
         if (res.success && res.data) {
           this.storeTokens(res.data.jwt, res.data.newRefreshToken);
           this.scheduleRefresh(res.data.jwtExpiresIn);
@@ -155,11 +158,17 @@ export class Auth {
         }
       }),
       catchError(() => {
-        this._isRefreshing.set(false);
         this.forceLogout();
         return of({ success: false, message: 'Token refresh failed.' } as ResponseResult<TokenRefreshResponse>);
       }),
+      finalize(() => {
+        this._isRefreshing.set(false);
+        this.refreshInFlight$ = null;
+      }),
+      shareReplay(1),
     );
+
+    return this.refreshInFlight$;
   }
 
   // --------------- Logout ---------------
@@ -238,6 +247,7 @@ export class Auth {
 
   private clearState(): void {
     this.clearRefreshTimer();
+    this.refreshInFlight$ = null;
     localStorage.removeItem(STORAGE_KEYS.JWT);
     localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.SESSION_TOKEN);

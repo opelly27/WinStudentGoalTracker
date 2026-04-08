@@ -9,7 +9,16 @@ namespace WinStudentGoalTracker.Services;
 public class TokenService
 {
     private readonly IConfiguration _config;
-    private readonly int _tokenExpiryInSeconds = 60 * 15; // 15 minutes
+
+    // Temporary lowered to 1 minute expiration to test front end auth management
+    // and see if we get any random logouts or if token refresh is working as intended.
+    private readonly int _tokenExpiryInSeconds = 60; // 1 minute
+
+    // This is for the temporary non program scoped token that is granted at login
+    // and is only used for the selection of a program.
+
+    // In theory we have a bug here if someone sits at the program selection screen for more
+    // Than 5 minutes, the program selection will fail and they will be logged out.
     private readonly int _sessionTokenExpiryInSeconds = 60 * 5; // 5 minutes
 
     public TokenService(IConfiguration config)
