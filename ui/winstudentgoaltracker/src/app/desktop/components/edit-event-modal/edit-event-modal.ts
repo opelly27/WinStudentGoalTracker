@@ -4,7 +4,7 @@ import { ModalShell } from '../modal-shell/modal-shell';
 import { StudentService } from '../../../shared/services/student.service';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
 import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
-import { getCategoryColor } from '../../../shared/classes/category-colors';
+import { GOAL_COLOR } from '../../../shared/classes/category-colors';
 
 @Component({
     selector: 'app-edit-event-modal',
@@ -17,7 +17,7 @@ export class EditEventModal {
 
     readonly studentId = input.required<string>();
     readonly goalId = input.required<string>();
-    readonly goalCategory = input<string>('');
+
     readonly benchmarks = input<BenchmarkDto[]>([]);
     /** null for new event, populated for edit */
     readonly event = input<ProgressEventDto | null>(null);
@@ -47,7 +47,7 @@ export class EditEventModal {
     }
 
     get colors() {
-        return getCategoryColor(this.goalCategory());
+        return GOAL_COLOR;
     }
 
     isBenchmarkSelected(id: string): boolean {

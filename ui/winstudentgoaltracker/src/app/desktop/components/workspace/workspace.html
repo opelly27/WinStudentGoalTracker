@@ -18,7 +18,7 @@
 }
 @if (showEditEventModal()) {
 <app-edit-event-modal [studentId]="studentId()!" [goalId]="selectedGoal()!.goalId"
-    [goalCategory]="selectedGoal()!.category" [benchmarks]="goalBenchmarks()"
+    [benchmarks]="goalBenchmarks()"
     [event]="showEditEventModal() === 'new' ? null : $any(showEditEventModal())" (saved)="onEventSaved()"
     (closed)="showEditEventModal.set(null)" />
 }
@@ -32,9 +32,6 @@
     <div class="goal-tabs">
         @for (g of goals(); track g.goalId) {
         <button class="goal-tab" [class.active]="selectedGoalId() === g.goalId || (selectedGoal()?.goalId === g.goalId)"
-            [style.border-color]="(selectedGoalId() === g.goalId || selectedGoal()?.goalId === g.goalId) ? getCatColor(g.category).border : '#E5E5E0'"
-            [style.background]="(selectedGoalId() === g.goalId || selectedGoal()?.goalId === g.goalId) ? getCatColor(g.category).bg : '#FFF'"
-            [style.color]="(selectedGoalId() === g.goalId || selectedGoal()?.goalId === g.goalId) ? getCatColor(g.category).text : '#666'"
             (click)="onSelectGoal(g.goalId)">
             {{ g.category }}
         </button>
@@ -49,8 +46,7 @@
     <!-- Goal Card -->
     <div class="goal-card">
         <div class="goal-card-header">
-            <span class="goal-badge" [style.color]="goalColors().text"
-                [style.background]="goalColors().bg">{{ selectedGoal()!.category }} Goal</span>
+            <span class="goal-badge">{{ selectedGoal()!.category }} Goal</span>
             @if (selectedGoal()!.targetCompletionDate) {
             <span class="goal-due">Due {{ formatDate(selectedGoal()!.targetCompletionDate) }}</span>
             }
@@ -67,14 +63,10 @@
     <!-- Sub Tabs -->
     <div class="sub-tabs">
         <button class="sub-tab" [class.active]="activeTab() === 'benchmarks'"
-            [style.color]="activeTab() === 'benchmarks' ? goalColors().text : '#888'"
-            [style.border-bottom-color]="activeTab() === 'benchmarks' ? goalColors().accent : 'transparent'"
             (click)="onTabChange('benchmarks')">
             Benchmarks ({{ goalBenchmarks().length }})
         </button>
         <button class="sub-tab" [class.active]="activeTab() === 'progress'"
-            [style.color]="activeTab() === 'progress' ? goalColors().text : '#888'"
-            [style.border-bottom-color]="activeTab() === 'progress' ? goalColors().accent : 'transparent'"
             (click)="onTabChange('progress')">
             Progress Events ({{ sortedProgressEvents().length }})
         </button>
@@ -83,10 +75,11 @@
     <!-- Benchmarks Tab -->
     @if (activeTab() === 'benchmarks') {
     <div class="tab-content">
+        <button class="add-btn" (click)="onAddBenchmark()">+ Add Benchmark</button>
         @for (b of goalBenchmarks(); track b.benchmarkId) {
         <div class="benchmark-card">
             <div class="benchmark-header">
-                <span class="benchmark-name" [style.color]="goalColors().text">{{ b.shortName || b.benchmark }}</span>
+                <span class="benchmark-name">{{ b.shortName || b.benchmark }}</span>
                 <button class="edit-icon" (click)="onEditBenchmark(b)" aria-label="Edit benchmark">
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#999" stroke-width="1.5"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -97,18 +90,17 @@
             <p class="benchmark-desc">{{ b.benchmark }}</p>
         </div>
         }
-        <button class="add-btn" (click)="onAddBenchmark()">+ Add Benchmark</button>
     </div>
     }
 
     <!-- Progress Tab -->
     @if (activeTab() === 'progress') {
     <div class="tab-content timeline">
+        <button class="add-btn" (click)="onNewEvent()">+ Log Progress Event</button>
         <div class="timeline-line"></div>
         @for (ev of sortedProgressEvents(); track ev.progressEventId) {
         <div class="timeline-item">
-            <div class="timeline-dot" [style.background]="goalColors().bg"
-                [style.border-color]="goalColors().border"></div>
+            <div class="timeline-dot"></div>
             <div class="event-card">
                 <div class="event-header">
                     <span class="event-date">{{ formatDate(ev.createdAt) }}</span>
@@ -123,7 +115,6 @@
             </div>
         </div>
         }
-        <button class="add-btn" (click)="onNewEvent()">+ Log Progress Event</button>
     </div>
     }
 </div>

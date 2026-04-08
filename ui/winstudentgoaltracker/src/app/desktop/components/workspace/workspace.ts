@@ -5,7 +5,6 @@ import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
 import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
-import { getCategoryColor, CategoryColor } from '../../../shared/classes/category-colors';
 import { EditGoalModal } from '../edit-goal-modal/edit-goal-modal';
 import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
@@ -81,9 +80,6 @@ export class Workspace {
         return this.goals().find(g => g.goalId === id) ?? null;
     });
 
-    protected readonly goalColors = computed<CategoryColor>(() => {
-        return getCategoryColor(this.selectedGoal()?.category ?? '');
-    });
 
     protected readonly goalBenchmarks = computed<BenchmarkDto[]>(() => {
         const goalId = this.selectedGoal()?.goalId;
@@ -169,24 +165,10 @@ export class Workspace {
 
     // ************************ Formatting Helpers **********************
 
-    getCatColor(category: string): CategoryColor {
-        return getCategoryColor(category);
-    }
-
     formatDate(d: string | Date | null): string {
         if (!d) return '';
         const date = new Date(d);
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
-
-    truncate(text: string, max: number): string {
-        return text.length > max ? text.slice(0, max) + '…' : text;
-    }
-
-    getRelatedEventCount(benchmarkId: string): number {
-        // We don't have benchmark associations in the event DTO from the list endpoint,
-        // so we return 0. The mockup shows this but we can't derive it without extra API calls.
-        return 0;
     }
 
     // ********************** Support Procedures ***********************
