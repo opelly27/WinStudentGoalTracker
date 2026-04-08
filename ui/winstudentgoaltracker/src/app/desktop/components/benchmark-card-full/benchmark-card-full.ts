@@ -95,19 +95,12 @@ export class BenchmarkCardFull implements OnDestroy {
         this.errorMessage.set(result.message);
       }
     } else {
-      const shortNameChanged = this.shortName !== this.savedShortName;
       const result = await this.studentService.updateBenchmark(this.studentId, this.benchmarkId!, this.benchmarkText, this.shortName || undefined);
       this.saving.set(false);
       if (result.success) {
         this.savedBenchmarkText = this.benchmarkText;
         this.savedShortName = this.shortName;
         this.successMessage.set('Changes saved.');
-        if (shortNameChanged) {
-          this.studentService.updateSidebarLabel(
-            ['/students', this.studentId, 'goals', this.goalId, 'benchmarks', this.benchmarkId!],
-            this.shortName || this.benchmarkText
-          );
-        }
       } else {
         this.errorMessage.set(result.message);
       }
