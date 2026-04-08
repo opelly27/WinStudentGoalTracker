@@ -20,7 +20,7 @@ const STORAGE_KEYS = {
 } as const;
 
 // Refresh the JWT this many seconds before it actually expires.
-const REFRESH_BUFFER_SECONDS = 60;
+const REFRESH_BUFFER_SECONDS = 10;
 
 @Injectable({
   providedIn: 'root',
