@@ -53,11 +53,15 @@ export class StudentService {
 
     // *****************************************************************
     // Returns student card summaries for the authenticated user.
+    // When scope is 'all', returns all students in the program.
     // *****************************************************************
-    async getMyStudents(): Promise<ApiResult<StudentCardDto[]>> {
+    async getMyStudents(scope?: 'all'): Promise<ApiResult<StudentCardDto[]>> {
         try {
+            const params: any = {};
+            if (scope) params.scope = scope;
+
             const result = await firstValueFrom(
-                this.http.get<ResponseResult<StudentCardDto[]>>(`${this.base}/api/Student/my`)
+                this.http.get<ResponseResult<StudentCardDto[]>>(`${this.base}/api/Student/my`, { params })
             );
             return result.success && result.data
                 ? ApiResult.ok(result.data)

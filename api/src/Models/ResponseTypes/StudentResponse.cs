@@ -10,4 +10,6 @@ public class StudentResponse
     public int GoalCount { get; set; }
     public int ProgressEventCount { get; set; }
     public int BenchmarkCount { get; set; }
+    public string? OwnerName { get; set; }
+    public bool IsMine { get; set; }
 }

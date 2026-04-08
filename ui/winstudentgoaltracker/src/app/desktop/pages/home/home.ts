@@ -99,9 +99,12 @@ export class Home implements OnDestroy {
   // *****************************************************************
   // Loads student list, sorts by identifier, and builds the sidebar
   // tree with lazy-loading callbacks for goals and benchmarks.
+  // When scope is 'all', groups students by owning user.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getMyStudents().then(data => {
+    // Fetch with 'all' scope so the sidebar can show grouped nodes
+    // when the StudentCardList toggle is active.
+    this.studentService.getMyStudents('all').then(data => {
       if (data.success) {
         const sorted = (data.payload || []).sort((a, b) =>
           a.identifier.localeCompare(b.identifier, undefined, { sensitivity: 'base' })
@@ -114,30 +117,76 @@ export class Home implements OnDestroy {
 
   // *****************************************************************
   // Builds the sidebar node tree from a list of students.
+  // Groups students by ownerName — "My Students" first, then other
+  // owners' groups sorted alphabetically.
   // *****************************************************************
   private buildTree(students: StudentCardDto[]): SidebarNode[] {
-    return [{
+    // Group students by ownerName. Students with isMine go into "My Students".
+    const myStudents: StudentCardDto[] = [];
+    const otherGroups = new Map<string, StudentCardDto[]>();
+
+    for (const s of students) {
+      if (s.isMine !== false) {
+        myStudents.push(s);
+      } else {
+        const key = s.ownerName ?? 'Unknown';
+        if (!otherGroups.has(key)) otherGroups.set(key, []);
+        otherGroups.get(key)!.push(s);
+      }
+    }
+
+    const nodes: SidebarNode[] = [{
       label: 'My Students',
       routerLink: ['/students'],
       expanded: true,
-      childCount: students.length,
-      children: students.map(s => ({
-        label: s.identifier,
-        routerLink: ['/students', s.studentId],
-        childCount: s.goalCount > 0 ? 1 : 0,
-        children: s.goalCount > 0 ? [{
-          label: 'Goals',
-          routerLink: ['/students', s.studentId, 'goals'],
-          childCount: s.goalCount,
-          loadChildren: () => this.loadGoalNodes(s.studentId),
-        }] : undefined,
-      })),
-    },
-    {
+      childCount: myStudents.length,
+      children: myStudents.map(s => this.buildStudentNode(s)),
+    }];
+
+    // Add other users' groups sorted by owner name.
+    const sortedOwners = [...otherGroups.keys()].sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: 'base' })
+    );
+
+    for (const ownerName of sortedOwners) {
+      const group = otherGroups.get(ownerName)!;
+      const firstName = ownerName.split(' ')[0];
+      nodes.push({
+        label: `${firstName}'s Students`,
+        routerLink: ['/students'],
+        expanded: false,
+        childCount: group.length,
+        children: group.map(s => this.buildStudentNode(s)),
+      });
+    }
+
+    nodes.push({
       label: 'Reports',
       routerLink: ['/reports'],
-    }];
+    });
+
+    return nodes;
   }
+
+  // *****************************************************************
+  // Builds a single student sidebar node with lazy-loaded goal
+  // children.
+  // *****************************************************************
+  private buildStudentNode(s: StudentCardDto): SidebarNode {
+    return {
+      label: s.identifier,
+      routerLink: ['/students', s.studentId],
+      childCount: s.goalCount > 0 ? 1 : 0,
+      children: s.goalCount > 0 ? [{
+        label: 'Goals',
+        routerLink: ['/students', s.studentId, 'goals'],
+        childCount: s.goalCount,
+        loadChildren: () => this.loadGoalNodes(s.studentId),
+      }] : undefined,
+    };
+  }
+
+
 
   // *****************************************************************
   // Lazy-loads individual goal nodes for a student. Called when

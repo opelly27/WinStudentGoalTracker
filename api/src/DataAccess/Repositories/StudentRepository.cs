@@ -10,22 +10,38 @@ public class StudentRepository
 {
     private IDbConnection Connection => new MySqlConnection(DatabaseManager.ConnectionString);
 
-    public async Task<IEnumerable<StudentResponse>> GetMyStudentsAsync(Guid userId, Guid programId, string role)
+    // *****************************************************************
+    // Returns students visible to the current user. When scope is
+    // "all", returns every student in the program enriched with the
+    // owning user's name. Otherwise returns only the user's own.
+    // *****************************************************************
+    public async Task<IEnumerable<StudentResponse>> GetMyStudentsAsync(Guid userId, Guid programId, string role, string? scope = null)
     {
         using var db = Connection;
         using var multi = await db.QueryMultipleAsync(
             "sp_Student_GetWithAssignments",
-            new { p_id_program = programId.ToString(), p_id_user = userId.ToString() },
+            new { p_id_program = programId.ToString(), p_id_user = userId.ToString(), p_scope = scope },
             commandType: CommandType.StoredProcedure);
 
-        var students = await multi.ReadAsync<StudentResponse>();
-        var assignments = await multi.ReadAsync<dbUserStudent>();
+        var students = (await multi.ReadAsync<StudentResponse>()).ToList();
+        var assignments = (await multi.ReadAsync<dbUserStudent>()).ToList();
 
-        var myStudents = students.Where(s =>
-            PermissionService.IsAllowed(role, EntityType.Student, PermissionAction.Read, assignments.Any(a => a.IdStudent == s.StudentId && a.IdUser == userId))
-        );
+        // When scope is "all", return every student in the program.
+        // Otherwise, return only students assigned to the current user.
+        var filtered = scope == "all"
+            ? students
+            : students.Where(s => assignments.Any(a => a.IdStudent == s.StudentId && a.IdUser == userId)).ToList();
 
-        return myStudents;
+        // Enrich each student with the primary owner's display name and ownership flag.
+        foreach (var student in filtered)
+        {
+            var owner = assignments.FirstOrDefault(a => a.IdStudent == student.StudentId && (a.IsPrimary == true));
+            owner ??= assignments.FirstOrDefault(a => a.IdStudent == student.StudentId);
+            student.OwnerName = owner?.OwnerName;
+            student.IsMine = assignments.Any(a => a.IdStudent == student.StudentId && a.IdUser == userId);
+        }
+
+        return filtered;
     }
 
     public async Task<StudentResponse?> GetByIdAsync(Guid idStudent)

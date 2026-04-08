@@ -17,3 +17,46 @@
     border-radius: 10px;
     border: 1px solid #e5e5e5;
 }
+
+.scope-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.scope-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-track {
+    display: inline-flex;
+    align-items: center;
+    width: 36px;
+    height: 20px;
+    background: #d1d5db;
+    border-radius: 10px;
+    padding: 2px;
+    transition: background 0.2s;
+
+    &.active {
+        background: #4f46e5;
+    }
+}
+
+.toggle-thumb {
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+
+    .active > & {
+        transform: translateX(16px);
+    }
+}

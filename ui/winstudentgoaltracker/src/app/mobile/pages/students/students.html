@@ -1,3 +1,13 @@
+<div class="scope-bar">
+    <label class="scope-toggle">
+        <span>All Students</span>
+        <span class="toggle-track" [class.active]="showAll()">
+            <span class="toggle-thumb"></span>
+        </span>
+        <input type="checkbox" [checked]="showAll()" (change)="onToggleScope()" hidden>
+    </label>
+</div>
+
 @if (loaded() && students().length === 0) {
 <div class="empty-state">
     <p>You don't currently have any students.</p>

@@ -31,6 +31,7 @@ export class StudentCardList {
   protected readonly displayMode = signal<DisplayMode>('card');
   protected readonly showAddModal = signal(false);
   protected readonly loaded = signal(false);
+  protected readonly showAll = signal(false);
 
   public errorMessage = signal<String | null>(null);
 
@@ -46,6 +47,17 @@ export class StudentCardList {
 
   onAddStudent() {
     this.showAddModal.set(true);
+  }
+
+  // *****************************************************************
+  // Toggles between "My Students" and "All Students" scope, then
+  // reloads the student list from the API with the new scope.
+  // *****************************************************************
+  onToggleScope() {
+    this.showAll.update(v => !v);
+    this.loaded.set(false);
+    this.loadStudents();
+    this.studentService.notifyDataChanged();
   }
 
   onStudentCreated(student: StudentCardDto) {
@@ -72,9 +84,11 @@ export class StudentCardList {
 
   // *****************************************************************
   // Loads students from the service and populates the students signal.
+  // Uses scope 'all' when the toggle is active.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getMyStudents().then(data => {
+    const scope = this.showAll() ? 'all' : undefined;
+    this.studentService.getMyStudents(scope).then(data => {
 
       if (!data.success) {
         this.errorMessage.set(data.message);

@@ -1,6 +1,13 @@
 <div class="toolbar">
-    <h1 class= "page-title"> My Students -  <span class="student-count"> {{ students().length}}</span></h1>
+    <h1 class="page-title">{{ showAll() ? 'All Students' : 'My Students' }} - <span class="student-count">{{ students().length }}</span></h1>
     <div class="toolbar-right">
+        <label class="scope-toggle" title="Toggle between My Students and All Students">
+            <span class="scope-label">All Students</span>
+            <span class="toggle-track" [class.active]="showAll()">
+                <span class="toggle-thumb"></span>
+            </span>
+            <input type="checkbox" [checked]="showAll()" (change)="onToggleScope()" hidden>
+        </label>
         <div class="view-toggle">
             <button
                 class="toggle-btn"
@@ -60,6 +67,9 @@
     <div class="student-list">
         <div class="list-header">
             <span class="col-name">Student</span>
+            @if (showAll()) {
+            <span class="col-owner">Owner</span>
+            }
             <span class="col-iep">IEP Date</span>
             <span class="col-entry">Last Entry</span>
             <span class="col-stat">Goals</span>
@@ -69,6 +79,9 @@
         @for (student of students(); track student.studentId) {
         <div class="list-row" [routerLink]="['/students', student.studentId]">
             <span class="col-name">🎓 {{ student.identifier }}</span>
+            @if (showAll()) {
+            <span class="col-owner">{{ student.ownerName }}</span>
+            }
             <span class="col-iep">{{ student.nextIepDate | date:'M/d/yy' }}</span>
             <span class="col-entry">
                 @if (student.lastEntryDate) {

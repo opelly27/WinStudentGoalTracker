@@ -210,29 +210,29 @@ public static class PermissionMatrix
             [EntityType.Student] = new()
             {
                 [PermissionAction.Create] = MineOnly,
-                [PermissionAction.Read]   = MineOnly,
-                [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = MineOnly,
             },
             [EntityType.Goal] = new()
             {
-                [PermissionAction.Create] = MineOnly,
-                [PermissionAction.Read]   = MineOnly,
-                [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = MineOnly,
             },
             [EntityType.ProgressEvent] = new()
             {
-                [PermissionAction.Create] = MineOnly,
-                [PermissionAction.Read]   = MineOnly,
-                [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = MineOnly,
             },
             [EntityType.Benchmark] = new()
             {
-                [PermissionAction.Create] = MineOnly,
-                [PermissionAction.Read]   = MineOnly,
-                [PermissionAction.Update] = MineOnly,
+                [PermissionAction.Create] = Allow,
+                [PermissionAction.Read]   = Allow,
+                [PermissionAction.Update] = Allow,
                 [PermissionAction.Delete] = MineOnly,
             },
         },

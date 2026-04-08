@@ -6,4 +6,5 @@ public class dbUserStudent
     public Guid? IdUser { get; set; }
     public Guid? IdStudent { get; set; }
     public bool? IsPrimary { get; set; }
+    public string? OwnerName { get; set; }
 }

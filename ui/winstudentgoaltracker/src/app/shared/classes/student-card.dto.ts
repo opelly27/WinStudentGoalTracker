@@ -7,4 +7,6 @@ export interface StudentCardDto {
     goalCount: number;
     progressEventCount: number;
     benchmarkCount: number;
+    ownerName?: string;
+    isMine?: boolean;
 }

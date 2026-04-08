@@ -23,6 +23,7 @@ export class Students {
   private readonly studentService = inject(StudentService);
   protected readonly students = signal<StudentCardDto[]>([]);
   protected readonly loaded = signal(false);
+  protected readonly showAll = signal(false);
 
   public errorMessage = signal<String | null>(null);
 
@@ -32,13 +33,24 @@ export class Students {
 
   // ************************ Event Handlers *************************
 
+  // *****************************************************************
+  // Toggles between "My Students" and "All Students" scope, then
+  // reloads the student list from the API.
+  // *****************************************************************
+  onToggleScope() {
+    this.showAll.update(v => !v);
+    this.loaded.set(false);
+    this.loadStudents();
+  }
+
   // ********************** Support Procedures ***********************
 
   // *****************************************************************
   // Loads the list of students assigned to the current user.
   // *****************************************************************
   private loadStudents() {
-    this.studentService.getMyStudents().then(data => {
+    const scope = this.showAll() ? 'all' : undefined;
+    this.studentService.getMyStudents(scope).then(data => {
 
       if (!data.success)
       {

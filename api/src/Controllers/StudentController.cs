@@ -17,7 +17,7 @@ public class StudentController : BaseController
     [HttpGet("my")]
     [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult<IEnumerable<StudentResponse>>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetMyStudents()
+    public async Task<ActionResult<ResponseResult<IEnumerable<StudentResponse>>>> GetMyStudents([FromQuery] string? scope = null)
     {
         var (userId, email, programId, role, error) = GetProgramUserFromClaims();
 
@@ -26,7 +26,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, scope);
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
