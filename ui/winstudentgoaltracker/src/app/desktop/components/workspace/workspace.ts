@@ -5,16 +5,15 @@ import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
 import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
-import { EditGoalModal } from '../edit-goal-modal/edit-goal-modal';
+import { GoalModal } from '../goal-modal/goal-modal';
 import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
-import { AddGoalModal } from '../add-goal-modal/add-goal-modal';
 
 type TabView = 'benchmarks' | 'progress';
 
 @Component({
     selector: 'app-workspace',
-    imports: [EditGoalModal, EditBenchmarkModal, EditEventModal, AddGoalModal],
+    imports: [GoalModal, EditBenchmarkModal, EditEventModal],
     templateUrl: './workspace.html',
     styleUrl: './workspace.scss',
 })
@@ -67,8 +66,7 @@ export class Workspace {
     protected readonly activeTab = signal<TabView>('benchmarks');
 
     // Modal states
-    protected readonly showAddGoalModal = signal(false);
-    protected readonly showEditGoalModal = signal(false);
+    protected readonly showGoalModal = signal<StudentGoalItem | 'add' | null>(null);
     protected readonly showEditBenchmarkModal = signal<BenchmarkDto | null>(null);
     protected readonly showEditEventModal = signal<ProgressEventDto | null | 'new'>(null);
 
@@ -113,20 +111,20 @@ export class Workspace {
 
     // Modal handlers
     onEditGoal() {
-        this.showEditGoalModal.set(true);
+        this.showGoalModal.set(this.selectedGoal()!);
     }
 
-    onEditGoalSaved() {
-        this.showEditGoalModal.set(false);
+    onGoalSaved() {
+        this.showGoalModal.set(null);
         this.loadStudentData(this.studentId()!);
     }
 
     onAddGoal() {
-        this.showAddGoalModal.set(true);
+        this.showGoalModal.set('add');
     }
 
     onGoalCreated(goal: StudentGoalItem) {
-        this.showAddGoalModal.set(false);
+        this.showGoalModal.set(null);
         this.studentService.notifyDataChanged();
         this.loadStudentData(this.studentId()!).then(() => {
             this.selectedGoalId.set(goal.goalId);

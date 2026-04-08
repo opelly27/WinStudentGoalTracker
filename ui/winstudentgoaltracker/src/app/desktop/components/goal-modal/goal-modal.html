@@ -1,4 +1,4 @@
-<app-modal-shell title="Add Goal" (closed)="cancelled.emit()">
+<app-modal-shell [title]="modalTitle" (closed)="closed.emit()">
     <div class="field">
         <label class="field-label">Category</label>
         <input class="field-input" type="text" [(ngModel)]="form.category"
@@ -24,9 +24,9 @@
     }
 
     <div class="modal-actions">
-        <button class="btn-secondary" (click)="cancelled.emit()">Cancel</button>
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
         <button class="btn-primary" (click)="onSubmit()" [disabled]="isSubmitting() || !form.category.trim()">
-            {{ isSubmitting() ? 'Saving...' : 'Add Goal' }}
+            {{ isSubmitting() ? 'Saving...' : submitLabel }}
         </button>
     </div>
 </app-modal-shell>

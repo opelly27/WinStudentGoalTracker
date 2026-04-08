@@ -4,13 +4,12 @@
 </div>
 } @else {
 <!-- Modals -->
-@if (showAddGoalModal()) {
-<app-add-goal-modal [studentId]="studentId()!" [existingGoals]="goals()" [nextIepDate]="nextIepDate()"
-    (goalCreated)="onGoalCreated($event)" (cancelled)="showAddGoalModal.set(false)" />
-}
-@if (showEditGoalModal() && selectedGoal()) {
-<app-edit-goal-modal [studentId]="studentId()!" [goal]="selectedGoal()!" (saved)="onEditGoalSaved()"
-    (closed)="showEditGoalModal.set(false)" />
+@if (showGoalModal()) {
+<app-goal-modal [studentId]="studentId()!"
+    [goal]="showGoalModal() === 'add' ? null : $any(showGoalModal())"
+    [nextIepDate]="nextIepDate()"
+    (goalCreated)="onGoalCreated($event)" (saved)="onGoalSaved()"
+    (closed)="showGoalModal.set(null)" />
 }
 @if (showEditBenchmarkModal()) {
 <app-edit-benchmark-modal [studentId]="studentId()!" [benchmark]="showEditBenchmarkModal()!"
