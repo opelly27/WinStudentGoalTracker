@@ -53,7 +53,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, idProgram, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, idProgram, role, "all");
 
         return Ok(new ResponseResult<IEnumerable<StudentResponse>>
         {
@@ -76,7 +76,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -109,7 +109,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -142,7 +142,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -176,7 +176,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -250,7 +250,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -283,7 +283,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -327,7 +327,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
             return NotFound(new ResponseResult
@@ -395,7 +395,7 @@ public class StudentController : BaseController
             });
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(studentId.Value))
         {
@@ -469,7 +469,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -511,7 +511,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -552,7 +552,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -602,7 +602,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
@@ -635,7 +635,7 @@ public class StudentController : BaseController
             return error;
         }
 
-        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role);
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
 
         if (!students.Select(s => s.StudentId).Contains(idStudent))
         {
