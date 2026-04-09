@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WinStudentGoalTracker.Models;
+using WinStudentGoalTracker.Models.ResponseTypes;
 using WinStudentGoalTracker.BaseClasses;
 using WinStudentGoalTracker.DataAccess;
 using WinStudentGoalTracker.Services;
@@ -11,7 +12,14 @@ namespace WinStudentGoalTracker.Controllers;
 [Route("api/[controller]")]
 public class StudentController : BaseController
 {
-    private readonly StudentRepository _studentRepository = new();
+    private readonly StudentRepository _studentRepository;
+    private readonly RecommendationService _recommendationService;
+
+    public StudentController(RecommendationService recommendationService)
+    {
+        _studentRepository = new();
+        _recommendationService = recommendationService;
+    }
 
 
     [HttpGet("my")]
@@ -710,5 +718,75 @@ public class StudentController : BaseController
             Message = "Progress report generated successfully.",
             Data = markdown
         });
+    }
+
+    [HttpGet("{idStudent:guid}/goals/{idGoal:guid}/benchmark-recommendation")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<BenchmarkRecommendationResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<BenchmarkRecommendationResponse>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<BenchmarkRecommendationResponse>>> GetBenchmarkRecommendation(
+        Guid idStudent, Guid idGoal, CancellationToken cancellationToken)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+            return error;
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var profile = await _studentRepository.GetFullProfileAsync(idStudent);
+        if (profile is null)
+        {
+            return NotFound(new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        if (profile.Goals.All(g => g.GoalId != idGoal))
+        {
+            return NotFound(new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = false,
+                Message = "Goal not found."
+            });
+        }
+
+        try
+        {
+            var recommendation = await _recommendationService.RecommendBenchmarkAsync(profile, idGoal, cancellationToken);
+
+            return Ok(new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = true,
+                Message = "Benchmark recommendation generated successfully.",
+                Data = recommendation
+            });
+        }
+        catch (OllamaClient.OllamaUnavailableException ex)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new ResponseResult<BenchmarkRecommendationResponse>
+            {
+                Success = false,
+                Message = ex.Message
+            });
+        }
     }
 }

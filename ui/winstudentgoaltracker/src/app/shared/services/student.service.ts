@@ -9,7 +9,7 @@ import { CreateStudentDto } from '../classes/create-student.dto';
 import { CreateGoalDto } from '../classes/create-goal.dto';
 import { StudentCardDto } from '../classes/student-card.dto';
 import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
-import { StudentBenchmarkSummary } from '../classes/benchmark.dto';
+import { BenchmarkRecommendationDto, StudentBenchmarkSummary } from '../classes/benchmark.dto';
 import { StudentProgressReportDto } from '../classes/student-progress-report.dto';
 import { StudentFullProfileDto } from '../classes/student-full-profile.dto';
 
@@ -262,6 +262,24 @@ export class StudentService {
                 this.http.put<ResponseResult<any>>(`${this.base}/api/Student/${studentId}/benchmarks/${benchmarkId}`, { benchmark: benchmarkText, shortName })
             );
             return result.success
+                ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Requests an AI-generated benchmark recommendation for a goal.
+    // *****************************************************************
+    async getBenchmarkRecommendation(studentId: string, goalId: string): Promise<ApiResult<BenchmarkRecommendationDto>> {
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<BenchmarkRecommendationDto>>(
+                    `${this.base}/api/Student/${studentId}/goals/${goalId}/benchmark-recommendation`
+                )
+            );
+            return result.success && result.data
                 ? ApiResult.ok(result.data)
                 : ApiResult.fail(result.message);
         } catch (error) {

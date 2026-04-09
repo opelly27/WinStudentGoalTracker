@@ -22,7 +22,9 @@ export class EditBenchmarkModal {
     readonly closed = output<void>();
 
     protected readonly saving = signal(false);
+    protected readonly recommending = signal(false);
     protected readonly errorMessage = signal<string | null>(null);
+    protected readonly recommendError = signal<string | null>(null);
 
     protected shortName = '';
     protected benchmarkText = '';
@@ -44,6 +46,22 @@ export class EditBenchmarkModal {
         if (b) {
             this.shortName = b.shortName ?? '';
             this.benchmarkText = b.benchmark;
+        }
+    }
+
+    async onGetRecommendation() {
+        this.recommending.set(true);
+        this.recommendError.set(null);
+
+        const result = await this.studentService.getBenchmarkRecommendation(this.studentId(), this.goalId());
+
+        this.recommending.set(false);
+
+        if (result.success && result.payload) {
+            this.benchmarkText = result.payload.benchmark;
+            this.shortName = result.payload.shortName;
+        } else {
+            this.recommendError.set(result.message);
         }
     }
 

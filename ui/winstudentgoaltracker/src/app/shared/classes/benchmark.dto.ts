@@ -1,3 +1,8 @@
+export interface BenchmarkRecommendationDto {
+    benchmark: string;
+    shortName: string;
+}
+
 export interface StudentBenchmarkSummary {
     studentIdentifier: string;
     benchmarks: BenchmarkDto[];

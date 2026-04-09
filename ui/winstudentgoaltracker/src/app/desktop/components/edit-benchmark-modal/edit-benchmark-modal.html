@@ -1,4 +1,15 @@
 <app-modal-shell [title]="modalTitle" (closed)="closed.emit()">
+    @if (!isEditMode) {
+    <div class="ai-suggest-row">
+        <button class="btn-ai" (click)="onGetRecommendation()" [disabled]="recommending() || saving()">
+            {{ recommending() ? 'Generating...' : '✦ Suggest with AI' }}
+        </button>
+        @if (recommendError()) {
+        <p class="recommend-error">{{ recommendError() }}</p>
+        }
+    </div>
+    }
+
     <div class="field">
         <label class="field-label">Benchmark</label>
         <textarea class="field-input field-textarea" [(ngModel)]="benchmarkText"
@@ -16,7 +27,7 @@
 
     <div class="modal-actions">
         <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
-        <button class="btn-primary" (click)="onSave()" [disabled]="saving() || !benchmarkText.trim()">
+        <button class="btn-primary" (click)="onSave()" [disabled]="saving() || recommending() || !benchmarkText.trim()">
             {{ saving() ? 'Saving...' : submitLabel }}
         </button>
     </div>

@@ -24,7 +24,7 @@ export function describeHttpError(error: HttpErrorResponse): string {
         case 500:
             return 'Server error (500). The API encountered an internal failure (possibly a database issue).';
         case 503:
-            return 'Server unavailable (503). The API may be starting up or overwhelmed.';
+            return serverMessage ?? 'Service unavailable (503). The API or a required provider may be starting up or unreachable.';
         default:
             return `Unexpected error (${error.status}).`;
     }
