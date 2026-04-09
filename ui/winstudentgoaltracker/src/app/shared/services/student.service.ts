@@ -9,9 +9,9 @@ import { CreateStudentDto } from '../classes/create-student.dto';
 import { CreateGoalDto } from '../classes/create-goal.dto';
 import { StudentCardDto } from '../classes/student-card.dto';
 import { StudentGoalSummary, StudentGoalItem } from '../classes/student-goal';
-import { ProgressEventDto } from '../classes/progress-event.dto';
 import { StudentBenchmarkSummary } from '../classes/benchmark.dto';
 import { StudentProgressReportDto } from '../classes/student-progress-report.dto';
+import { StudentFullProfileDto } from '../classes/student-full-profile.dto';
 
 @Injectable({
     providedIn: 'root',
@@ -28,6 +28,9 @@ export class StudentService {
     // Incremented after any data mutation so subscribers can refresh.
     readonly dataVersion = signal(0);
 
+    // Per-student full profile cache.
+    private readonly profileCache = new Map<string, StudentFullProfileDto>();
+
     // Emits targeted label updates for sidebar nodes without a full rebuild.
     private readonly _sidebarLabelUpdate = new Subject<{ routerLink: string[]; label: string }>();
     readonly sidebarLabelUpdate$ = this._sidebarLabelUpdate.asObservable();
@@ -41,6 +44,41 @@ export class StudentService {
     // *****************************************************************
     notifyDataChanged() {
         this.dataVersion.update(v => v + 1);
+    }
+
+    // *****************************************************************
+    // Returns the full profile for a student. Uses a per-student cache
+    // so subsequent loads are instant. Call invalidateProfile() after
+    // mutations to force a fresh fetch.
+    // *****************************************************************
+    async getFullProfile(studentId: string): Promise<ApiResult<StudentFullProfileDto>> {
+        const cached = this.profileCache.get(studentId);
+        if (cached) return ApiResult.ok(cached);
+
+        try {
+            const result = await firstValueFrom(
+                this.http.get<ResponseResult<StudentFullProfileDto>>(`${this.base}/api/Student/${studentId}/full`)
+            );
+            if (result.success && result.data) {
+                this.profileCache.set(studentId, result.data);
+                return ApiResult.ok(result.data);
+            }
+            return ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Removes a student's cached profile so the next getFullProfile
+    // call fetches fresh data. Pass no argument to clear all.
+    // *****************************************************************
+    invalidateProfile(studentId?: string) {
+        if (studentId) {
+            this.profileCache.delete(studentId);
+        } else {
+            this.profileCache.clear();
+        }
     }
 
     // *****************************************************************
@@ -153,38 +191,6 @@ export class StudentService {
     }
 
     // *****************************************************************
-    // Returns benchmark IDs associated with a progress event.
-    // *****************************************************************
-    async getProgressEventBenchmarks(progressEventId: string): Promise<ApiResult<string[]>> {
-        try {
-            const result = await firstValueFrom(
-                this.http.get<ResponseResult<string[]>>(`${this.base}/api/Student/progress-events/${progressEventId}/benchmarks`)
-            );
-            return result.success
-                ? ApiResult.ok(result.data ?? [])
-                : ApiResult.fail(result.message);
-        } catch (error) {
-            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
-        }
-    }
-
-    // *****************************************************************
-    // Returns progress events for a given student goal.
-    // *****************************************************************
-    async getProgressEventsForGoal(goalId: string): Promise<ApiResult<ProgressEventDto[]>> {
-        try {
-            const result = await firstValueFrom(
-                this.http.get<ResponseResult<ProgressEventDto[]>>(`${this.base}/api/Student/goals/${goalId}/progress-events`)
-            );
-            return result.success
-                ? ApiResult.ok(result.data ?? [])
-                : ApiResult.fail(result.message);
-        } catch (error) {
-            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
-        }
-    }
-
-    // *****************************************************************
     // Returns a full progress report for a student within a date
     // range, including goals, events, and benchmark associations.
     // *****************************************************************
@@ -210,22 +216,6 @@ export class StudentService {
     // ************************ Event Handlers *************************
 
     // ********************** Support Procedures ***********************
-
-    // *****************************************************************
-    // Returns a single student by ID.
-    // *****************************************************************
-    async getStudentById(studentId: string): Promise<ApiResult<StudentCardDto>> {
-        try {
-            const result = await firstValueFrom(
-                this.http.get<ResponseResult<StudentCardDto>>(`${this.base}/api/Student/${studentId}`)
-            );
-            return result.success && result.data
-                ? ApiResult.ok(result.data)
-                : ApiResult.fail(result.message);
-        } catch (error) {
-            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
-        }
-    }
 
     // *****************************************************************
     // Updates a student and returns the refreshed student data.

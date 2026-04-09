@@ -4,7 +4,7 @@ import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
-import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
+import { StudentFullProfileDto, ProgressEventWithGoalDto, ProgressEventBenchmarkLink } from '../../../shared/classes/student-full-profile.dto';
 import { GoalModal } from '../goal-modal/goal-modal';
 import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
@@ -50,6 +50,7 @@ export class Workspace {
             if (initialized) {
                 const id = untracked(() => this.studentId());
                 if (id) {
+                    this.studentService.invalidateProfile(id);
                     this.loadStudentData(id);
                 }
             }
@@ -67,14 +68,15 @@ export class Workspace {
     protected readonly student = signal<StudentCardDto | null>(null);
     protected readonly goals = signal<StudentGoalItem[]>([]);
     protected readonly benchmarks = signal<BenchmarkDto[]>([]);
-    protected readonly progressEvents = signal<ProgressEventDto[]>([]);
+    protected readonly progressEvents = signal<ProgressEventWithGoalDto[]>([]);
+    protected readonly progressEventBenchmarks = signal<ProgressEventBenchmarkLink[]>([]);
     protected readonly selectedGoalId = signal<string | null>(null);
     protected readonly activeTab = signal<TabView>('benchmarks');
 
     // Modal states
     protected readonly showGoalModal = signal<StudentGoalItem | 'add' | null>(null);
     protected readonly showEditBenchmarkModal = signal<BenchmarkDto | 'new' | null>(null);
-    protected readonly showEditEventModal = signal<ProgressEventDto | null | 'new'>(null);
+    protected readonly showEditEventModal = signal<ProgressEventWithGoalDto | null | 'new'>(null);
 
     // ************************** Properties ***************************
 
@@ -91,8 +93,11 @@ export class Workspace {
         return this.benchmarks().filter(b => b.goalId === goalId);
     });
 
-    protected readonly sortedProgressEvents = computed<ProgressEventDto[]>(() => {
-        return [...this.progressEvents()]
+    protected readonly goalProgressEvents = computed<ProgressEventWithGoalDto[]>(() => {
+        const goalId = this.selectedGoal()?.goalId;
+        if (!goalId) return [];
+        return this.progressEvents()
+            .filter(e => e.goalId === goalId)
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     });
 
@@ -107,7 +112,6 @@ export class Workspace {
     onSelectGoal(goalId: string) {
         this.selectedGoalId.set(goalId);
         this.activeTab.set('benchmarks');
-        this.loadGoalDetails(goalId);
         this.router.navigate(['/students', this.studentId(), 'goals', goalId]);
     }
 
@@ -122,7 +126,7 @@ export class Workspace {
 
     onGoalSaved() {
         this.showGoalModal.set(null);
-        this.loadStudentData(this.studentId()!);
+        this.refetchProfile();
     }
 
     onAddGoal() {
@@ -132,9 +136,8 @@ export class Workspace {
     onGoalCreated(goal: StudentGoalItem) {
         this.showGoalModal.set(null);
         this.studentService.notifyDataChanged();
-        this.loadStudentData(this.studentId()!).then(() => {
+        this.refetchProfile().then(() => {
             this.selectedGoalId.set(goal.goalId);
-            this.loadGoalDetails(goal.goalId);
         });
     }
 
@@ -144,7 +147,7 @@ export class Workspace {
 
     onEditBenchmarkSaved() {
         this.showEditBenchmarkModal.set(null);
-        this.loadStudentData(this.studentId()!);
+        this.refetchProfile();
     }
 
     onAddBenchmark() {
@@ -155,15 +158,23 @@ export class Workspace {
         this.showEditEventModal.set('new');
     }
 
-    onEditEvent(ev: ProgressEventDto) {
+    onEditEvent(ev: ProgressEventWithGoalDto) {
         this.showEditEventModal.set(ev);
     }
 
     onEventSaved() {
         this.showEditEventModal.set(null);
-        if (this.selectedGoal()) {
-            this.loadGoalDetails(this.selectedGoal()!.goalId);
-        }
+        this.refetchProfile();
+    }
+
+    // *****************************************************************
+    // Returns the benchmark IDs associated with a given progress event,
+    // read from the cached profile data.
+    // *****************************************************************
+    getBenchmarkIdsForEvent(progressEventId: string): string[] {
+        return this.progressEventBenchmarks()
+            .filter(link => link.progressEventId === progressEventId)
+            .map(link => link.benchmarkId);
     }
 
     // ************************ Formatting Helpers **********************
@@ -177,39 +188,27 @@ export class Workspace {
     // ********************** Support Procedures ***********************
 
     private async loadStudentData(studentId: string) {
-        const [studentResult, goalsResult, bmResult] = await Promise.all([
-            this.studentService.getStudentById(studentId),
-            this.studentService.getGoalsForStudent(studentId),
-            this.studentService.getBenchmarksForStudent(studentId),
-        ]);
+        const result = await this.studentService.getFullProfile(studentId);
 
-        if (studentResult.success && studentResult.payload) {
-            this.student.set(studentResult.payload);
-        }
+        if (!result.success || !result.payload) return;
 
-        if (goalsResult.success && goalsResult.payload) {
-            this.goals.set(goalsResult.payload.goals);
-            // Auto-select first goal if none selected
-            if (!this.selectedGoalId() && goalsResult.payload.goals.length > 0) {
-                this.selectedGoalId.set(goalsResult.payload.goals[0].goalId);
-            }
-        }
+        const profile = result.payload;
+        this.student.set(profile.student);
+        this.goals.set(profile.goals);
+        this.benchmarks.set(profile.benchmarks);
+        this.progressEvents.set(profile.progressEvents);
+        this.progressEventBenchmarks.set(profile.progressEventBenchmarks);
 
-        if (bmResult.success && bmResult.payload) {
-            this.benchmarks.set(bmResult.payload.benchmarks);
-        }
-
-        // Load progress events for selected goal
-        const goalId = this.selectedGoalId();
-        if (goalId) {
-            this.loadGoalDetails(goalId);
+        // Auto-select first goal if none selected
+        if (!this.selectedGoalId() && profile.goals.length > 0) {
+            this.selectedGoalId.set(profile.goals[0].goalId);
         }
     }
 
-    private async loadGoalDetails(goalId: string) {
-        const result = await this.studentService.getProgressEventsForGoal(goalId);
-        if (result.success) {
-            this.progressEvents.set(result.payload ?? []);
-        }
+    private async refetchProfile(): Promise<void> {
+        const id = this.studentId();
+        if (!id) return;
+        this.studentService.invalidateProfile(id);
+        await this.loadStudentData(id);
     }
 }

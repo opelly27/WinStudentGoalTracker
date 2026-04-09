@@ -368,6 +368,78 @@ public class StudentRepository
     }
 
     // *****************************************************************
+    // Returns a full student profile: student card, goals, benchmarks,
+    // progress events, and benchmark/event associations in one call.
+    // *****************************************************************
+    public async Task<StudentFullProfileResponse?> GetFullProfileAsync(Guid idStudent)
+    {
+        using var db = Connection;
+        using var multi = await db.QueryMultipleAsync(
+            "sp_Student_GetFullProfile",
+            new { p_id_student = idStudent.ToString() },
+            commandType: CommandType.StoredProcedure);
+
+        // Result set 1: Student card
+        var student = await multi.ReadSingleOrDefaultAsync<StudentResponse>();
+        if (student is null) return null;
+
+        // Result set 2: Goals
+        var goalRows = (await multi.ReadAsync<dbStudentGoalRow>()).ToList();
+
+        // Result set 3: Benchmarks
+        var benchmarkRows = (await multi.ReadAsync<dbStudentBenchmarkRow>()).ToList();
+
+        // Result set 4: Progress events
+        var eventRows = (await multi.ReadAsync<dbProgressEventWithGoalRow>()).ToList();
+
+        // Result set 5: Benchmark/event associations
+        var linkRows = (await multi.ReadAsync<dbProgressEventBenchmarkRow>()).ToList();
+
+        return new StudentFullProfileResponse
+        {
+            Student = student,
+            Goals = goalRows.Select(r => new StudentGoalItem
+            {
+                GoalId = r.GoalId,
+                GoalParentId = r.GoalParentId,
+                Description = r.Description,
+                Category = r.Category,
+                Baseline = r.Baseline,
+                TargetCompletionDate = r.TargetCompletionDate,
+                CloseDate = r.CloseDate,
+                Achieved = r.Achieved,
+                CloseNotes = r.CloseNotes,
+                ProgressEventCount = r.ProgressEventCount,
+                BenchmarkCount = r.BenchmarkCount
+            }).ToList(),
+            Benchmarks = benchmarkRows.Select(r => new StudentBenchmarkItem
+            {
+                BenchmarkId = r.BenchmarkId,
+                GoalId = r.GoalId,
+                GoalCategory = r.GoalCategory,
+                Benchmark = r.Benchmark,
+                ShortName = r.ShortName,
+                CreatedByName = r.CreatedByName,
+                CreatedAt = r.CreatedAt,
+                UpdatedAt = r.UpdatedAt
+            }).ToList(),
+            ProgressEvents = eventRows.Select(r => new ProgressEventWithGoalResponse
+            {
+                ProgressEventId = r.ProgressEventId,
+                GoalId = r.GoalId,
+                Content = r.Content,
+                CreatedAt = r.CreatedAt,
+                CreatedByName = r.CreatedByName
+            }).ToList(),
+            ProgressEventBenchmarks = linkRows.Select(r => new ProgressEventBenchmarkLink
+            {
+                ProgressEventId = r.ProgressEventId,
+                BenchmarkId = r.BenchmarkId
+            }).ToList()
+        };
+    }
+
+    // *****************************************************************
     // Returns a full progress report for a student within the given
     // date range. Calls sp_ProgressReport_GetByStudentId which returns
     // two result sets: goals and progress events with benchmark names.

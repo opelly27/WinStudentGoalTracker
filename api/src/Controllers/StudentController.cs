@@ -97,6 +97,52 @@ public class StudentController : BaseController
         });
     }
 
+    [HttpGet("{idStudent:guid}/full")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<StudentFullProfileResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<StudentFullProfileResponse>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<StudentFullProfileResponse>>> GetFullProfile(Guid idStudent)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<StudentFullProfileResponse>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var profile = await _studentRepository.GetFullProfileAsync(idStudent);
+        if (profile is null)
+        {
+            return NotFound(new ResponseResult<StudentFullProfileResponse>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        // Enrich with ownership info from the authorization query.
+        var match = students.Single(s => s.StudentId == idStudent);
+        profile.Student.OwnerName = match.OwnerName;
+        profile.Student.IsMine = match.IsMine;
+
+        return Ok(new ResponseResult<StudentFullProfileResponse>
+        {
+            Success = true,
+            Message = "Student profile retrieved successfully.",
+            Data = profile
+        });
+    }
+
     [HttpGet("{idStudent:guid}/goals")]
     [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult<StudentGoalSummary>), StatusCodes.Status200OK)]

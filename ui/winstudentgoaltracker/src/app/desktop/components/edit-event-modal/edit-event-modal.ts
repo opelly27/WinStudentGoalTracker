@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalShell } from '../modal-shell/modal-shell';
 import { StudentService } from '../../../shared/services/student.service';
 import { BenchmarkDto } from '../../../shared/classes/benchmark.dto';
-import { ProgressEventDto } from '../../../shared/classes/progress-event.dto';
+import { ProgressEventWithGoalDto } from '../../../shared/classes/student-full-profile.dto';
 import { GOAL_COLOR } from '../../../shared/classes/category-colors';
 
 @Component({
@@ -19,8 +19,10 @@ export class EditEventModal {
     readonly goalId = input.required<string>();
 
     readonly benchmarks = input<BenchmarkDto[]>([]);
+    /** Benchmark IDs already associated with this event (from cached profile). */
+    readonly eventBenchmarkIds = input<string[]>([]);
     /** null for new event, populated for edit */
-    readonly event = input<ProgressEventDto | null>(null);
+    readonly event = input<ProgressEventWithGoalDto | null>(null);
     readonly saved = output<void>();
     readonly closed = output<void>();
 
@@ -30,15 +32,11 @@ export class EditEventModal {
 
     protected content = '';
 
-    async ngOnInit() {
+    ngOnInit() {
         const ev = this.event();
         if (ev) {
             this.content = ev.content;
-            // Load existing benchmark associations
-            const result = await this.studentService.getProgressEventBenchmarks(ev.progressEventId);
-            if (result.success && result.payload) {
-                this.selectedBenchmarkIds.set(new Set(result.payload));
-            }
+            this.selectedBenchmarkIds.set(new Set(this.eventBenchmarkIds()));
         }
     }
 

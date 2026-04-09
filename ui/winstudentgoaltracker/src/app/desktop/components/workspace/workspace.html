@@ -19,6 +19,7 @@
 @if (showEditEventModal()) {
 <app-edit-event-modal [studentId]="studentId()!" [goalId]="selectedGoal()!.goalId"
     [benchmarks]="goalBenchmarks()"
+    [eventBenchmarkIds]="showEditEventModal() !== 'new' && showEditEventModal() ? getBenchmarkIdsForEvent($any(showEditEventModal()).progressEventId) : []"
     [event]="showEditEventModal() === 'new' ? null : $any(showEditEventModal())" (saved)="onEventSaved()"
     (closed)="showEditEventModal.set(null)" />
 }
@@ -68,7 +69,7 @@
         </button>
         <button class="sub-tab" [class.active]="activeTab() === 'progress'"
             (click)="onTabChange('progress')">
-            Progress Events ({{ sortedProgressEvents().length }})
+            Progress Events ({{ goalProgressEvents().length }})
         </button>
     </div>
 
@@ -98,7 +99,7 @@
     <div class="tab-content timeline">
         <button class="add-btn" (click)="onNewEvent()">+ Log Progress Event</button>
         <div class="timeline-line"></div>
-        @for (ev of sortedProgressEvents(); track ev.progressEventId) {
+        @for (ev of goalProgressEvents(); track ev.progressEventId) {
         <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="event-card">
