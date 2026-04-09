@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentGoalItem } from '../../../shared/classes/student-goal';
+import { toIsoDateString } from '../../../shared/utils/format-date';
 
 interface GoalCheckItem {
   goalId: string;
@@ -62,10 +63,10 @@ export class StudentProgressReport {
     if (!student) return;
 
     if (student.firstEntryDate) {
-      this.fromDate = this.toIsoDate(new Date(student.firstEntryDate));
+      this.fromDate = toIsoDateString(new Date(student.firstEntryDate));
     }
     if (student.lastEntryDate) {
-      this.toDate = this.toIsoDate(new Date(student.lastEntryDate));
+      this.toDate = toIsoDateString(new Date(student.lastEntryDate));
     }
 
     const goalsResult = await this.studentService.getGoalsForStudent(this.selectedStudentId);
@@ -144,16 +145,5 @@ export class StudentProgressReport {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }
-
-  // *****************************************************************
-  // Formats a Date as an ISO date string (yyyy-MM-dd) for use with
-  // the native HTML date input.
-  // *****************************************************************
-  private toIsoDate(date: Date): string {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
   }
 }

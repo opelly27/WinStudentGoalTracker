@@ -157,21 +157,6 @@
     color: var(--text-dim);
 }
 
-.edit-pencil {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 2px;
-    flex-shrink: 0;
-    display: flex;
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-
-    .student-item:hover & {
-        opacity: 1;
-    }
-}
-
 /* ─── Sidebar Footer ─── */
 .sidebar-footer {
     padding: 10px 12px;

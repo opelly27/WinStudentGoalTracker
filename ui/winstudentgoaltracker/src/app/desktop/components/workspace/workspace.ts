@@ -8,12 +8,14 @@ import { StudentFullProfileDto, ProgressEventWithGoalDto, ProgressEventBenchmark
 import { GoalModal } from '../goal-modal/goal-modal';
 import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
+import { EditIcon } from '../edit-icon/edit-icon';
+import { formatDate } from '../../../shared/utils/format-date';
 
 type TabView = 'benchmarks' | 'progress';
 
 @Component({
     selector: 'app-workspace',
-    imports: [GoalModal, EditBenchmarkModal, EditEventModal],
+    imports: [GoalModal, EditBenchmarkModal, EditEventModal, EditIcon],
     templateUrl: './workspace.html',
     styleUrl: './workspace.scss',
 })
@@ -177,13 +179,12 @@ export class Workspace {
             .map(link => link.benchmarkId);
     }
 
-    // ************************ Formatting Helpers **********************
-
-    formatDate(d: string | Date | null): string {
-        if (!d) return '';
-        const date = new Date(d);
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    getBenchmarksForEvent(progressEventId: string): BenchmarkDto[] {
+        const ids = this.getBenchmarkIdsForEvent(progressEventId);
+        return this.benchmarks().filter(b => ids.includes(b.benchmarkId));
     }
+
+    formatDate = formatDate;
 
     // ********************** Support Procedures ***********************
 

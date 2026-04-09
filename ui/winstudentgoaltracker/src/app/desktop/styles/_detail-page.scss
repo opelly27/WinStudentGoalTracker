@@ -1,0 +1,92 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px 28px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.toolbar-btn {
+    padding: 6px 14px;
+    background: transparent;
+    color: var(--accent-indigo);
+    border: 1px solid var(--accent-indigo);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+
+    &:hover {
+        background: #EEF2FF;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.toolbar-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.spacer {
+    flex: 1;
+}
+
+.detail-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    max-width: 600px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.field-input {
+    padding: 8px 10px;
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+}
+
+.field-textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.error {
+    font-size: 13px;
+    color: #dc2626;
+    margin: 0 0 12px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}

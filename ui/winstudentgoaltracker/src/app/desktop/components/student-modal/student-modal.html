@@ -1,0 +1,22 @@
+<app-modal-shell [title]="modalTitle" (closed)="closed.emit()">
+    <div class="field">
+        <label class="field-label">Name</label>
+        <input class="field-input" type="text" [(ngModel)]="identifier"
+            placeholder="Initials or other non-personally identifiable label" />
+    </div>
+    <div class="field">
+        <label class="field-label">Next IEP Date</label>
+        <input class="field-input" type="date" [(ngModel)]="nextIepDate" />
+    </div>
+
+    @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+    }
+
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="closed.emit()">Cancel</button>
+        <button class="btn-primary" (click)="onSubmit()" [disabled]="isSubmitting() || !identifier.trim()">
+            {{ isSubmitting() ? 'Saving...' : submitLabel }}
+        </button>
+    </div>
+</app-modal-shell>

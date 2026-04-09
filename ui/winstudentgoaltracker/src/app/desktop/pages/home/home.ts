@@ -3,12 +3,13 @@ import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { Auth } from '../../../shared/services/auth';
 import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
-import { AddStudentModal } from '../../components/add-student-modal/add-student-modal';
-import { EditStudentModal } from '../../components/edit-student-modal/edit-student-modal';
+import { StudentModal } from '../../components/student-modal/student-modal';
+import { EditIcon } from '../../components/edit-icon/edit-icon';
+import { formatDate } from '../../../shared/utils/format-date';
 
 @Component({
     selector: 'app-home',
-    imports: [RouterOutlet, RouterLink, AddStudentModal, EditStudentModal],
+    imports: [RouterOutlet, RouterLink, StudentModal, EditIcon],
     templateUrl: './home.html',
     styleUrl: './home.scss',
 })
@@ -39,8 +40,7 @@ export class Home {
     protected readonly students = signal<StudentCardDto[]>([]);
     protected readonly selectedStudentId = signal<string | null>(null);
     protected readonly showAll = signal(false);
-    protected readonly showAddStudentModal = signal(false);
-    protected readonly editingStudent = signal<StudentCardDto | null>(null);
+    protected readonly showStudentModal = signal<StudentCardDto | 'add' | null>(null);
 
     // Groups students by owner when "All" is active.
     protected readonly groupedStudents = computed(() => {
@@ -88,11 +88,11 @@ export class Home {
     }
 
     onAddStudent() {
-        this.showAddStudentModal.set(true);
+        this.showStudentModal.set('add');
     }
 
     onStudentCreated(student: StudentCardDto) {
-        this.showAddStudentModal.set(false);
+        this.showStudentModal.set(null);
         this.studentService.notifyDataChanged();
         this.selectedStudentId.set(student.studentId);
         this.router.navigate(['/students', student.studentId]);
@@ -100,11 +100,11 @@ export class Home {
 
     onEditStudent(student: StudentCardDto, event: Event) {
         event.stopPropagation();
-        this.editingStudent.set(student);
+        this.showStudentModal.set(student);
     }
 
-    onEditStudentSaved() {
-        this.editingStudent.set(null);
+    onStudentSaved() {
+        this.showStudentModal.set(null);
         this.loadStudents();
     }
 
@@ -113,12 +113,7 @@ export class Home {
         this.auth.forceLogout();
     }
 
-    // ************************ Formatting Helpers **********************
-
-    formatDate(d: Date | null): string {
-        if (!d) return '';
-        return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
+    formatDate = formatDate;
 
     // ********************** Support Procedures ***********************
 

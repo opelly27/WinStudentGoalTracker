@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { firstValueFrom, Subject } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResult } from '../classes/api-result';
 import { ResponseResult } from '../classes/auth.models';
@@ -30,10 +30,6 @@ export class StudentService {
 
     // Per-student full profile cache.
     private readonly profileCache = new Map<string, StudentFullProfileDto>();
-
-    // Emits targeted label updates for sidebar nodes without a full rebuild.
-    private readonly _sidebarLabelUpdate = new Subject<{ routerLink: string[]; label: string }>();
-    readonly sidebarLabelUpdate$ = this._sidebarLabelUpdate.asObservable();
 
     // ************************** Properties ***************************
 
@@ -79,14 +75,6 @@ export class StudentService {
         } else {
             this.profileCache.clear();
         }
-    }
-
-    // *****************************************************************
-    // Emits a targeted sidebar label update for a specific node,
-    // avoiding the full tree rebuild that notifyDataChanged triggers.
-    // *****************************************************************
-    updateSidebarLabel(routerLink: string[], label: string) {
-        this._sidebarLabelUpdate.next({ routerLink, label });
     }
 
     // *****************************************************************
