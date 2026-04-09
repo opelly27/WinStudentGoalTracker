@@ -64,7 +64,7 @@ builder.Services.AddHttpClient<TranscriptionService>(client =>
 builder.Services.AddHttpClient<OllamaClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["Ollama:BaseUrl"] ?? "https://llm.opelly.me");
-    client.Timeout = TimeSpan.FromMinutes(3);
+    client.Timeout = TimeSpan.FromMinutes(5);
 });
 builder.Services.AddScoped<RecommendationService>();
 
