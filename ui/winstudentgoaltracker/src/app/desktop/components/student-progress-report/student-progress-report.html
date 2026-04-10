@@ -45,6 +45,22 @@
             </div>
         }
 
+        <div class="field">
+            <div class="field-label-row">
+                <label class="field-label" for="prompt">Prompt</label>
+                @if (promptSaved()) {
+                    <span class="save-indicator">&#10003; Saved</span>
+                }
+            </div>
+            <textarea
+                id="prompt"
+                class="field-input prompt-textarea"
+                rows="6"
+                [(ngModel)]="promptText"
+                (ngModelChange)="onPromptChange()">
+            </textarea>
+        </div>
+
         <div class="actions">
             <button
                 class="toolbar-btn run-btn"

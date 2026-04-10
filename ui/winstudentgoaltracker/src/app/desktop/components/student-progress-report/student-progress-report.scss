@@ -55,6 +55,37 @@
     }
 }
 
+.field-label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    .field-label {
+        margin-bottom: 0;
+    }
+}
+
+.save-indicator {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-green, #22c55e);
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.prompt-textarea {
+    width: 100%;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 .run-btn {
     background: var(--accent-indigo) !important;
     color: #fff !important;

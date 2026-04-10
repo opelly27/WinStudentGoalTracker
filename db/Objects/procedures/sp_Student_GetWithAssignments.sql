@@ -18,7 +18,6 @@ BEGIN
     INNER JOIN student s ON s.id_student = vc.studentId
     WHERE s.id_program = p_id_program
     ORDER BY vc.studentId;
-
     IF p_scope = 'all' THEN
         SELECT
             us.id_user_student,

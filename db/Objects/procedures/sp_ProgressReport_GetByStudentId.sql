@@ -21,7 +21,6 @@ BEGIN
             AND DATE(pe.`created_at`) <= p_to_date
       )
     ORDER BY g.`category`;
-
     -- Result set 2: Progress events within the date range, with benchmark names
     SELECT
         pe.`id_goal`            AS `goalId`,

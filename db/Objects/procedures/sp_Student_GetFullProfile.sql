@@ -14,7 +14,6 @@ BEGIN
     FROM v_student_card
     WHERE studentId = p_id_student
     LIMIT 1;
-
     -- Result set 2: Goals
     SELECT
         s.`identifier`              AS `studentIdentifier`,
@@ -33,7 +32,6 @@ BEGIN
     INNER JOIN `student` s ON s.`id_student` = vc.`studentId`
     WHERE vc.`studentId` = p_id_student
     ORDER BY vc.`goalId`;
-
     -- Result set 3: Benchmarks
     SELECT
         s.`identifier`          AS `studentIdentifier`,
@@ -51,7 +49,6 @@ BEGIN
     LEFT JOIN `user` u ON u.`id_user` = b.`id_user_created`
     WHERE g.`id_student` = p_id_student
     ORDER BY b.`created_at` DESC;
-
     -- Result set 4: Progress events (all goals for this student)
     SELECT
         vc.`progressEventId`,
@@ -62,7 +59,6 @@ BEGIN
     FROM `v_progress_event_card` vc
     WHERE vc.`studentId` = p_id_student
     ORDER BY vc.`createdAt` DESC;
-
     -- Result set 5: Benchmark/progress-event associations
     SELECT
         peb.`id_progress_event` AS `progressEventId`,
