@@ -102,15 +102,11 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--text-faint);
-    padding: 12px 12px 4px;
-    margin-top: 4px;
-    border-top: 1px solid var(--border-color);
-
-    &:first-child {
-        border-top: none;
-        margin-top: 0;
-    }
+    color: #4338CA;
+    background: #EEF2FF;
+    padding: 6px 12px;
+    margin-top: 6px;
+    border-left: 3px solid #818CF8;
 }
 
 .student-item {

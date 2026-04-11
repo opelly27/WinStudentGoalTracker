@@ -4,12 +4,12 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_ReportPrompt_GetById`(
 )
 BEGIN
     SELECT
-        `id_report_prompt`  AS `reportPromptId`,
+        `id_ReportPrompt`   AS `reportPromptId`,
         `id_program`        AS `programId`,
         `prompt`            AS `prompt`,
         `reportname`        AS `reportname`
     FROM `ReportPrompt`
-    WHERE `id_report_prompt` = p_id_report_prompt
+    WHERE `id_ReportPrompt` = p_id_report_prompt
     LIMIT 1;
 END;;
 DELIMITER ;

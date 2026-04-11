@@ -324,6 +324,38 @@ public class StudentController : BaseController
         });
     }
 
+    [HttpDelete("{idStudent:guid}/goals/{idGoal:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<object>>> DeleteGoal(Guid idStudent, Guid idGoal)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var deleted = await _studentRepository.DeleteGoalAsync(idGoal);
+
+        return Ok(new ResponseResult<object>
+        {
+            Success = true,
+            Message = deleted ? "Goal deleted." : "Goal not found."
+        });
+    }
+
     [HttpPost("{idStudent:guid}/progress-event")]
     [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.Paraeducator},{UserRoles.ProgramAdmin}")]
     [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status201Created)]
@@ -410,6 +442,38 @@ public class StudentController : BaseController
                 Message = $"[DIAG] {ex.GetType().Name}: {ex.Message} | Inner: {ex.InnerException?.Message}"
             });
         }
+    }
+
+    [HttpDelete("{idStudent:guid}/progress-events/{idProgressEvent:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<object>>> DeleteProgressEvent(Guid idStudent, Guid idProgressEvent)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var deleted = await _studentRepository.DeleteProgressEventAsync(idProgressEvent);
+
+        return Ok(new ResponseResult<object>
+        {
+            Success = true,
+            Message = deleted ? "Progress event deleted." : "Progress event not found."
+        });
     }
 
     [HttpGet("progress-events/{idProgressEvent:guid}/benchmarks")]
@@ -673,6 +737,38 @@ public class StudentController : BaseController
         {
             Success = true,
             Message = updated ? "Changes applied successfully." : "No changes were applied."
+        });
+    }
+
+    [HttpDelete("{idStudent:guid}/benchmarks/{idBenchmark:guid}")]
+    [Authorize(Roles = $"{UserRoles.Teacher},{UserRoles.ProgramAdmin}")]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseResult<object>>> DeleteBenchmark(Guid idStudent, Guid idBenchmark)
+    {
+        var (userId, email, programId, role, error) = GetProgramUserFromClaims();
+        if (error is not null)
+        {
+            return error;
+        }
+
+        var students = await _studentRepository.GetMyStudentsAsync(userId, programId, role, "all");
+
+        if (!students.Select(s => s.StudentId).Contains(idStudent))
+        {
+            return NotFound(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "Student not found."
+            });
+        }
+
+        var deleted = await _studentRepository.DeleteBenchmarkAsync(idBenchmark);
+
+        return Ok(new ResponseResult<object>
+        {
+            Success = true,
+            Message = deleted ? "Benchmark deleted." : "Benchmark not found."
         });
     }
 

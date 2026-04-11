@@ -145,6 +145,19 @@ public class StudentRepository
         return rows.Select(r => r.benchmarkId is Guid g ? g : Guid.Parse((string)r.benchmarkId)).ToList();
     }
 
+    // *****************************************************************
+    // Deletes a progress event and its benchmark associations.
+    // *****************************************************************
+    public async Task<bool> DeleteProgressEventAsync(Guid progressEventId)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteScalarAsync<int>(
+            "sp_ProgressEvent_Delete",
+            new { p_id_progress_event = progressEventId.ToString() },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
+
     public async Task<Guid?> GetStudentIdForGoalAsync(Guid idGoal)
     {
         using var db = Connection;
@@ -277,6 +290,20 @@ public class StudentRepository
     }
 
     // *****************************************************************
+    // Deletes a goal and all its child entities (benchmarks, progress
+    // events, event-benchmark links, child goals) via cascade SP.
+    // *****************************************************************
+    public async Task<bool> DeleteGoalAsync(Guid goalId)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteScalarAsync<int>(
+            "sp_Goal_Delete",
+            new { p_id_goal = goalId.ToString() },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
+
+    // *****************************************************************
     // Returns all benchmarks for a student, grouped under a summary
     // with the student identifier. Returns null if student not found.
     // *****************************************************************
@@ -363,6 +390,19 @@ public class StudentRepository
                 p_benchmark = dto.Benchmark,
                 p_short_name = dto.ShortName
             },
+            commandType: CommandType.StoredProcedure);
+        return rowsAffected > 0;
+    }
+
+    // *****************************************************************
+    // Deletes a benchmark and its progress-event associations.
+    // *****************************************************************
+    public async Task<bool> DeleteBenchmarkAsync(Guid benchmarkId)
+    {
+        using var db = Connection;
+        var rowsAffected = await db.ExecuteScalarAsync<int>(
+            "sp_Benchmark_Delete",
+            new { p_id_benchmark = benchmarkId.ToString() },
             commandType: CommandType.StoredProcedure);
         return rowsAffected > 0;
     }

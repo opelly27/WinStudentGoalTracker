@@ -5,7 +5,7 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_ReportPrompt_GetByReportname`(
 )
 BEGIN
     SELECT
-        `id_report_prompt`  AS `reportPromptId`,
+        `id_ReportPrompt`   AS `reportPromptId`,
         `id_program`        AS `programId`,
         `prompt`            AS `prompt`,
         `reportname`        AS `reportname`

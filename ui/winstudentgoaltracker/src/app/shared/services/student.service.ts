@@ -146,6 +146,23 @@ export class StudentService {
     }
 
     // *****************************************************************
+    // Deletes a goal and all its child entities (benchmarks, progress
+    // events, event-benchmark links).
+    // *****************************************************************
+    async deleteGoal(studentId: string, goalId: string): Promise<ApiResult> {
+        try {
+            const result = await firstValueFrom(
+                this.http.delete<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/goals/${goalId}`)
+            );
+            return result.success
+                ? ApiResult.empty()
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
     // Creates a new progress event, optionally with benchmark
     // associations. Returns the new progress event ID on success.
     // *****************************************************************
@@ -169,6 +186,22 @@ export class StudentService {
         try {
             const result = await firstValueFrom(
                 this.http.put<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/progress-events/${progressEventId}`, { content, benchmarkIds })
+            );
+            return result.success
+                ? ApiResult.empty()
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Deletes a progress event and its benchmark associations.
+    // *****************************************************************
+    async deleteProgressEvent(studentId: string, progressEventId: string): Promise<ApiResult> {
+        try {
+            const result = await firstValueFrom(
+                this.http.delete<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/progress-events/${progressEventId}`)
             );
             return result.success
                 ? ApiResult.empty()
@@ -222,6 +255,22 @@ export class StudentService {
     }
 
     // *****************************************************************
+    // Deletes a student and all associated data.
+    // *****************************************************************
+    async deleteStudent(studentId: string): Promise<ApiResult> {
+        try {
+            const result = await firstValueFrom(
+                this.http.delete<ResponseResult<void>>(`${this.base}/api/Student/${studentId}`)
+            );
+            return result.success
+                ? ApiResult.empty()
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
     // Returns benchmarks for a given student.
     // *****************************************************************
     async getBenchmarksForStudent(studentId: string): Promise<ApiResult<StudentBenchmarkSummary | null>> {
@@ -263,6 +312,22 @@ export class StudentService {
             );
             return result.success
                 ? ApiResult.ok(result.data)
+                : ApiResult.fail(result.message);
+        } catch (error) {
+            return ApiResult.fail(describeHttpError(error as HttpErrorResponse));
+        }
+    }
+
+    // *****************************************************************
+    // Deletes a benchmark and its progress-event associations.
+    // *****************************************************************
+    async deleteBenchmark(studentId: string, benchmarkId: string): Promise<ApiResult> {
+        try {
+            const result = await firstValueFrom(
+                this.http.delete<ResponseResult<void>>(`${this.base}/api/Student/${studentId}/benchmarks/${benchmarkId}`)
+            );
+            return result.success
+                ? ApiResult.empty()
                 : ApiResult.fail(result.message);
         } catch (error) {
             return ApiResult.fail(describeHttpError(error as HttpErrorResponse));

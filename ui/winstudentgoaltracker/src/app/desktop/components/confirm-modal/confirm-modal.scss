@@ -1,0 +1,42 @@
+.confirm-message {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0 0 16px;
+}
+
+.second-confirm-message {
+    color: #DC2626;
+    font-weight: 600;
+}
+
+:host ::ng-deep .btn-danger {
+    padding: 8px 20px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: #DC2626;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+        background: #B91C1C;
+    }
+}
+
+:host ::ng-deep .btn-danger-confirm {
+    padding: 8px 20px;
+    border-radius: var(--radius-md);
+    border: 2px solid #DC2626;
+    background: #FEF2F2;
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+        background: #DC2626;
+        color: #fff;
+    }
+}

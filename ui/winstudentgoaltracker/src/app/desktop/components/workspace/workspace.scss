@@ -43,6 +43,26 @@
     color: var(--text-faint);
 }
 
+.delete-student-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    align-self: center;
+    padding: 4px;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+
+    &:hover {
+        color: #DC2626;
+        background: #FEE2E2;
+    }
+}
+
 .goal-tabs {
     display: flex;
     gap: 4px;
@@ -115,6 +135,24 @@
     font-size: 12px;
     color: var(--text-faint);
     margin-left: auto;
+}
+
+.delete-goal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+
+    &:hover {
+        color: #DC2626;
+        background: #FEE2E2;
+    }
 }
 
 .goal-description {
@@ -193,6 +231,25 @@
     margin: 0;
 }
 
+.delete-benchmark-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 4px;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+
+    &:hover {
+        color: #DC2626;
+        background: #FEE2E2;
+    }
+}
+
 /* ─── Progress Timeline ─── */
 .timeline {
     position: relative;
@@ -249,6 +306,25 @@
     line-height: 1.55;
     margin: 0;
     color: #333;
+}
+
+.delete-event-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 4px;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+
+    &:hover {
+        color: #DC2626;
+        background: #FEE2E2;
+    }
 }
 
 .event-benchmarks {

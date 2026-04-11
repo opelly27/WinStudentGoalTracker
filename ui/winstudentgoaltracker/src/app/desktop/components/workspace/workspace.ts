@@ -9,13 +9,14 @@ import { GoalModal } from '../goal-modal/goal-modal';
 import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal';
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { EditIcon } from '../edit-icon/edit-icon';
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 import { formatDate } from '../../../shared/utils/format-date';
 
 type TabView = 'benchmarks' | 'progress';
 
 @Component({
     selector: 'app-workspace',
-    imports: [GoalModal, EditBenchmarkModal, EditEventModal, EditIcon],
+    imports: [GoalModal, EditBenchmarkModal, EditEventModal, EditIcon, ConfirmModal],
     templateUrl: './workspace.html',
     styleUrl: './workspace.scss',
 })
@@ -79,6 +80,12 @@ export class Workspace {
     protected readonly showGoalModal = signal<StudentGoalItem | 'add' | null>(null);
     protected readonly showEditBenchmarkModal = signal<BenchmarkDto | 'new' | null>(null);
     protected readonly showEditEventModal = signal<ProgressEventWithGoalDto | null | 'new'>(null);
+    protected readonly showDeleteConfirm = signal(false);
+    protected readonly showDeleteBenchmarkConfirm = signal(false);
+    protected readonly deletingBenchmark = signal<BenchmarkDto | null>(null);
+    protected readonly showDeleteEventConfirm = signal(false);
+    protected readonly deletingEvent = signal<ProgressEventWithGoalDto | null>(null);
+    protected readonly showDeleteStudentConfirm = signal(false);
 
     // ************************** Properties ***************************
 
@@ -135,6 +142,28 @@ export class Workspace {
         this.showGoalModal.set('add');
     }
 
+    onDeleteGoal() {
+        if (!this.selectedGoal()) return;
+        this.showDeleteConfirm.set(true);
+    }
+
+    // *****************************************************************
+    // Called when the user confirms deletion in the confirm modal.
+    // Deletes the selected goal and all its child entities.
+    // *****************************************************************
+    async onDeleteConfirmed() {
+        this.showDeleteConfirm.set(false);
+        const goal = this.selectedGoal();
+        if (!goal) return;
+
+        const result = await this.studentService.deleteGoal(this.studentId()!, goal.goalId);
+        if (!result.success) return;
+
+        this.selectedGoalId.set(null);
+        this.studentService.notifyDataChanged();
+        await this.refetchProfile();
+    }
+
     onGoalCreated(goal: StudentGoalItem) {
         this.showGoalModal.set(null);
         this.studentService.notifyDataChanged();
@@ -156,6 +185,27 @@ export class Workspace {
         this.showEditBenchmarkModal.set('new');
     }
 
+    onDeleteBenchmark(b: BenchmarkDto) {
+        this.deletingBenchmark.set(b);
+        this.showDeleteBenchmarkConfirm.set(true);
+    }
+
+    // *****************************************************************
+    // Called when the user confirms deletion in the confirm modal.
+    // Deletes the benchmark and its event associations.
+    // *****************************************************************
+    async onDeleteBenchmarkConfirmed() {
+        this.showDeleteBenchmarkConfirm.set(false);
+        const b = this.deletingBenchmark();
+        if (!b) return;
+
+        this.deletingBenchmark.set(null);
+        const result = await this.studentService.deleteBenchmark(this.studentId()!, b.benchmarkId);
+        if (!result.success) return;
+
+        await this.refetchProfile();
+    }
+
     onNewEvent() {
         this.showEditEventModal.set('new');
     }
@@ -167,6 +217,27 @@ export class Workspace {
     onEventSaved() {
         this.showEditEventModal.set(null);
         this.refetchProfile();
+    }
+
+    onDeleteEvent(ev: ProgressEventWithGoalDto) {
+        this.deletingEvent.set(ev);
+        this.showDeleteEventConfirm.set(true);
+    }
+
+    // *****************************************************************
+    // Called when the user confirms deletion in the confirm modal.
+    // Deletes the progress event and its benchmark associations.
+    // *****************************************************************
+    async onDeleteEventConfirmed() {
+        this.showDeleteEventConfirm.set(false);
+        const ev = this.deletingEvent();
+        if (!ev) return;
+
+        this.deletingEvent.set(null);
+        const result = await this.studentService.deleteProgressEvent(this.studentId()!, ev.progressEventId);
+        if (!result.success) return;
+
+        await this.refetchProfile();
     }
 
     // *****************************************************************
@@ -185,6 +256,26 @@ export class Workspace {
     }
 
     formatDate = formatDate;
+
+    onDeleteStudent() {
+        this.showDeleteStudentConfirm.set(true);
+    }
+
+    // *****************************************************************
+    // Called when the user confirms student deletion. Deletes the
+    // student and navigates back to the home page.
+    // *****************************************************************
+    async onDeleteStudentConfirmed() {
+        this.showDeleteStudentConfirm.set(false);
+        const id = this.studentId();
+        if (!id) return;
+
+        const result = await this.studentService.deleteStudent(id);
+        if (!result.success) return;
+
+        this.studentService.notifyDataChanged();
+        this.router.navigate(['/']);
+    }
 
     // ********************** Support Procedures ***********************
 

@@ -23,12 +23,58 @@
     [event]="showEditEventModal() === 'new' ? null : $any(showEditEventModal())" (saved)="onEventSaved()"
     (closed)="showEditEventModal.set(null)" />
 }
+@if (showDeleteConfirm()) {
+<app-confirm-modal
+    title="Delete Goal"
+    [message]="'Delete \u0022' + selectedGoal()!.category + '\u0022 goal and all its benchmarks and progress events? This cannot be undone.'"
+    confirmLabel="Delete"
+    [destructive]="true"
+    [doubleConfirm]="true"
+    (confirmed)="onDeleteConfirmed()"
+    (closed)="showDeleteConfirm.set(false)" />
+}
+@if (showDeleteBenchmarkConfirm() && deletingBenchmark()) {
+<app-confirm-modal
+    title="Delete Benchmark"
+    [message]="'Delete \u0022' + (deletingBenchmark()!.shortName || deletingBenchmark()!.benchmark) + '\u0022? This cannot be undone.'"
+    confirmLabel="Delete"
+    [destructive]="true"
+    (confirmed)="onDeleteBenchmarkConfirmed()"
+    (closed)="showDeleteBenchmarkConfirm.set(false)" />
+}
+@if (showDeleteEventConfirm() && deletingEvent()) {
+<app-confirm-modal
+    title="Delete Progress Event"
+    message="Delete this progress event? This cannot be undone."
+    confirmLabel="Delete"
+    [destructive]="true"
+    (confirmed)="onDeleteEventConfirmed()"
+    (closed)="showDeleteEventConfirm.set(false)" />
+}
+@if (showDeleteStudentConfirm()) {
+<app-confirm-modal
+    title="Delete Student"
+    [message]="'Delete \u0022' + student()!.identifier + '\u0022 and all their goals, benchmarks, and progress events? This cannot be undone.'"
+    confirmLabel="Delete"
+    [destructive]="true"
+    [doubleConfirm]="true"
+    (confirmed)="onDeleteStudentConfirmed()"
+    (closed)="showDeleteStudentConfirm.set(false)" />
+}
 
 <!-- Student Header -->
 <div class="student-header">
     <div class="student-info">
         <h1 class="student-name">{{ student()!.identifier }}</h1>
         <span class="student-iep">IEP {{ formatDate(student()!.nextIepDate) }}</span>
+        <button class="delete-student-btn" (click)="onDeleteStudent()" aria-label="Delete student" title="Delete student">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+        </button>
     </div>
     <div class="goal-tabs">
         <button class="goal-tab add-goal" (click)="onAddGoal()">+ Goal</button>
@@ -47,11 +93,19 @@
     <!-- Goal Card -->
     <div class="goal-card">
         <div class="goal-card-header">
-            <span class="goal-badge">{{ selectedGoal()!.category }} Goal</span>
             <app-edit-icon (click)="onEditGoal()" ariaLabel="Edit goal" />
+            <span class="goal-badge">{{ selectedGoal()!.category }} Goal</span>
             @if (selectedGoal()!.targetCompletionDate) {
             <span class="goal-due">Due {{ formatDate(selectedGoal()!.targetCompletionDate) }}</span>
             }
+            <button class="delete-goal-btn" (click)="onDeleteGoal()" aria-label="Delete goal" title="Delete goal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+            </button>
         </div>
         <p class="goal-description">{{ selectedGoal()!.description }}</p>
     </div>
@@ -75,8 +129,16 @@
         @for (b of goalBenchmarks(); track b.benchmarkId) {
         <div class="benchmark-card">
             <div class="benchmark-header">
-                <span class="benchmark-name">{{ b.shortName || b.benchmark }}</span>
                 <app-edit-icon size="13" (click)="onEditBenchmark(b)" ariaLabel="Edit benchmark" />
+                <span class="benchmark-name">{{ b.shortName || b.benchmark }}</span>
+                <button class="delete-benchmark-btn" (click)="onDeleteBenchmark(b)" aria-label="Delete benchmark" title="Delete benchmark">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                </button>
             </div>
             <p class="benchmark-desc">{{ b.benchmark }}</p>
         </div>
@@ -94,8 +156,16 @@
             <div class="timeline-dot"></div>
             <div class="event-card">
                 <div class="event-header">
-                    <span class="event-date">{{ formatDate(ev.createdAt) }}</span>
                     <app-edit-icon size="13" (click)="onEditEvent(ev)" ariaLabel="Edit event" color="#bbb" />
+                    <span class="event-date">{{ formatDate(ev.createdAt) }}</span>
+                    <button class="delete-event-btn" (click)="onDeleteEvent(ev)" aria-label="Delete event" title="Delete event">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                    </button>
                 </div>
                 <p class="event-content">{{ ev.content }}</p>
                 @if (getBenchmarksForEvent(ev.progressEventId).length > 0) {

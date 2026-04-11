@@ -7,9 +7,9 @@ CREATE DEFINER=`root`@`%` PROCEDURE `sp_ReportPrompt_Update`(
 BEGIN
     UPDATE `ReportPrompt`
     SET
-        `prompt` = p_prompt,
-        `reportname` = p_reportname
-    WHERE `id_report_prompt` = p_id_report_prompt;
+        `prompt` = COALESCE(p_prompt, `prompt`),
+        `reportname` = COALESCE(p_reportname, `reportname`)
+    WHERE `id_ReportPrompt` = p_id_report_prompt;
     SELECT ROW_COUNT() AS rowsAffected;
 END;;
 DELIMITER ;

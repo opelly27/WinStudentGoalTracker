@@ -1,0 +1,19 @@
+<app-modal-shell [title]="title()" (closed)="onCancel()">
+    @if (!awaitingSecondConfirm()) {
+    <p class="confirm-message">{{ message() }}</p>
+    } @else {
+    <p class="confirm-message second-confirm-message">Are you absolutely sure? This action is permanent and cannot be undone.</p>
+    }
+    <div class="modal-actions">
+        <button class="btn-secondary" (click)="onCancel()">{{ cancelLabel() }}</button>
+        @if (!awaitingSecondConfirm()) {
+        <button [class]="destructive() ? 'btn-danger' : 'btn-primary'" (click)="onConfirm()">
+            {{ confirmLabel() }}
+        </button>
+        } @else {
+        <button class="btn-danger-confirm" (click)="onConfirm()">
+            Yes, delete permanently
+        </button>
+        }
+    </div>
+</app-modal-shell>
