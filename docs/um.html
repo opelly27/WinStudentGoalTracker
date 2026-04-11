@@ -291,12 +291,15 @@
           <li><a href="#access">2. Accessing the Application</a></li>
           <li><a href="#program">3. Selecting a Program</a></li>
           <li><a href="#dashboard">4. Student Dashboard</a></li>
-          <li><a href="#add-student">5. Adding a Student</a></li>
-          <li><a href="#goals">6. Viewing Student Goals</a></li>
+          <li><a href="#add-student">5. Adding &amp; Editing Students</a></li>
+          <li><a href="#goals">6. Managing Goals</a></li>
           <li><a href="#benchmarks">7. Managing Benchmarks</a></li>
           <li><a href="#events">8. Recording Progress Events</a></li>
-          <li><a href="#workflow">9. Typical Workflow</a></li>
-          <li><a href="#tips">10. Usage Notes</a></li>
+          <li><a href="#deleting">9. Deleting Records</a></li>
+          <li><a href="#reports">10. Reports</a></li>
+          <li><a href="#mobile">11. Mobile Experience</a></li>
+          <li><a href="#workflow">12. Typical Workflow</a></li>
+          <li><a href="#tips">13. Usage Notes</a></li>
         </ul>
 
         <p class="small">
@@ -314,6 +317,7 @@
             help teachers and program staff organize student progress in a
             structured way. Users can review assigned students, create or review
             goals, define benchmarks, and document progress events over time.
+            The application works on both desktop and mobile devices.
           </p>
 
           <div class="kpis">
@@ -330,14 +334,15 @@
               Milestones per goal
             </div>
             <div class="kpi">
-              <strong>Events</strong>
-              Progress history
+              <strong>Progress Events</strong>
+              Documentation of progress
             </div>
           </div>
 
           <div class="callout">
-            This manual focuses on the current application workflow shown in the
-            deployed prototype and implemented interface.
+            This manual covers the current application workflow as implemented
+            in the deployed prototype. Features relating to district registration
+            and administration are documented separately.
           </div>
         </section>
 
@@ -366,12 +371,14 @@
           <h2 class="section-title">3. Selecting a Program</h2>
           <p class="muted">
             After authentication, the system displays the list of programs
-            available to the logged-in user.
+            available to the logged-in user. Each program card shows the
+            program name, your role (e.g. Teacher, Admin), and whether it is
+            your primary program.
           </p>
 
           <ol>
             <li>Review the available program cards.</li>
-            <li>Select <strong>WIN Program – Teacher (Primary)</strong>.</li>
+            <li>Click the program you wish to work in.</li>
             <li>The application will open the main dashboard for that program.</li>
           </ol>
         </section>
@@ -385,59 +392,115 @@
 
           <div class="grid two">
             <div>
-              <h3>Information shown on each student card</h3>
+              <h3>Sidebar</h3>
               <ul class="info-list">
-                <li>Student identifier</li>
-                <li>Expected graduation date</li>
-                <li>Number of goals</li>
-                <li>Number of progress events</li>
-                <li>Last activity date</li>
+                <li>
+                  The left sidebar lists all students. Each entry shows the
+                  student's <strong>name</strong> and <strong>IEP date</strong>.
+                </li>
+                <li>
+                  Use the <strong>My Students / All</strong> toggle to switch
+                  between viewing only your own students and all students in
+                  the program.
+                </li>
+                <li>Click a student to open their goal workspace.</li>
               </ul>
             </div>
             <div>
               <h3>Navigation</h3>
               <ul class="info-list">
-                <li>The left sidebar lists students for quick access.</li>
-                <li>Clicking a student opens that student’s detail view.</li>
-                <li>The dashboard serves as the main starting point for daily use.</li>
+                <li>
+                  The sidebar also provides links to <strong>Reports</strong>
+                  and <strong>Log Out</strong>.
+                </li>
+                <li>Click the edit icon next to a student to update their name or IEP date.</li>
               </ul>
             </div>
           </div>
         </section>
 
         <section id="add-student" class="card">
-          <h2 class="section-title">5. Adding a Student</h2>
+          <h2 class="section-title">5. Adding &amp; Editing Students</h2>
           <p class="muted">
-            Teachers can add a new student record directly from the dashboard.
+            Teachers can add a new student record directly from the dashboard,
+            or edit an existing student's information.
           </p>
 
+          <h3>Adding a student</h3>
           <ol>
-            <li>Click <strong>+ Add a Student</strong>.</li>
-            <li>Enter the <strong>Student Identifier</strong>.</li>
-            <li>Enter the <strong>Expected Graduation Date</strong>.</li>
-            <li>Click <strong>Add Student</strong> to save the record.</li>
+            <li>Click <strong>+ Add Student</strong> at the bottom of the sidebar.</li>
+            <li>Enter the student's <strong>Name</strong> (initials or other non-personally identifiable label).</li>
+            <li>Enter the <strong>Next IEP Date</strong>.</li>
+            <li>Click the save button to create the record.</li>
           </ol>
 
           <p>
-            Once saved, the new student appears in the dashboard and sidebar.
+            Once saved, the new student appears in the sidebar immediately.
           </p>
+
+          <h3>Editing a student</h3>
+          <ol>
+            <li>Click the edit icon (pencil) next to a student's name in the sidebar.</li>
+            <li>Update the <strong>Name</strong> or <strong>Next IEP Date</strong> as needed.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
         </section>
 
         <section id="goals" class="card">
-          <h2 class="section-title">6. Viewing Student Goals</h2>
+          <h2 class="section-title">6. Managing Goals</h2>
           <p>
-            Selecting a student opens the goals view for that student. Goals are
-            the main tracking objects used to measure student development and
-            progress.
+            Selecting a student opens the goal workspace for that student.
+            Goals are the main tracking objects used to measure student
+            development and progress. Each goal appears as a tab along the top
+            of the workspace, labeled by its category.
           </p>
 
-          <h3>Goal details may include</h3>
-          <ul>
-            <li>Goal category or label</li>
-            <li>Goal description</li>
-            <li>Associated benchmarks</li>
-            <li>Related progress events</li>
-          </ul>
+          <h3>Creating a goal</h3>
+          <ol>
+            <li>Click the <strong>+ Goal</strong> tab in the workspace.</li>
+            <li>Fill in the goal details:
+              <ul>
+                <li><strong>Category</strong> — a short label (e.g. Reading, Math, Behavior)</li>
+                <li><strong>Baseline</strong> — the student's starting point</li>
+                <li><strong>Goal</strong> — a description of the desired outcome</li>
+                <li><strong>Target Completion Date</strong> — automatically pre-filled from the student's next IEP date</li>
+              </ul>
+            </li>
+            <li>Click <strong>Add Goal</strong> to save.</li>
+          </ol>
+
+          <h3>Viewing a goal</h3>
+          <p>
+            Click a goal tab to view its details. The goal card shows the
+            category badge, description, and target completion date. Below the
+            card, two sub-tabs allow switching between
+            <strong>Benchmarks</strong> and <strong>Progress Events</strong>
+            for that goal.
+          </p>
+
+          <h3>Editing a goal</h3>
+          <ol>
+            <li>Click the edit icon (pencil) on the goal card.</li>
+            <li>Update any of the goal fields.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
+
+          <h3>Closing a goal</h3>
+          <p>
+            When a student completes or exits a goal, the goal can be formally
+            closed from the goal edit screen.
+          </p>
+          <ol>
+            <li>Click the edit icon (pencil) on the goal card.</li>
+            <li>Set the <strong>Close Date</strong>.</li>
+            <li>Mark whether the goal was <strong>Achieved</strong> (yes or no).</li>
+            <li>Optionally add <strong>Close Notes</strong> summarizing the outcome.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
+          <p>
+            Closed goals remain visible for reference and reporting but are
+            clearly distinguished from active goals.
+          </p>
 
           <div class="callout">
             Users can use this page to quickly review whether a student is making
@@ -449,14 +512,31 @@
           <h2 class="section-title">7. Managing Benchmarks</h2>
           <p>
             Benchmarks break a goal into smaller, measurable steps. This makes it
-            easier to see incremental progress over time.
+            easier to see incremental progress over time. Each benchmark has a
+            full description and an optional short name used for compact display.
           </p>
 
           <h3>To add a benchmark</h3>
           <ol>
-            <li>Open the selected student’s goal.</li>
-            <li>Go to the <strong>Benchmarks</strong> section.</li>
-            <li>Enter the benchmark description.</li>
+            <li>Select the goal tab for the relevant goal.</li>
+            <li>Switch to the <strong>Benchmarks</strong> sub-tab.</li>
+            <li>Click <strong>+ Add Benchmark</strong>.</li>
+            <li>In the modal, enter the <strong>Benchmark</strong> description and optionally a <strong>Short Name</strong>.</li>
+            <li>Click <strong>Add</strong> to save.</li>
+          </ol>
+
+          <h3>AI-assisted suggestions</h3>
+          <p>
+            When adding a new benchmark, you can click the
+            <strong>✦ Suggest with AI</strong> button. The system will analyze
+            the student's goal and generate a recommended benchmark that you
+            can accept, modify, or discard before saving.
+          </p>
+
+          <h3>Editing a benchmark</h3>
+          <ol>
+            <li>Click the edit icon (pencil) next to the benchmark.</li>
+            <li>Update the description or short name.</li>
             <li>Click <strong>Save</strong>.</li>
           </ol>
 
@@ -468,15 +548,42 @@
           <h2 class="section-title">8. Recording Progress Events</h2>
           <p class="muted">
             Progress events document meaningful activities, milestones, or notes
-            related to a student’s goal.
+            related to a student's goal.
           </p>
 
-          <h3>Each progress event should capture</h3>
+          <h3>To log a progress event</h3>
+          <ol>
+            <li>Select the goal tab for the relevant goal.</li>
+            <li>Switch to the <strong>Progress Events</strong> sub-tab.</li>
+            <li>Click <strong>+ Log Progress Event</strong>.</li>
+            <li>Enter a <strong>Description</strong> of the activity.</li>
+            <li>
+              Optionally, select one or more <strong>Related Benchmarks</strong>
+              to link the event to specific milestones. Benchmarks appear as
+              clickable chips that toggle on and off.
+            </li>
+            <li>Click <strong>Log</strong> to save.</li>
+          </ol>
+
+          <h3>Each progress event captures</h3>
           <ul>
-            <li>A brief description of the activity</li>
-            <li>The user who recorded the event</li>
-            <li>The date of the event</li>
+            <li>A description of the activity</li>
+            <li>The user who recorded the event (recorded automatically)</li>
+            <li>The date of the event (recorded automatically)</li>
+            <li>Any linked benchmarks</li>
           </ul>
+
+          <p>
+            Progress events are displayed in a timeline view, with linked
+            benchmark tags shown beneath each entry.
+          </p>
+
+          <h3>Editing a progress event</h3>
+          <ol>
+            <li>Click the edit icon (pencil) on the event card in the timeline.</li>
+            <li>Update the description and/or benchmark selections.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
 
           <h3>Example</h3>
           <p><code>Took C4G – loved it!</code></p>
@@ -487,8 +594,111 @@
           </div>
         </section>
 
+        <section id="deleting" class="card">
+          <h2 class="section-title">9. Deleting Records</h2>
+          <p class="muted">
+            Students, goals, benchmarks, and progress events can all be deleted.
+            Deletions are permanent and cannot be undone.
+          </p>
+
+          <h3>How to delete</h3>
+          <ul>
+            <li>
+              <strong>Student</strong> — Click the delete icon (trash) in the
+              student header area. A double-confirmation dialog will appear
+              because this deletes the student and all their goals, benchmarks,
+              and progress events.
+            </li>
+            <li>
+              <strong>Goal</strong> — Click the delete icon on the goal card.
+              A double-confirmation dialog will appear because this also
+              deletes all benchmarks and progress events under the goal.
+            </li>
+            <li>
+              <strong>Benchmark</strong> — Click the delete icon next to
+              the benchmark. A double-confirmation dialog will appear.
+            </li>
+            <li>
+              <strong>Progress Event</strong> — Click the delete icon on
+              the event card in the timeline. A confirmation dialog will appear.
+            </li>
+          </ul>
+
+          <div class="callout">
+            Deleting a student or goal is a cascading operation — all child
+            records (goals, benchmarks, and progress events) are permanently
+            removed. Use with caution.
+          </div>
+        </section>
+
+        <section id="reports" class="card">
+          <h2 class="section-title">10. Reports</h2>
+          <p class="muted">
+            The Reports section provides tools for extracting and summarizing
+            student progress data. Access it from the <strong>Reports</strong>
+            link in the sidebar.
+          </p>
+
+          <h3>Student Progress Report</h3>
+          <p>
+            Generates a formatted progress report for a selected student over
+            a date range. This is useful for IEP meetings, program reviews, or
+            external reporting.
+          </p>
+
+          <ol>
+            <li>Click <strong>Reports</strong> in the sidebar, then select <strong>Student Progress Report</strong>.</li>
+            <li>Select a <strong>Student</strong> from the dropdown.</li>
+            <li>Set the <strong>From Date</strong> and <strong>To Date</strong> for the reporting period.</li>
+            <li>Check or uncheck which <strong>Goals to Include</strong> in the report.</li>
+            <li>
+              Optionally, edit the <strong>Prompt</strong> to customize the
+              report instructions. The prompt auto-saves as you type.
+            </li>
+            <li>Click <strong>Run</strong> to generate the report.</li>
+          </ol>
+
+          <div class="callout success">
+            The generated report aggregates goals, benchmarks, and progress
+            events into a structured summary that can be copied or used in
+            external documents.
+          </div>
+        </section>
+
+        <section id="mobile" class="card">
+          <h2 class="section-title">11. Mobile Experience</h2>
+          <p class="muted">
+            The application automatically detects whether you are using a
+            touch-based mobile device and presents a touch-optimized interface.
+          </p>
+
+          <h3>Mobile capabilities</h3>
+          <ul>
+            <li>
+              <strong>Student list</strong> — browse your students, with the
+              same My Students / All toggle available on desktop.
+            </li>
+            <li>
+              <strong>Student goals</strong> — tap a student to view their
+              goals and benchmarks.
+            </li>
+            <li>
+              <strong>Log progress events</strong> — tap a goal to open a
+              touch-friendly form for entering notes and selecting benchmarks
+              via large, tappable tiles.
+            </li>
+          </ul>
+
+          <div class="callout">
+            Some management features — such as adding students, creating goals,
+            editing benchmarks, running reports, and deleting records — are
+            only available in the desktop interface. Use a desktop browser for
+            full administrative access.
+          </div>
+        </section>
+
         <section id="workflow" class="card">
-          <h2 class="section-title">9. Typical Workflow</h2>
+          <h2 class="section-title">12. Typical Workflow</h2>
           <ol>
             <li>Log into the application.</li>
             <li>Select the appropriate program.</li>
@@ -496,18 +706,21 @@
             <li>Add a student if needed.</li>
             <li>Open a student record.</li>
             <li>Review or create goals.</li>
-            <li>Add benchmarks to define milestones.</li>
-            <li>Record progress events as the student advances.</li>
+            <li>Add benchmarks to define milestones (use AI suggestions when helpful).</li>
+            <li>Record progress events as the student advances, linking relevant benchmarks.</li>
+            <li>Run reports as needed for IEP meetings or program reviews.</li>
           </ol>
         </section>
 
         <section id="tips" class="card">
-          <h2 class="section-title">10. Usage Notes</h2>
+          <h2 class="section-title">13. Usage Notes</h2>
           <ul>
-            <li>Keep student identifiers consistent to avoid duplicate entries.</li>
+            <li>Keep student names consistent to avoid duplicate entries.</li>
             <li>Update progress events regularly so the record stays current.</li>
             <li>Use benchmarks to make large goals easier to track.</li>
+            <li>Link progress events to benchmarks for richer reporting.</li>
             <li>Review student cards often to spot inactivity or missing updates.</li>
+            <li>Use the mobile app for quick progress logging in the field.</li>
             <li>Log out when finished using the system on a shared device.</li>
           </ul>
 
@@ -518,7 +731,7 @@
   </main>
 
   <div class="footer">
-    © 2026 WIN Student Goal Tracker
+    © 2026 WIN Student Goal Tracker.
   </div>
 </body>
 </html>
