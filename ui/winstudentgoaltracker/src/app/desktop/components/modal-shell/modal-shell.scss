@@ -64,7 +64,7 @@
         display: block;
         font-size: 12px;
         font-weight: 600;
-        color: #666;
+        color: var(--text-secondary);
         margin-bottom: 4px;
     }
 
@@ -102,7 +102,7 @@
         cursor: pointer;
 
         &:hover:not(:disabled) {
-            background: #3730A3;
+            background: var(--accent-indigo-dark);
         }
 
         &:disabled {
@@ -122,13 +122,13 @@
         cursor: pointer;
 
         &:hover {
-            background: #e5e5e0;
+            background: var(--border-color);
         }
     }
 
     .error {
         font-size: 13px;
-        color: #dc2626;
+        color: var(--danger);
         margin: 0 0 8px;
     }
 }

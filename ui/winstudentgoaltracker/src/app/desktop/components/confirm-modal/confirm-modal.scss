@@ -6,7 +6,7 @@
 }
 
 .second-confirm-message {
-    color: #DC2626;
+    color: var(--danger);
     font-weight: 600;
 }
 
@@ -14,29 +14,29 @@
     padding: 8px 20px;
     border-radius: var(--radius-md);
     border: none;
-    background: #DC2626;
+    background: var(--danger);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 
     &:hover {
-        background: #B91C1C;
+        background: var(--danger-dark);
     }
 }
 
 :host ::ng-deep .btn-danger-confirm {
     padding: 8px 20px;
     border-radius: var(--radius-md);
-    border: 2px solid #DC2626;
-    background: #FEF2F2;
-    color: #DC2626;
+    border: 2px solid var(--danger);
+    background: var(--danger-bg-light);
+    color: var(--danger);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 
     &:hover {
-        background: #DC2626;
+        background: var(--danger);
         color: #fff;
     }
 }
