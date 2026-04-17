@@ -1182,21 +1182,43 @@
 
       <section id="flow">
         <h2>3. Data Flow</h2>
+        <p>Each scenario lists the UI file that initiates the action, the Angular service method called, the API
+          endpoint hit, the .NET controller and repository method invoked, and the stored procedure that reads or writes
+          the database.</p>
 
-        <h3>Create Goal</h3>
-        <div class="flow">User → Angular → API → Validation → Database → Response → UI</div>
+        <h3>1 — User Login</h3>
+        <div class="flow">login.html (submit) → Auth.login() [auth.ts] → POST /api/Auth/Login → AuthController.Login() →
+          UserRepository.GetByEmailAsync() + GetProgramsForUserIdAsync() → sp_User_GetByEmail,
+          sp_UserPrograms_GetByUserId → session token + program list → login.html renders program selector</div>
 
-        <h3>View Dashboard</h3>
-        <div class="flow">User → Angular → API → Database → Response → UI</div>
+        <h3>2 — View My Students (Home Dashboard)</h3>
+        <div class="flow">home.ts (constructor) → StudentService.getMyStudents() [student.service.ts] → GET
+          /api/Student/my → StudentController.GetMyStudents() → StudentRepository.GetMyStudentsAsync() →
+          sp_Student_GetWithAssignments → student card list → home.html renders student cards</div>
+
+        <h3>3 — Open Student Workspace (Full Profile)</h3>
+        <div class="flow">home.html (card click → router) → workspace.ts (route param change) →
+          StudentService.getFullProfile() [student.service.ts] → GET /api/Student/{id}/full →
+          StudentController.GetFullProfile() → StudentRepository.GetFullProfileAsync() → sp_Student_GetFullProfile →
+          goals + benchmarks + progress events → workspace.html renders detail view</div>
+
+        <h3>4 — Create Goal</h3>
+        <div class="flow">workspace.html (Add Goal button) → goal-modal.ts (onSubmit) → StudentService.createGoal()
+          [student.service.ts] → POST /api/Student/{id}/goals → StudentController.CreateGoal() →
+          PermissionService.IsAllowed() → StudentRepository.InsertGoalAsync() → sp_Goal_Insert → created goal returned →
+          goal-modal closes, workspace.html refreshes</div>
+
+        <h3>5 — Log Progress Event</h3>
+        <div class="flow">workspace.html (Add Event) → edit-event-modal.ts (onSave) → StudentService.addProgressEvent()
+          [student.service.ts] → POST /api/Student/{id}/progress-event → StudentController.AddProgressEvent() →
+          StudentRepository.SaveProgressEventAsync() → sp_ProgressEvent_Save → new event ID returned → workspace.html
+          progress list refreshes</div>
       </section>
 
       <section id="hosting">
         <h2>4. Recommended Hosting</h2>
         <ul>
-          <li>Frontend: GitHub Pages, Netlify</li>
-          <li>Backend: Render, Railway</li>
-          <li>Database: PlanetScale, Railway MySQL</li>
-          <li>Alternative: VPS with Docker</li>
+          <li>The entire application is currently hosted online with Hetzner (www.hetzner.com), on a plan donated by team members. The team has committed to hosting for at least the next two years, and if/when that changes, will help the partner transition to the hosting platform of their choice. </li>
         </ul>
       </section>
 
@@ -1237,6 +1259,9 @@ dotnet run</code></pre>
 
         <h3>Restore</h3>
         <pre><code>mysql -u username -p dbname &lt; backup.sql</code></pre>
+
+        <h3>From the UI</h3>
+        <p>Administrators may back up the database via the "Backup" button in the Administrator panel</p>
       </section>
 
       <section id="env">
@@ -1249,14 +1274,17 @@ JWT_EXPIRATION=3600</code></pre>
 
       <section id="partner">
         <h2>9. Partner Statement</h2>
-        <p>The partner has reviewed the developer documentation and understands the system.</p>
-        <p><strong>Date:</strong> April 2026</p>
+        <p>The partner representatives Polly Balsillie and Fred Winter have reviewed the developer documentation and
+          understands its scope and purpose.</p>
+        <p><strong>Date:</strong> April 16, 2026</p>
       </section>
 
       <section id="walk">
         <h2>10. Installation Walkthrough Statement</h2>
-        <p>A walkthrough was conducted with the partner, who successfully followed the documentation.</p>
-        <p><strong>Date:</strong> April 2026</p>
+        <p>N/A. An installation walkthrough was not appropriate for the partner, as they are non-technical. They are
+          primarily users of the application, and at least two of our team members will continue to make ourselves
+          available to support the application.</p>
+        <p><strong>Date:</strong> April 16, 2026</p>
       </section>
 
       <section id="analysis">
