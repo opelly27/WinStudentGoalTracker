@@ -364,24 +364,24 @@
   <style>
     /* ─── ERD Embed ─── */
     #erd-embed {
-      --erd-bg: #0f1117;
-      --erd-surface: #181a24;
-      --erd-surface-hover: #1e2130;
-      --erd-border: #2a2d3e;
-      --erd-border-highlight: #3d4160;
-      --erd-text: #c9cdd8;
-      --erd-text-muted: #6b7084;
-      --erd-text-bright: #eef0f6;
-      --erd-pk: #f0b866;
-      --erd-pk-bg: rgba(240,184,102,0.08);
-      --erd-fk: #6ea8fe;
-      --erd-fk-bg: rgba(110,168,254,0.08);
-      --erd-col: #8b91a8;
-      --erd-type: #5a5f75;
-      --erd-line-color: #3d5a80;
-      --erd-line-highlight: #6ea8fe;
-      --erd-shadow: 0 4px 24px rgba(0,0,0,0.4);
-      --erd-shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+      --erd-bg: #f5f7fb;
+      --erd-surface: #ffffff;
+      --erd-surface-hover: #f0f2f7;
+      --erd-border: #e2e4ed;
+      --erd-border-highlight: #b0b6d0;
+      --erd-text: #374151;
+      --erd-text-muted: #9ca3af;
+      --erd-text-bright: #111827;
+      --erd-pk: #b45309;
+      --erd-pk-bg: rgba(180, 83, 9, 0.08);
+      --erd-fk: #1d4ed8;
+      --erd-fk-bg: rgba(29, 78, 216, 0.08);
+      --erd-col: #4b5563;
+      --erd-type: #9ca3af;
+      --erd-line-color: #94a3b8;
+      --erd-line-highlight: #2563eb;
+      --erd-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --erd-shadow-lg: 0 4px 24px rgba(0,0,0,0.14);
       --erd-radius: 10px;
       position: relative;
       height: 720px;
@@ -745,10 +745,10 @@ JWT_EXPIRATION=3600</code></pre>
           </div>
 
           <div id="legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#f0b866"></div> Primary Key</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#6ea8fe"></div> Foreign Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#b45309"></div> Primary Key</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#1d4ed8"></div> Foreign Key</div>
             <div class="legend-item">
-              <svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="#3d5a80" stroke-width="1.5"/></svg>
+              <svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="#94a3b8" stroke-width="1.5"/></svg>
               Relationship
             </div>
           </div>
@@ -1923,7 +1923,7 @@ function updateMinimap() {
   minimapCanvas.style.height = mh + 'px';
   mCtx.scale(2, 2);
   mCtx.clearRect(0, 0, mw, mh);
-  mCtx.fillStyle = '#0f1117';
+  mCtx.fillStyle = '#f5f7fb';
   mCtx.fillRect(0, 0, mw, mh);
 
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
