@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database ERD — Student Progress Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181a24;
+    --surface-hover: #1e2130;
+    --border: #2a2d3e;
+    --border-highlight: #3d4160;
+    --text: #c9cdd8;
+    --text-muted: #6b7084;
+    --text-bright: #eef0f6;
+    --pk: #f0b866;
+    --pk-bg: rgba(240, 184, 102, 0.08);
+    --fk: #6ea8fe;
+    --fk-bg: rgba(110, 168, 254, 0.08);
+    --col: #8b91a8;
+    --type: #5a5f75;
+    --line-color: #3d5a80;
+    --line-highlight: #6ea8fe;
+    --accent-green: #66d9a0;
+    --accent-red: #f07178;
+    --accent-purple: #c792ea;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    gap: 16px;
+  }
+
+  #toolbar h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+  }
+
+  #toolbar .separator {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+
+  #toolbar .stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  #toolbar .stat span { color: var(--text); font-weight: 600; }
+
+  .toolbar-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+
+  .toolbar-btn {
+    background: var(--border);
+    border: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .toolbar-btn:hover { background: var(--border-highlight); color: var(--text-bright); }
+
+  #canvas-container {
+    position: absolute;
+    top: 52px; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+    cursor: grab;
+  }
+  #canvas-container:active { cursor: grabbing; }
+
+  #canvas {
+    position: absolute;
+    transform-origin: 0 0;
+  }
+
+  svg#lines {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .table-node {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 240px;
+    box-shadow: var(--shadow);
+    cursor: move;
+    user-select: none;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .table-node:hover {
+    border-color: var(--border-highlight);
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+  }
+  .table-node.dragging {
+    z-index: 100;
+    border-color: var(--fk);
+    box-shadow: 0 0 0 1px var(--fk), var(--shadow-lg);
+  }
+
+  .table-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .table-icon {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .table-header .table-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+
+  .table-body { padding: 4px 0; }
+
+  .column-row {
+    display: flex;
+    align-items: center;
+    padding: 3px 14px;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.6;
+    transition: background 0.1s;
+  }
+  .column-row:hover { background: var(--surface-hover); }
+
+  .col-badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    min-width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .col-badge.pk { background: var(--pk-bg); color: var(--pk); }
+  .col-badge.fk { background: var(--fk-bg); color: var(--fk); }
+  .col-badge.empty { min-width: 20px; }
+
+  .col-name { color: var(--col); flex: 1; }
+  .col-name.pk-name { color: var(--pk); }
+  .col-name.fk-name { color: var(--fk); }
+
+  .col-type { color: var(--type); font-size: 10px; text-align: right; }
+
+  /* Legend */
+  #legend {
+    position: fixed;
+    bottom: 16px; left: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    z-index: 1000;
+    font-size: 11px;
+    display: flex;
+    gap: 16px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* Zoom controls */
+  #zoom-controls {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    display: flex;
+    gap: 4px;
+    z-index: 1000;
+  }
+  #zoom-controls button {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  #zoom-controls button:hover { background: var(--surface-hover); border-color: var(--border-highlight); }
+
+  /* Minimap */
+  #minimap {
+    position: fixed;
+    bottom: 60px; right: 16px;
+    width: 180px; height: 120px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  #minimap canvas { width: 100%; height: 100%; }
+
+  /* Relationship line styles */
+  .rel-line {
+    fill: none;
+    stroke: var(--line-color);
+    stroke-width: 1.5;
+    opacity: 0.5;
+    transition: opacity 0.2s, stroke 0.2s;
+  }
+  .rel-line.highlighted {
+    stroke: var(--line-highlight);
+    opacity: 1;
+    stroke-width: 2;
+  }
+  .rel-marker {
+    fill: var(--line-color);
+    transition: fill 0.2s;
+  }
+  .rel-marker.highlighted { fill: var(--line-highlight); }
+
+  .rel-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    fill: var(--text-muted);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <h1>⬡ ERD</h1>
+  <div class="separator"></div>
+  <div class="stat">Tables <span id="table-count">17</span></div>
+  <div class="separator"></div>
+  <div class="stat">Relations <span id="rel-count">0</span></div>
+  <div class="toolbar-actions">
+    <button class="toolbar-btn" onclick="resetView()">Reset View</button>
+    <button class="toolbar-btn" onclick="toggleLabels()">Toggle Labels</button>
+    <a href="technical.html" class="toolbar-btn" style="text-decoration:none;">← Technical Docs</a>
+  </div>
+</div>
+
+<div id="canvas-container">
+  <div id="canvas">
+    <svg id="lines" width="6000" height="4000"></svg>
+  </div>
+</div>
+
+<div id="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pk)"></div> Primary Key</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--fk)"></div> Foreign Key</div>
+  <div class="legend-item">
+    <svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--line-color)" stroke-width="1.5"/></svg>
+    Relationship
+  </div>
+</div>
+
+<div id="zoom-controls">
+  <button onclick="zoomIn()">+</button>
+  <button onclick="zoomOut()">−</button>
+  <button onclick="resetView()" style="font-size:12px">⌂</button>
+</div>
+
+<div id="minimap"><canvas id="minimap-canvas"></canvas></div>
+
+<script>
+// ─── Schema Data ───
+const schema = {
+  tables: {
+    user: {
+      columns: [
+        { name: 'id_user', type: 'char(36)', pk: true },
+        { name: 'email', type: 'varchar(255)' },
+        { name: 'name', type: 'varchar(255)' },
+        { name: 'password_hash', type: 'varchar(255)' },
+        { name: 'password_salt', type: 'varchar(255)' },
+        { name: 'password_updated_at', type: 'timestamp' },
+        { name: 'failed_login_attempts', type: 'int' },
+        { name: 'locked_until', type: 'timestamp' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#6ea8fe'
+    },
+    student: {
+      columns: [
+        { name: 'id_student', type: 'char(36)', pk: true },
+        { name: 'id_program', type: 'char(36)', fk: 'program' },
+        { name: 'identifier', type: 'varchar(50)' },
+        { name: 'program_year', type: 'int' },
+        { name: 'enrollment_date', type: 'date' },
+        { name: 'next_iep_date', type: 'date' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#66d9a0'
+    },
+    goal: {
+      columns: [
+        { name: 'id_goal', type: 'char(36)', pk: true },
+        { name: 'id_goal_parent', type: 'char(36)', fk: 'goal' },
+        { name: 'id_student', type: 'char(36)', fk: 'student' },
+        { name: 'id_user_created', type: 'char(36)', fk: 'user' },
+        { name: 'description', type: 'text' },
+        { name: 'category', type: 'varchar(255)' },
+        { name: 'baseline', type: 'text' },
+        { name: 'target_completion_date', type: 'date' },
+        { name: 'close_date', type: 'date' },
+        { name: 'achieved', type: 'tinyint(1)' },
+        { name: 'close_notes', type: 'text' },
+        { name: 'created_at', type: 'timestamp' },
+        { name: 'updated_at', type: 'timestamp' }
+      ],
+      color: '#f0b866'
+    },
+    benchmark: {
+      columns: [
+        { name: 'id_benchmark', type: 'char(36)', pk: true },
+        { name: 'id_goal', type: 'char(36)', fk: 'goal' },
+        { name: 'id_user_created', type: 'char(36)', fk: 'user' },
+        { name: 'benchmark', type: 'text' },
+        { name: 'short_name', type: 'varchar(50)' },
+        { name: 'created_at', type: 'datetime' },
+        { name: 'updated_at', type: 'datetime' }
+      ],
+      color: '#f0b866'
+    },
+    progress_event: {
+      columns: [
+        { name: 'id_progress_event', type: 'char(36)', pk: true },
+        { name: 'id_goal', type: 'char(36)', fk: 'goal' },
+        { name: 'id_user_created', type: 'char(36)', fk: 'user' },
+        { name: 'content', type: 'text' },
+        { name: 'is_sensitive', type: 'tinyint(1)' },
+        { name: 'created_at', type: 'timestamp' },
+        { name: 'updated_at', type: 'timestamp' }
+      ],
+      color: '#c792ea'
+    },
+    progress_event_benchmark: {
+      columns: [
+        { name: 'id_progress_event_benchmark', type: 'char(36)', pk: true },
+        { name: 'id_progress_event', type: 'char(36)', fk: 'progress_event' },
+        { name: 'id_benchmark', type: 'char(36)', fk: 'benchmark' },
+        { name: 'created_at', type: 'datetime' }
+      ],
+      color: '#c792ea'
+    },
+    progress_report: {
+      columns: [
+        { name: 'id_progress_report', type: 'char(36)', pk: true },
+        { name: 'id_student', type: 'char(36)', fk: 'student' },
+        { name: 'id_goal', type: 'char(36)', fk: 'goal' },
+        { name: 'id_user_created', type: 'char(36)', fk: 'user' },
+        { name: 'period', type: 'varchar(10)' },
+        { name: 'year', type: 'int' },
+        { name: 'summary', type: 'text' },
+        { name: 'generated_at', type: 'timestamp' }
+      ],
+      color: '#c792ea'
+    },
+    health_note: {
+      columns: [
+        { name: 'id_health_note', type: 'char(36)', pk: true },
+        { name: 'id_student', type: 'char(36)', fk: 'student' },
+        { name: 'id_user_created', type: 'char(36)', fk: 'user' },
+        { name: 'content', type: 'text' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#66d9a0'
+    },
+    program: {
+      columns: [
+        { name: 'id_program', type: 'char(36)', pk: true },
+        { name: 'id_school_district', type: 'char(36)', fk: 'school_district' },
+        { name: 'name', type: 'varchar(255)' },
+        { name: 'description', type: 'text' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#f07178'
+    },
+    school_district: {
+      columns: [
+        { name: 'id_school_district', type: 'char(36)', pk: true },
+        { name: 'name', type: 'varchar(255)' },
+        { name: 'contact_email', type: 'varchar(255)' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#f07178'
+    },
+    role: {
+      columns: [
+        { name: 'id_role', type: 'char(36)', pk: true },
+        { name: 'name', type: 'varchar(100)' },
+        { name: 'internal_name', type: 'varchar(100)' },
+        { name: 'description', type: 'text' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#6ea8fe'
+    },
+    user_program: {
+      columns: [
+        { name: 'id_user_program', type: 'char(36)', pk: true },
+        { name: 'id_user', type: 'char(36)', fk: 'user' },
+        { name: 'id_program', type: 'char(36)', fk: 'program' },
+        { name: 'id_role', type: 'char(36)', fk: 'role' },
+        { name: 'is_primary', type: 'tinyint(1)' },
+        { name: 'status', type: 'varchar(20)' },
+        { name: 'joined_at', type: 'timestamp' }
+      ],
+      color: '#6ea8fe'
+    },
+    user_student: {
+      columns: [
+        { name: 'id_user_student', type: 'char(36)', pk: true },
+        { name: 'id_user', type: 'char(36)', fk: 'user' },
+        { name: 'id_student', type: 'char(36)', fk: 'student' },
+        { name: 'is_primary', type: 'tinyint(1)' }
+      ],
+      color: '#6ea8fe'
+    },
+    password_history: {
+      columns: [
+        { name: 'id_password_history', type: 'char(36)', pk: true },
+        { name: 'id_user', type: 'char(36)', fk: 'user' },
+        { name: 'password_hash', type: 'varchar(255)' },
+        { name: 'created_at', type: 'timestamp' }
+      ],
+      color: '#5a5f75'
+    },
+    password_reset_token: {
+      columns: [
+        { name: 'id_password_reset_token', type: 'char(36)', pk: true },
+        { name: 'id_user', type: 'char(36)', fk: 'user' },
+        { name: 'token_hash', type: 'varchar(255)' },
+        { name: 'expires_at', type: 'timestamp' },
+        { name: 'created_at', type: 'timestamp' },
+        { name: 'used_at', type: 'timestamp' },
+        { name: 'invalidated_at', type: 'timestamp' },
+        { name: 'request_ip', type: 'varchar(45)' }
+      ],
+      color: '#5a5f75'
+    },
+    refresh_token: {
+      columns: [
+        { name: 'id_refresh_token', type: 'char(36)', pk: true },
+        { name: 'id_user', type: 'char(36)', fk: 'user' },
+        { name: 'id_program', type: 'char(36)', fk: 'program' },
+        { name: 'token_hash', type: 'varchar(512)' },
+        { name: 'token_salt', type: 'varchar(512)' },
+        { name: 'expires_at', type: 'timestamp' },
+        { name: 'last_used_at', type: 'timestamp' },
+        { name: 'revoked_at', type: 'timestamp' },
+        { name: 'device_info', type: 'varchar(255)' },
+        { name: 'user_agent', type: 'varchar(512)' },
+        { name: 'replaced_by_token_id', type: 'char(36)', fk: 'refresh_token' },
+        { name: 'created_at', type: 'timestamp' },
+        { name: 'updated_at', type: 'timestamp' }
+      ],
+      color: '#5a5f75'
+    },
+    ReportPrompt: {
+      columns: [
+        { name: 'id_ReportPrompt', type: 'char(36)', pk: true },
+        { name: 'prompt', type: 'text' },
+        { name: 'reportname', type: 'char(100)' },
+        { name: 'id_program', type: 'char(36)', fk: 'program' }
+      ],
+      color: '#c792ea'
+    }
+  }
+};
+
+// Explicit foreign key relationships from the SQL constraints
+const relationships = [
+  { from: 'goal', fromCol: 'id_goal_parent', to: 'goal', toCol: 'id_goal', label: 'parent' },
+  { from: 'goal', fromCol: 'id_student', to: 'student', toCol: 'id_student' },
+  { from: 'goal', fromCol: 'id_user_created', to: 'user', toCol: 'id_user' },
+  { from: 'health_note', fromCol: 'id_student', to: 'student', toCol: 'id_student' },
+  { from: 'health_note', fromCol: 'id_user_created', to: 'user', toCol: 'id_user' },
+  { from: 'password_history', fromCol: 'id_user', to: 'user', toCol: 'id_user' },
+  { from: 'password_reset_token', fromCol: 'id_user', to: 'user', toCol: 'id_user' },
+  { from: 'program', fromCol: 'id_school_district', to: 'school_district', toCol: 'id_school_district' },
+  { from: 'progress_event', fromCol: 'id_goal', to: 'goal', toCol: 'id_goal' },
+  { from: 'progress_event', fromCol: 'id_user_created', to: 'user', toCol: 'id_user' },
+  { from: 'progress_event_benchmark', fromCol: 'id_progress_event', to: 'progress_event', toCol: 'id_progress_event' },
+  { from: 'progress_event_benchmark', fromCol: 'id_benchmark', to: 'benchmark', toCol: 'id_benchmark' },
+  { from: 'progress_report', fromCol: 'id_student', to: 'student', toCol: 'id_student' },
+  { from: 'progress_report', fromCol: 'id_goal', to: 'goal', toCol: 'id_goal' },
+  { from: 'progress_report', fromCol: 'id_user_created', to: 'user', toCol: 'id_user' },
+  { from: 'refresh_token', fromCol: 'id_user', to: 'user', toCol: 'id_user' },
+  { from: 'refresh_token', fromCol: 'id_program', to: 'program', toCol: 'id_program' },
+  { from: 'refresh_token', fromCol: 'replaced_by_token_id', to: 'refresh_token', toCol: 'id_refresh_token', label: 'replaces' },
+  { from: 'benchmark', fromCol: 'id_goal', to: 'goal', toCol: 'id_goal' },
+  { from: 'benchmark', fromCol: 'id_user_created', to: 'user', toCol: 'id_user' },
+  { from: 'student', fromCol: 'id_program', to: 'program', toCol: 'id_program' },
+  { from: 'user_program', fromCol: 'id_user', to: 'user', toCol: 'id_user' },
+  { from: 'user_program', fromCol: 'id_program', to: 'program', toCol: 'id_program' },
+  { from: 'user_program', fromCol: 'id_role', to: 'role', toCol: 'id_role' },
+  { from: 'user_student', fromCol: 'id_user', to: 'user', toCol: 'id_user' },
+  { from: 'user_student', fromCol: 'id_student', to: 'student', toCol: 'id_student' },
+  { from: 'ReportPrompt', fromCol: 'id_program', to: 'program', toCol: 'id_program' }
+];
+
+document.getElementById('rel-count').textContent = relationships.length;
+
+// ─── Layout positions (hand-tuned for clarity) ───
+const positions = {
+  // Core cluster
+  user:              { x: 100,  y: 300 },
+  role:              { x: 100,  y: 50 },
+  user_program:      { x: 380,  y: 80 },
+  user_student:      { x: 380,  y: 340 },
+  // Org cluster
+  school_district:   { x: 680,  y: 50 },
+  program:           { x: 680,  y: 260 },
+  student:           { x: 680,  y: 500 },
+  // Goals & progress cluster
+  goal:              { x: 1050, y: 260 },
+  benchmark:         { x: 1050, y: 50 },
+  progress_event:    { x: 1380, y: 100 },
+  progress_event_benchmark: { x: 1380, y: 340 },
+  progress_report:   { x: 1050, y: 570 },
+  health_note:       { x: 680,  y: 760 },
+  ReportPrompt:      { x: 1380, y: 570 },
+  // Auth cluster
+  password_history:      { x: 100, y: 620 },
+  password_reset_token:  { x: 100, y: 800 },
+  refresh_token:         { x: 380, y: 620 }
+};
+
+// ─── Rendering ───
+const canvas = document.getElementById('canvas');
+const svgLines = document.getElementById('lines');
+const container = document.getElementById('canvas-container');
+const tableElements = {};
+let scale = 0.85;
+let panX = 50, panY = 20;
+let showLabels = true;
+
+function renderTables() {
+  for (const [tableName, table] of Object.entries(schema.tables)) {
+    const pos = positions[tableName] || { x: 0, y: 0 };
+    const el = document.createElement('div');
+    el.className = 'table-node';
+    el.id = `table-${tableName}`;
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+
+    const headerColor = table.color || '#6ea8fe';
+    let html = `
+      <div class="table-header">
+        <div class="table-icon" style="background:${headerColor}22;color:${headerColor}">⬡</div>
+        <span class="table-name">${tableName}</span>
+      </div>
+      <div class="table-body">
+    `;
+    for (const col of table.columns) {
+      const isPk = col.pk;
+      const isFk = col.fk;
+      let badge = '<span class="col-badge empty"></span>';
+      if (isPk) badge = '<span class="col-badge pk">PK</span>';
+      else if (isFk) badge = '<span class="col-badge fk">FK</span>';
+
+      let nameClass = 'col-name';
+      if (isPk) nameClass += ' pk-name';
+      else if (isFk) nameClass += ' fk-name';
+
+      html += `
+        <div class="column-row" data-col="${col.name}">
+          ${badge}
+          <span class="${nameClass}">${col.name}</span>
+          <span class="col-type">${col.type}</span>
+        </div>`;
+    }
+    html += '</div>';
+    el.innerHTML = html;
+    canvas.appendChild(el);
+    tableElements[tableName] = el;
+    makeDraggable(el, tableName);
+  }
+}
+
+function getColumnY(tableName, colName) {
+  const el = tableElements[tableName];
+  if (!el) return 0;
+  const row = el.querySelector(`[data-col="${colName}"]`);
+  if (!row) return el.offsetTop + 20;
+  return el.offsetTop + row.offsetTop + row.offsetHeight / 2;
+}
+
+function getTableCenter(tableName) {
+  const el = tableElements[tableName];
+  if (!el) return { x: 0, y: 0 };
+  return {
+    x: el.offsetLeft + el.offsetWidth / 2,
+    y: el.offsetTop + el.offsetHeight / 2
+  };
+}
+
+function drawRelationships() {
+  svgLines.innerHTML = '';
+
+  // Arrow marker defs
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+  const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+  marker.setAttribute('id', 'arrowhead');
+  marker.setAttribute('markerWidth', '8');
+  marker.setAttribute('markerHeight', '6');
+  marker.setAttribute('refX', '8');
+  marker.setAttribute('refY', '3');
+  marker.setAttribute('orient', 'auto');
+  const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  poly.setAttribute('points', '0 0, 8 3, 0 6');
+  poly.setAttribute('class', 'rel-marker');
+  marker.appendChild(poly);
+  defs.appendChild(marker);
+
+  const markerH = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+  markerH.setAttribute('id', 'arrowhead-hl');
+  markerH.setAttribute('markerWidth', '8');
+  markerH.setAttribute('markerHeight', '6');
+  markerH.setAttribute('refX', '8');
+  markerH.setAttribute('refY', '3');
+  markerH.setAttribute('orient', 'auto');
+  const polyH = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  polyH.setAttribute('points', '0 0, 8 3, 0 6');
+  polyH.setAttribute('class', 'rel-marker highlighted');
+  markerH.appendChild(polyH);
+  defs.appendChild(markerH);
+
+  svgLines.appendChild(defs);
+
+  for (const rel of relationships) {
+    const fromEl = tableElements[rel.from];
+    const toEl = tableElements[rel.to];
+    if (!fromEl || !toEl) continue;
+
+    const fromY = getColumnY(rel.from, rel.fromCol);
+    const toY = getColumnY(rel.to, rel.toCol);
+
+    const fromLeft = fromEl.offsetLeft;
+    const fromRight = fromEl.offsetLeft + fromEl.offsetWidth;
+    const toLeft = toEl.offsetLeft;
+    const toRight = toEl.offsetLeft + toEl.offsetWidth;
+
+    let x1, x2;
+    // Self-referencing
+    if (rel.from === rel.to) {
+      x1 = fromRight;
+      x2 = fromRight;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const loopSize = 40;
+      const d = `M ${x1} ${fromY} C ${x1 + loopSize} ${fromY - loopSize}, ${x2 + loopSize} ${toY + loopSize}, ${x2} ${toY}`;
+      path.setAttribute('d', d);
+      path.setAttribute('class', 'rel-line');
+      path.setAttribute('marker-end', 'url(#arrowhead)');
+      path.dataset.from = rel.from;
+      path.dataset.to = rel.to;
+      svgLines.appendChild(path);
+
+      if (showLabels && rel.label) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x1 + loopSize + 4);
+        text.setAttribute('y', (fromY + toY) / 2);
+        text.setAttribute('class', 'rel-label');
+        text.textContent = rel.label;
+        svgLines.appendChild(text);
+      }
+      continue;
+    }
+
+    // Determine which side to connect
+    const fromCX = (fromLeft + fromRight) / 2;
+    const toCX = (toLeft + toRight) / 2;
+
+    if (fromCX < toCX) {
+      x1 = fromRight;
+      x2 = toLeft;
+    } else {
+      x1 = fromLeft;
+      x2 = toRight;
+    }
+
+    const dx = Math.abs(x2 - x1);
+    const cpOffset = Math.max(40, dx * 0.35);
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const cp1x = x1 < x2 ? x1 + cpOffset : x1 - cpOffset;
+    const cp2x = x1 < x2 ? x2 - cpOffset : x2 + cpOffset;
+    const d = `M ${x1} ${fromY} C ${cp1x} ${fromY}, ${cp2x} ${toY}, ${x2} ${toY}`;
+    path.setAttribute('d', d);
+    path.setAttribute('class', 'rel-line');
+    path.setAttribute('marker-end', 'url(#arrowhead)');
+    path.dataset.from = rel.from;
+    path.dataset.to = rel.to;
+    svgLines.appendChild(path);
+
+    if (showLabels && rel.label) {
+      const mx = (x1 + x2) / 2;
+      const my = (fromY + toY) / 2 - 6;
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', mx);
+      text.setAttribute('y', my);
+      text.setAttribute('class', 'rel-label');
+      text.setAttribute('text-anchor', 'middle');
+      text.textContent = rel.label;
+      svgLines.appendChild(text);
+    }
+  }
+}
+
+// ─── Interaction: Drag ───
+function makeDraggable(el, tableName) {
+  let startX, startY, origX, origY;
+
+  el.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    el.classList.add('dragging');
+    startX = e.clientX;
+    startY = e.clientY;
+    origX = el.offsetLeft;
+    origY = el.offsetTop;
+
+    function onMove(e) {
+      const dx = (e.clientX - startX) / scale;
+      const dy = (e.clientY - startY) / scale;
+      el.style.left = (origX + dx) + 'px';
+      el.style.top = (origY + dy) + 'px';
+      positions[tableName].x = origX + dx;
+      positions[tableName].y = origY + dy;
+      drawRelationships();
+      updateMinimap();
+    }
+
+    function onUp() {
+      el.classList.remove('dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+
+  // Hover highlighting
+  el.addEventListener('mouseenter', () => highlightTable(tableName));
+  el.addEventListener('mouseleave', () => clearHighlights());
+}
+
+function highlightTable(tableName) {
+  const lines = svgLines.querySelectorAll('.rel-line');
+  lines.forEach(line => {
+    if (line.dataset.from === tableName || line.dataset.to === tableName) {
+      line.classList.add('highlighted');
+      line.setAttribute('marker-end', 'url(#arrowhead-hl)');
+    } else {
+      line.style.opacity = '0.15';
+    }
+  });
+}
+
+function clearHighlights() {
+  const lines = svgLines.querySelectorAll('.rel-line');
+  lines.forEach(line => {
+    line.classList.remove('highlighted');
+    line.setAttribute('marker-end', 'url(#arrowhead)');
+    line.style.opacity = '';
+  });
+}
+
+// ─── Pan & Zoom ───
+let isPanning = false, panStartX, panStartY;
+
+container.addEventListener('mousedown', (e) => {
+  if (e.target !== container && e.target !== canvas && e.target.tagName !== 'svg') return;
+  isPanning = true;
+  panStartX = e.clientX - panX;
+  panStartY = e.clientY - panY;
+  container.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isPanning) return;
+  panX = e.clientX - panStartX;
+  panY = e.clientY - panStartY;
+  applyTransform();
+  updateMinimap();
+});
+
+document.addEventListener('mouseup', () => {
+  isPanning = false;
+  container.style.cursor = 'grab';
+});
+
+container.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.92 : 1.08;
+  const newScale = Math.max(0.2, Math.min(2, scale * delta));
+
+  // Zoom toward cursor
+  const rect = container.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  panX = cx - (cx - panX) * (newScale / scale);
+  panY = cy - (cy - panY) * (newScale / scale);
+
+  scale = newScale;
+  applyTransform();
+  updateMinimap();
+}, { passive: false });
+
+function applyTransform() {
+  canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+}
+
+function zoomIn() { scale = Math.min(2, scale * 1.2); applyTransform(); updateMinimap(); }
+function zoomOut() { scale = Math.max(0.2, scale * 0.8); applyTransform(); updateMinimap(); }
+
+function resetView() {
+  scale = 0.85;
+  panX = 50;
+  panY = 20;
+  applyTransform();
+  updateMinimap();
+}
+
+function toggleLabels() {
+  showLabels = !showLabels;
+  drawRelationships();
+}
+
+// ─── Minimap ───
+const minimapCanvas = document.getElementById('minimap-canvas');
+const mCtx = minimapCanvas.getContext('2d');
+
+function updateMinimap() {
+  const mw = 180, mh = 120;
+  minimapCanvas.width = mw * 2;
+  minimapCanvas.height = mh * 2;
+  minimapCanvas.style.width = mw + 'px';
+  minimapCanvas.style.height = mh + 'px';
+  mCtx.scale(2, 2);
+
+  mCtx.clearRect(0, 0, mw, mh);
+  mCtx.fillStyle = '#0f1117';
+  mCtx.fillRect(0, 0, mw, mh);
+
+  // Find bounds
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const [name, pos] of Object.entries(positions)) {
+    const el = tableElements[name];
+    if (!el) continue;
+    minX = Math.min(minX, pos.x);
+    minY = Math.min(minY, pos.y);
+    maxX = Math.max(maxX, pos.x + el.offsetWidth);
+    maxY = Math.max(maxY, pos.y + el.offsetHeight);
+  }
+
+  const padding = 40;
+  minX -= padding; minY -= padding;
+  maxX += padding; maxY += padding;
+  const scaleX = mw / (maxX - minX);
+  const scaleY = mh / (maxY - minY);
+  const ms = Math.min(scaleX, scaleY);
+
+  // Draw tables
+  for (const [name, pos] of Object.entries(positions)) {
+    const el = tableElements[name];
+    if (!el) continue;
+    const color = schema.tables[name]?.color || '#6ea8fe';
+    mCtx.fillStyle = color + '60';
+    mCtx.fillRect(
+      (pos.x - minX) * ms,
+      (pos.y - minY) * ms,
+      el.offsetWidth * ms,
+      el.offsetHeight * ms
+    );
+  }
+
+  // Draw viewport
+  const rect = container.getBoundingClientRect();
+  const vx = (-panX / scale - minX) * ms;
+  const vy = (-panY / scale - minY) * ms;
+  const vw = (rect.width / scale) * ms;
+  const vh = (rect.height / scale) * ms;
+  mCtx.strokeStyle = '#6ea8fe';
+  mCtx.lineWidth = 1;
+  mCtx.strokeRect(vx, vy, vw, vh);
+}
+
+// ─── Init ───
+renderTables();
+drawRelationships();
+applyTransform();
+setTimeout(updateMinimap, 100);
+window.addEventListener('resize', updateMinimap);
+</script>
+</body>
+</html>

@@ -193,7 +193,6 @@
     }
 
     .callout{
-      border-left:4px solid var(--primary);
       background:#eff6ff;
       padding:1rem;
       border-radius:12px;
@@ -201,8 +200,11 @@
     }
 
     .callout.success{
-      border-left-color:var(--success);
       background:#f0fdf4;
+    }
+
+    .callout.warn{
+      background:#fffbeb;
     }
 
     code{
@@ -244,6 +246,29 @@
       margin-bottom:.25rem;
     }
 
+    .role-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:1rem;
+      font-size:.95rem;
+    }
+
+    .role-table th,
+    .role-table td{
+      text-align:left;
+      padding:.5rem .75rem;
+      border:1px solid var(--border);
+    }
+
+    .role-table th{
+      background:#f3f4f6;
+      font-weight:600;
+    }
+
+    .role-table tr:nth-child(even) td{
+      background:#f9fafb;
+    }
+
     .footer{
       text-align:center;
       color:var(--muted);
@@ -263,8 +288,8 @@
   <header>
     <h1>WIN Student Goal Tracker</h1>
     <p>
-      User manual for teachers and program staff using the WIN platform to manage
-      students, goals, benchmarks, and progress events.
+      User manual for teachers, program staff, and administrators using the WIN
+      platform to manage students, goals, benchmarks, and progress events.
     </p>
 
     <div class="hero-actions">
@@ -288,24 +313,28 @@
         <h2>Contents</h2>
         <ul>
           <li><a href="#overview">1. Overview</a></li>
-          <li><a href="#access">2. Accessing the Application</a></li>
-          <li><a href="#program">3. Selecting a Program</a></li>
-          <li><a href="#dashboard">4. Student Dashboard</a></li>
-          <li><a href="#add-student">5. Adding &amp; Editing Students</a></li>
-          <li><a href="#goals">6. Managing Goals</a></li>
-          <li><a href="#benchmarks">7. Managing Benchmarks</a></li>
-          <li><a href="#events">8. Recording Progress Events</a></li>
-          <li><a href="#deleting">9. Deleting Records</a></li>
-          <li><a href="#reports">10. Reports</a></li>
-          <li><a href="#mobile">11. Mobile Experience</a></li>
-          <li><a href="#workflow">12. Typical Workflow</a></li>
-          <li><a href="#tips">13. Usage Notes</a></li>
+          <li><a href="#roles">2. User Roles</a></li>
+          <li><a href="#registration">3. Registering a New District</a></li>
+          <li><a href="#access">4. Accessing the Application</a></li>
+          <li><a href="#program">5. Selecting a Program</a></li>
+          <li><a href="#dashboard">6. Student Dashboard</a></li>
+          <li><a href="#add-student">7. Adding &amp; Editing Students</a></li>
+          <li><a href="#goals">8. Managing Goals</a></li>
+          <li><a href="#benchmarks">9. Managing Benchmarks</a></li>
+          <li><a href="#events">10. Recording Progress Events</a></li>
+          <li><a href="#deleting">11. Deleting Records</a></li>
+          <li><a href="#reports">12. Reports</a></li>
+          <li><a href="#admin">13. Administration</a></li>
+          <li><a href="#mobile">14. Mobile Experience</a></li>
+          <li><a href="#workflow">15. Typical Workflow</a></li>
+          <li><a href="#tips">16. Usage Notes</a></li>
         </ul>
 
         <p class="small">
-          Demo login:<br />
+          Prototype demo login:<br />
           <code>opelly@gmail.com</code><br />
-          <code>1234</code>
+          <code>1234</code><br />
+          (Teacher role — for demo use only)
         </p>
       </aside>
 
@@ -340,14 +369,128 @@
           </div>
 
           <div class="callout">
-            This manual covers the current application workflow as implemented
-            in the deployed prototype. Features relating to district registration
-            and administration are documented separately.
+            This manual covers teacher and program staff workflows as well as
+            district administration features including program management and
+            user provisioning.
+          </div>
+        </section>
+
+        <section id="roles" class="card">
+          <h2 class="section-title">2. User Roles</h2>
+          <p class="muted">
+            Every user account is assigned a role when added to a program. The
+            role determines which actions that user can perform. There are five
+            roles in the system.
+          </p>
+
+          <table class="role-table">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Description</th>
+                <th>Key Permissions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Teacher</strong></td>
+                <td>Standard instructional staff member</td>
+                <td>
+                  Full access to their own students — create, edit, and delete
+                  students, goals, benchmarks, and progress events. Can run
+                  reports and use AI suggestions.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Paraeducator</strong></td>
+                <td>Support staff assisting teachers</td>
+                <td>
+                  Can view students and log progress events. Cannot create or
+                  delete students, goals, or benchmarks, and cannot run reports
+                  or use AI suggestions.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Program Admin</strong></td>
+                <td>Staff member who manages an entire program</td>
+                <td>
+                  Same as Teacher but scoped across all students in the program,
+                  not just their own. Can run reports.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>District Admin</strong></td>
+                <td>Administrator who manages a school district</td>
+                <td>
+                  All Program Admin abilities plus access to the Administration
+                  panel. Can create and edit programs and add users to any
+                  program within the district.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Super Admin</strong></td>
+                <td>System-level administrator</td>
+                <td>
+                  Full access across all districts and programs. Can assign any
+                  role, including Super Admin. Reserved for platform operators.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            A user's role is set when their account is created by a District
+            Admin. If you are unsure of your role, contact your district
+            administrator.
+          </div>
+        </section>
+
+        <section id="registration" class="card">
+          <h2 class="section-title">3. Registering a New District</h2>
+          <p class="muted">
+            If your school district is not yet set up in the system, a district
+            administrator can self-register to create the district account, an
+            initial program, and their own login in one step.
+          </p>
+
+          <div class="callout warn">
+            Registration creates a new, independent district. If your district
+            already exists, do not register again — contact your existing
+            district administrator to have a user account created for you.
+          </div>
+
+          <h3>How to register</h3>
+          <ol>
+            <li>
+              Go to <code>https://win.opelly.me/register</code> or click
+              <strong>Register</strong> from the login page.
+            </li>
+            <li>
+              Fill in <strong>Your Details</strong>: name, email address, and
+              password. This becomes your login.
+            </li>
+            <li>
+              Fill in <strong>District Details</strong>: district name and an
+              optional contact email for the district.
+            </li>
+            <li>
+              Fill in <strong>Your First Program</strong>: the name and optional
+              description of the first program in your district (e.g.
+              "Special Education").
+            </li>
+            <li>Click <strong>Create District &amp; Account</strong>.</li>
+          </ol>
+
+          <div class="callout success">
+            After registration you will be directed to the login page. Sign in
+            with your new credentials. You will be assigned the District Admin
+            role automatically and can add more programs and users from the
+            Administration panel.
           </div>
         </section>
 
         <section id="access" class="card">
-          <h2 class="section-title">2. Accessing the Application</h2>
+          <h2 class="section-title">4. Accessing the Application</h2>
           <p>
             To begin, open the login page at
             <code>https://win.opelly.me/login</code>.
@@ -365,15 +508,21 @@
             After a successful login, the system will take you to the program
             selection screen.
           </div>
+
+          <div class="callout">
+            If your account is locked after repeated failed attempts, you will
+            see a message indicating the account is temporarily unavailable.
+            Wait a few minutes before trying again or contact your administrator.
+          </div>
         </section>
 
         <section id="program" class="card">
-          <h2 class="section-title">3. Selecting a Program</h2>
+          <h2 class="section-title">5. Selecting a Program</h2>
           <p class="muted">
             After authentication, the system displays the list of programs
             available to the logged-in user. Each program card shows the
-            program name, your role (e.g. Teacher, Admin), and whether it is
-            your primary program.
+            program name, your role (e.g. Teacher, District Admin), and whether
+            it is your primary program.
           </p>
 
           <ol>
@@ -381,10 +530,16 @@
             <li>Click the program you wish to work in.</li>
             <li>The application will open the main dashboard for that program.</li>
           </ol>
+
+          <div class="callout">
+            A user can belong to multiple programs with different roles in each.
+            Selecting a program loads a session scoped to that program — switch
+            programs by logging out and logging back in.
+          </div>
         </section>
 
         <section id="dashboard" class="card">
-          <h2 class="section-title">4. Student Dashboard</h2>
+          <h2 class="section-title">6. Student Dashboard</h2>
           <p>
             The main dashboard displays the students assigned to the current
             teacher or user.
@@ -403,6 +558,10 @@
                   between viewing only your own students and all students in
                   the program.
                 </li>
+                <li>
+                  Students may be organized into labeled groups if a Program
+                  Admin or District Admin has configured groupings.
+                </li>
                 <li>Click a student to open their goal workspace.</li>
               </ul>
             </div>
@@ -410,8 +569,13 @@
               <h3>Navigation</h3>
               <ul class="info-list">
                 <li>
-                  The sidebar also provides links to <strong>Reports</strong>
+                  The sidebar provides links to <strong>Reports</strong>
                   and <strong>Log Out</strong>.
+                </li>
+                <li>
+                  District Admins and Super Admins also see an
+                  <strong>Admin</strong> link that opens the Administration
+                  panel (see <a href="#admin">Section 13</a>).
                 </li>
                 <li>Click the edit icon next to a student to update their name or IEP date.</li>
               </ul>
@@ -420,10 +584,11 @@
         </section>
 
         <section id="add-student" class="card">
-          <h2 class="section-title">5. Adding &amp; Editing Students</h2>
+          <h2 class="section-title">7. Adding &amp; Editing Students</h2>
           <p class="muted">
-            Teachers can add a new student record directly from the dashboard,
-            or edit an existing student's information.
+            Teachers and Program Admins can add a new student record directly
+            from the dashboard, or edit an existing student's information.
+            Paraeducators cannot add or edit students.
           </p>
 
           <h3>Adding a student</h3>
@@ -447,7 +612,7 @@
         </section>
 
         <section id="goals" class="card">
-          <h2 class="section-title">6. Managing Goals</h2>
+          <h2 class="section-title">8. Managing Goals</h2>
           <p>
             Selecting a student opens the goal workspace for that student.
             Goals are the main tracking objects used to measure student
@@ -509,11 +674,16 @@
         </section>
 
         <section id="benchmarks" class="card">
-          <h2 class="section-title">7. Managing Benchmarks</h2>
+          <h2 class="section-title">9. Managing Benchmarks</h2>
           <p>
             Benchmarks break a goal into smaller, measurable steps. This makes it
             easier to see incremental progress over time. Each benchmark has a
             full description and an optional short name used for compact display.
+          </p>
+
+          <p class="muted">
+            Teachers and Program Admins can add and edit benchmarks.
+            Paraeducators can view benchmarks but cannot create or modify them.
           </p>
 
           <h3>To add a benchmark</h3>
@@ -530,7 +700,8 @@
             When adding a new benchmark, you can click the
             <strong>✦ Suggest with AI</strong> button. The system will analyze
             the student's goal and generate a recommended benchmark that you
-            can accept, modify, or discard before saving.
+            can accept, modify, or discard before saving. This feature is
+            available to Teachers and Program Admins only.
           </p>
 
           <h3>Editing a benchmark</h3>
@@ -545,10 +716,11 @@
         </section>
 
         <section id="events" class="card">
-          <h2 class="section-title">8. Recording Progress Events</h2>
+          <h2 class="section-title">10. Recording Progress Events</h2>
           <p class="muted">
             Progress events document meaningful activities, milestones, or notes
-            related to a student's goal.
+            related to a student's goal. All roles (including Paraeducators) can
+            log progress events.
           </p>
 
           <h3>To log a progress event</h3>
@@ -595,9 +767,10 @@
         </section>
 
         <section id="deleting" class="card">
-          <h2 class="section-title">9. Deleting Records</h2>
+          <h2 class="section-title">11. Deleting Records</h2>
           <p class="muted">
-            Students, goals, benchmarks, and progress events can all be deleted.
+            Students, goals, benchmarks, and progress events can all be deleted
+            by Teachers and Program Admins. Paraeducators cannot delete records.
             Deletions are permanent and cannot be undone.
           </p>
 
@@ -632,11 +805,12 @@
         </section>
 
         <section id="reports" class="card">
-          <h2 class="section-title">10. Reports</h2>
+          <h2 class="section-title">12. Reports</h2>
           <p class="muted">
             The Reports section provides tools for extracting and summarizing
             student progress data. Access it from the <strong>Reports</strong>
-            link in the sidebar.
+            link in the sidebar. Reports are available to Teachers and Program
+            Admins. Paraeducators do not have access to the Reports section.
           </p>
 
           <h3>Student Progress Report</h3>
@@ -665,8 +839,73 @@
           </div>
         </section>
 
+        <section id="admin" class="card">
+          <h2 class="section-title">13. Administration</h2>
+          <p class="muted">
+            The Administration panel is available to District Admins and Super
+            Admins. It is accessed via the <strong>Admin</strong> link in the
+            sidebar, which is only visible to users with those roles.
+          </p>
+
+          <p>
+            The Admin panel has two tabs: <strong>Programs</strong> and
+            <strong>Users</strong>.
+          </p>
+
+          <h3>Programs tab</h3>
+          <p>
+            Lists all programs in your district. District Admins can create new
+            programs and edit existing ones.
+          </p>
+
+          <h4>Adding a program</h4>
+          <ol>
+            <li>Click <strong>+ Add Program</strong>.</li>
+            <li>Enter a <strong>Program Name</strong> (required) and an optional <strong>Description</strong>.</li>
+            <li>Click <strong>Create</strong>.</li>
+          </ol>
+
+          <h4>Editing a program</h4>
+          <ol>
+            <li>Click <strong>Edit</strong> next to the program.</li>
+            <li>Update the name or description.</li>
+            <li>Click <strong>Save</strong>.</li>
+          </ol>
+
+          <h3>Users tab</h3>
+          <p>
+            Lists all users across all programs in your district, showing each
+            user's name, email, role, and assigned program.
+          </p>
+
+          <h4>Adding a user</h4>
+          <ol>
+            <li>Click <strong>+ Add User</strong>.</li>
+            <li>Enter the user's <strong>Name</strong>, <strong>Email</strong>, and a temporary <strong>Password</strong>.</li>
+            <li>Select the <strong>Program</strong> to assign the user to.</li>
+            <li>Select the user's <strong>Role</strong> (see <a href="#roles">Section 2</a> for role descriptions).</li>
+            <li>Click <strong>Create User</strong>.</li>
+          </ol>
+
+          <p>
+            The new user can immediately log in with the email and password you
+            provided. Share the credentials with them securely.
+          </p>
+
+          <div class="callout">
+            District Admins cannot assign the Super Admin role. Only a Super
+            Admin can elevate another user to Super Admin.
+          </div>
+
+          <div class="callout warn">
+            There is currently no in-app password reset. If a user forgets their
+            password, a District Admin will need to create a new account or
+            contact the platform operator for assistance.
+          </div>
+        </section>
+
         <section id="mobile" class="card">
-          <h2 class="section-title">11. Mobile Experience</h2>
+          <h2 class="section-title">14. Mobile Experience</h2>
           <p class="muted">
             The application automatically detects whether you are using a
             touch-based mobile device and presents a touch-optimized interface.
@@ -691,37 +930,56 @@
 
           <div class="callout">
             Some management features — such as adding students, creating goals,
-            editing benchmarks, running reports, and deleting records — are
-            only available in the desktop interface. Use a desktop browser for
-            full administrative access.
+            editing benchmarks, running reports, accessing the Admin panel, and
+            deleting records — are only available in the desktop interface. Use
+            a desktop browser for full administrative access.
           </div>
         </section>
 
         <section id="workflow" class="card">
-          <h2 class="section-title">12. Typical Workflow</h2>
+          <h2 class="section-title">15. Typical Workflow</h2>
+
+          <h3>For a Teacher or Program Admin</h3>
           <ol>
-            <li>Log into the application.</li>
-            <li>Select the appropriate program.</li>
-            <li>Review the list of assigned students.</li>
+            <li>Log into the application and select your program.</li>
+            <li>Review the list of assigned students in the sidebar.</li>
             <li>Add a student if needed.</li>
-            <li>Open a student record.</li>
-            <li>Review or create goals.</li>
+            <li>Open a student record and review or create goals.</li>
             <li>Add benchmarks to define milestones (use AI suggestions when helpful).</li>
             <li>Record progress events as the student advances, linking relevant benchmarks.</li>
             <li>Run reports as needed for IEP meetings or program reviews.</li>
           </ol>
+
+          <h3>For a Paraeducator</h3>
+          <ol>
+            <li>Log into the application and select your program.</li>
+            <li>Browse students using the sidebar.</li>
+            <li>Open a student record and select a goal.</li>
+            <li>Switch to the <strong>Progress Events</strong> sub-tab and log a new event.</li>
+          </ol>
+
+          <h3>For a District Admin (initial setup)</h3>
+          <ol>
+            <li>Register at <code>/register</code> to create your district and first program.</li>
+            <li>Log in and open the <strong>Admin</strong> panel from the sidebar.</li>
+            <li>Create additional programs if needed.</li>
+            <li>Add teacher and paraeducator accounts under the Users tab.</li>
+            <li>Share login credentials with each user.</li>
+          </ol>
         </section>
 
         <section id="tips" class="card">
-          <h2 class="section-title">13. Usage Notes</h2>
+          <h2 class="section-title">16. Usage Notes</h2>
           <ul>
-            <li>Keep student names consistent to avoid duplicate entries.</li>
+            <li>Keep student names consistent (use initials or a non-identifying label) to avoid duplicate entries and to protect student privacy.</li>
             <li>Update progress events regularly so the record stays current.</li>
             <li>Use benchmarks to make large goals easier to track.</li>
             <li>Link progress events to benchmarks for richer reporting.</li>
             <li>Review student cards often to spot inactivity or missing updates.</li>
             <li>Use the mobile app for quick progress logging in the field.</li>
             <li>Log out when finished using the system on a shared device.</li>
+            <li>If your login is locked, wait a few minutes and try again, or contact your district administrator.</li>
+            <li>District Admins: share newly created passwords with users through a secure channel and advise them not to share their credentials.</li>
           </ul>
 
           <a href="index.html" class="btn btn-primary back-link">Back to Project Home</a>
@@ -731,7 +989,7 @@
   </main>
 
   <div class="footer">
-    © 2026 WIN Student Goal Tracker.
+    &copy; 2026 WIN Student Goal Tracker.
   </div>
 </body>
 </html>

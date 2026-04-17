@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WIN — Architecture Overview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+      background: #f5f7fa;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    header h1 { font-size: 2rem; margin-bottom: .4rem; }
+    header p { opacity: .8; max-width: 60ch; margin: 0 auto; font-size: .95rem; }
+
+    nav {
+      background: #1e2a3a;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .25rem;
+      padding: .6rem 1rem;
+    }
+    nav a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: .82rem;
+      padding: .3rem .7rem;
+      border-radius: 6px;
+      transition: background .15s;
+    }
+    nav a:hover { background: rgba(255,255,255,.08); color: white; }
+
+    main {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* ── section headings ───────────────────────────────────── */
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: .4rem;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .section-title span { font-size: 1.2rem; }
+
+    /* ── tier diagram ───────────────────────────────────────── */
+    .arch-diagram {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .tier {
+      display: flex;
+      align-items: stretch;
+      gap: .75rem;
+      position: relative;
+    }
+
+    .tier-label {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: white;
+      padding: .5rem .35rem;
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+    }
+
+    .tier-body {
+      flex: 1;
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      padding: .9rem;
+      border-radius: 0 12px 12px 0;
+    }
+
+    /* tier colour themes */
+    .tier--client .tier-label   { background: #2563eb; }
+    .tier--client .tier-body    { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+
+    .tier--proxy .tier-label    { background: #64748b; }
+    .tier--proxy .tier-body     { background: #f8fafc; border: 1.5px solid #cbd5e1; }
+
+    .tier--api .tier-label      { background: #16a34a; }
+    .tier--api .tier-body       { background: #f0fdf4; border: 1.5px solid #bbf7d0; }
+
+    .tier--data .tier-label     { background: #d97706; }
+    .tier--data .tier-body      { background: #fffbeb; border: 1.5px solid #fde68a; }
+
+    .tier--ext .tier-label      { background: #7c3aed; }
+    .tier--ext .tier-body       { background: #faf5ff; border: 1.5px solid #ddd6fe; }
+
+    /* arrow between tiers */
+    .tier-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      gap: .4rem;
+      color: #6b7280;
+      font-size: .72rem;
+      margin-left: 28px; /* align with tier-body */
+    }
+    .tier-arrow svg { flex-shrink: 0; }
+
+    /* ── boxes inside tiers ─────────────────────────────────── */
+    .box {
+      background: white;
+      border-radius: 10px;
+      padding: .6rem .85rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      border: 1px solid rgba(0,0,0,.06);
+      min-width: 130px;
+    }
+    .box-title {
+      font-size: .8rem;
+      font-weight: 700;
+      margin-bottom: .3rem;
+    }
+    .box ul {
+      list-style: none;
+      font-size: .72rem;
+      color: #4b5563;
+    }
+    .box ul li { margin-bottom: .15rem; }
+    .box ul li::before { content: "• "; color: #9ca3af; }
+
+    .box--blue   { border-top: 3px solid #2563eb; }
+    .box--green  { border-top: 3px solid #16a34a; }
+    .box--amber  { border-top: 3px solid #d97706; }
+    .box--purple { border-top: 3px solid #7c3aed; }
+    .box--slate  { border-top: 3px solid #64748b; }
+    .box--rose   { border-top: 3px solid #e11d48; }
+    .box--teal   { border-top: 3px solid #0d9488; }
+    .box--indigo { border-top: 3px solid #4f46e5; }
+
+    .badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      margin-right: .25rem;
+      vertical-align: middle;
+    }
+    .badge--blue   { background: #dbeafe; color: #1d4ed8; }
+    .badge--green  { background: #dcfce7; color: #15803d; }
+    .badge--amber  { background: #fef3c7; color: #b45309; }
+    .badge--purple { background: #ede9fe; color: #6d28d9; }
+
+    /* ── auth flow ──────────────────────────────────────────── */
+    .flow {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: .5rem;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 150px;
+      max-width: 170px;
+    }
+    .flow-bubble {
+      background: white;
+      border-radius: 10px;
+      padding: .6rem .75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      border: 1.5px solid #e5e7eb;
+      font-size: .72rem;
+      text-align: center;
+      width: 100%;
+    }
+    .flow-bubble strong { display: block; font-size: .8rem; margin-bottom: .25rem; color: #111827; }
+    .flow-bubble .note { color: #6b7280; margin-top: .25rem; font-style: italic; }
+    .flow-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #111827;
+      color: white;
+      font-size: .72rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: .4rem;
+    }
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      padding-top: 11px; /* align with bubble mid */
+      flex-shrink: 0;
+    }
+    .flow-connector svg { color: #9ca3af; }
+    .flow-connector span { font-size: .65rem; color: #9ca3af; white-space: nowrap; padding: 0 .3rem; }
+
+    /* ── data model ─────────────────────────────────────────── */
+    .entity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .75rem;
+    }
+    .entity {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+    .entity-header {
+      padding: .45rem .75rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: white;
+    }
+    .entity-fields {
+      padding: .5rem .75rem;
+      font-size: .7rem;
+      color: #4b5563;
+    }
+    .entity-fields div { padding: .1rem 0; border-bottom: 1px solid #f3f4f6; }
+    .entity-fields div:last-child { border-bottom: none; }
+    .pk { color: #d97706; font-weight: 700; }
+    .fk { color: #2563eb; }
+    .field-note { color: #9ca3af; font-size: .65rem; margin-left: .25rem; }
+
+    .rel-diagram {
+      overflow-x: auto;
+    }
+
+    /* ── roles ──────────────────────────────────────────────── */
+    .role-pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 0;
+    }
+    .role-row {
+      display: flex;
+      justify-content: center;
+    }
+    .role-chip {
+      border-radius: 8px;
+      padding: .5rem 1.2rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      min-width: 160px;
+    }
+
+    /* ── permission matrix ──────────────────────────────────── */
+    table.matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .72rem;
+    }
+    table.matrix th, table.matrix td {
+      border: 1px solid #e5e7eb;
+      padding: .35rem .5rem;
+      text-align: center;
+    }
+    table.matrix th { background: #f9fafb; font-weight: 700; color: #374151; }
+    table.matrix td:first-child { text-align: left; font-weight: 600; color: #374151; }
+    .allow  { background: #dcfce7; color: #15803d; font-weight: 700; border-radius: 4px; padding: .1rem .3rem; font-size: .65rem; }
+    .mine   { background: #fef3c7; color: #b45309; font-weight: 700; border-radius: 4px; padding: .1rem .3rem; font-size: .65rem; }
+    .deny   { background: #fee2e2; color: #b91c1c; font-weight: 700; border-radius: 4px; padding: .1rem .3rem; font-size: .65rem; }
+
+    /* ── cards row ──────────────────────────────────────────── */
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: .75rem;
+    }
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      border: 1px solid #e5e7eb;
+    }
+    .info-card h3 { font-size: .85rem; font-weight: 700; margin-bottom: .5rem; color: #111827; }
+    .info-card ul { list-style: none; font-size: .75rem; color: #4b5563; }
+    .info-card ul li { padding: .2rem 0; border-bottom: 1px solid #f3f4f6; }
+    .info-card ul li:last-child { border-bottom: none; }
+    .info-card ul li::before { content: "→ "; color: #9ca3af; }
+
+    /* ── footer ─────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      font-size: .75rem;
+      color: #9ca3af;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>WIN — Architectural Overview</h1>
+  <p>High-level diagram of the system tiers, components, data model, auth flow, and role hierarchy.</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="technical.html">← Technical Docs</a>
+  <a href="api.html">API Docs</a>
+  <a href="db.html">Database</a>
+  <a href="erd.html">ERD</a>
+  <a href="um.html">User Manual</a>
+</nav>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       1. SYSTEM TIER DIAGRAM
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>🏗</span> System Architecture</div>
+
+  <div class="arch-diagram">
+
+    <!-- CLIENT TIER -->
+    <div class="tier tier--client">
+      <div class="tier-label">Client</div>
+      <div class="tier-body">
+
+        <div class="box box--blue">
+          <div class="box-title">Angular SPA <span class="badge badge--blue">v20</span></div>
+          <ul>
+            <li>TypeScript 5.8 + SCSS</li>
+            <li>Angular Signals (state)</li>
+            <li>Lazy-loaded routes</li>
+            <li>JWT auth interceptor</li>
+            <li>Proactive token refresh</li>
+          </ul>
+        </div>
+
+        <div class="box box--blue">
+          <div class="box-title">Desktop Layout</div>
+          <ul>
+            <li>Home / Workspace</li>
+            <li>Student detail view</li>
+            <li>Goal &amp; Benchmark modals</li>
+            <li>Progress event modals</li>
+            <li>Report generation UI</li>
+            <li>Admin panel</li>
+          </ul>
+        </div>
+
+        <div class="box box--blue">
+          <div class="box-title">Mobile Layout</div>
+          <ul>
+            <li>Student card list</li>
+            <li>Add progress event</li>
+            <li>Toggle benchmark</li>
+          </ul>
+        </div>
+
+        <div class="box box--blue">
+          <div class="box-title">Shared Services</div>
+          <ul>
+            <li>AuthService (signals)</li>
+            <li>ApiService (HTTP)</li>
+            <li>StudentService</li>
+            <li>AdminService</li>
+            <li>ReportPromptService</li>
+            <li>PlatformService</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tier-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      <span>HTTPS / REST + JWT Bearer — win.opelly.me → winapi.opelly.me</span>
+    </div>
+
+    <!-- PROXY TIER -->
+    <div class="tier tier--proxy">
+      <div class="tier-label">Proxy</div>
+      <div class="tier-body">
+
+        <div class="box box--slate">
+          <div class="box-title">Traefik Reverse Proxy</div>
+          <ul>
+            <li>win.opelly.me → Angular (Nginx :8006)</li>
+            <li>winapi.opelly.me → API (:8005)</li>
+            <li>Let's Encrypt TLS</li>
+            <li>Gzip compression</li>
+            <li>Security headers</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tier-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      <span>HTTP (internal Docker network)</span>
+    </div>
+
+    <!-- API TIER -->
+    <div class="tier tier--api">
+      <div class="tier-label">API</div>
+      <div class="tier-body">
+
+        <div class="box box--green">
+          <div class="box-title">ASP.NET Core 9 <span class="badge badge--green">C#</span></div>
+          <ul>
+            <li>JWT authentication middleware</li>
+            <li>Swagger / OpenAPI</li>
+            <li>CORS policy</li>
+            <li>Dependency injection</li>
+          </ul>
+        </div>
+
+        <div class="box box--green">
+          <div class="box-title">Controllers</div>
+          <ul>
+            <li>/api/Auth — login &amp; tokens</li>
+            <li>/api/Student — CRUD</li>
+            <li>/api/Admin — district/users</li>
+            <li>/api/ReportPrompt — prompts</li>
+          </ul>
+        </div>
+
+        <div class="box box--green">
+          <div class="box-title">Services</div>
+          <ul>
+            <li>TokenService (JWT)</li>
+            <li>PermissionService</li>
+            <li>PasswordHasher (PBKDF2)</li>
+            <li>RecommendationService</li>
+            <li>TranscriptionService</li>
+            <li>ProgressReportBuilder</li>
+          </ul>
+        </div>
+
+        <div class="box box--green">
+          <div class="box-title">Repositories <span class="badge badge--green">Dapper</span></div>
+          <ul>
+            <li>StudentRepository</li>
+            <li>UserRepository</li>
+            <li>AuthRepository</li>
+            <li>AdminRepository</li>
+            <li>ReportPromptRepository</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tier-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      <span>Stored procedures via Dapper — TCP :3309 (Docker internal)</span>
+    </div>
+
+    <!-- DATA TIER -->
+    <div class="tier tier--data">
+      <div class="tier-label">Data</div>
+      <div class="tier-body">
+
+        <div class="box box--amber">
+          <div class="box-title">MySQL 8 <span class="badge badge--amber">Docker</span></div>
+          <ul>
+            <li>winstudentgoaltracker DB</li>
+            <li>17 tables</li>
+            <li>51 stored procedures</li>
+            <li>Initialised from db/docker-init/</li>
+          </ul>
+        </div>
+
+        <div class="box box--amber">
+          <div class="box-title">Core Tables</div>
+          <ul>
+            <li>user, school_district, program</li>
+            <li>user_program (roles junction)</li>
+            <li>student, user_student</li>
+            <li>goal (recursive), benchmark</li>
+            <li>progress_event + junction</li>
+            <li>refresh_token</li>
+          </ul>
+        </div>
+
+        <div class="box box--amber">
+          <div class="box-title">Procedure Groups</div>
+          <ul>
+            <li>sp_Student_* (CRUD)</li>
+            <li>sp_Goal_* / sp_Benchmark_*</li>
+            <li>sp_ProgressEvent_*</li>
+            <li>sp_RefreshToken_*</li>
+            <li>sp_Program_* / sp_User_*</li>
+            <li>sp_ProgressReport_*</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- External services arrow (side) -->
+    <div class="tier-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      <span>Outbound HTTP from API tier only</span>
+    </div>
+
+    <!-- EXTERNAL TIER -->
+    <div class="tier tier--ext">
+      <div class="tier-label">External</div>
+      <div class="tier-body">
+
+        <div class="box box--purple">
+          <div class="box-title">Ollama LLM <span class="badge badge--purple">AI</span></div>
+          <ul>
+            <li>llm.opelly.me</li>
+            <li>Model: gemma4:e2b</li>
+            <li>Benchmark recommendations</li>
+            <li>5-min timeout</li>
+          </ul>
+        </div>
+
+        <div class="box box--purple">
+          <div class="box-title">STT Service <span class="badge badge--purple">AI</span></div>
+          <ul>
+            <li>stt.opelly.me</li>
+            <li>Speech-to-text transcription</li>
+            <li>Progress event dictation</li>
+            <li>5-min timeout</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /arch-diagram -->
+
+
+  <!-- ══════════════════════════════════════════
+       2. AUTH FLOW
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>🔐</span> Two-Phase Authentication Flow</div>
+
+  <div style="overflow-x:auto; padding-bottom:.5rem;">
+    <div class="flow" style="min-width:900px;">
+
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-bubble">
+          <strong>User Submits Credentials</strong>
+          email + password<br>
+          <span class="note">POST /api/Auth/Login</span>
+        </div>
+      </div>
+
+      <div class="flow-connector">
+        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M0 8h24M18 2l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-bubble">
+          <strong>Phase 1 Response</strong>
+          Session token (5 min)<br>+ program list<br>
+          <span class="note">Stored in localStorage</span>
+        </div>
+      </div>
+
+      <div class="flow-connector">
+        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M0 8h24M18 2l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-bubble">
+          <strong>User Selects Program</strong>
+          session token + program ID<br>
+          <span class="note">POST /api/Auth/SelectProgram</span>
+        </div>
+      </div>
+
+      <div class="flow-connector">
+        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M0 8h24M18 2l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-bubble">
+          <strong>Phase 2 Response</strong>
+          JWT (1 min) +<br>Refresh token (30 days)<br>
+          <span class="note">JWT includes role + program_id</span>
+        </div>
+      </div>
+
+      <div class="flow-connector">
+        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M0 8h24M18 2l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-bubble">
+          <strong>Authenticated Requests</strong>
+          Bearer JWT on all API calls<br>
+          <span class="note">Auth interceptor injects token</span>
+        </div>
+      </div>
+
+      <div class="flow-connector">
+        <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M0 8h24M18 2l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-bubble">
+          <strong>Proactive Refresh</strong>
+          10 s before JWT expiry:<br>POST /api/Auth/RefreshToken<br>
+          <span class="note">Rotated refresh token returned</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top:.75rem; font-size:.75rem; color:#6b7280; background:white; border-radius:10px; padding:.75rem 1rem; border:1px solid #e5e7eb;">
+    <strong>Token storage:</strong> <code>auth_jwt</code>, <code>auth_refresh_token</code>, <code>auth_session_token</code> — all in <code>localStorage</code>.
+    &nbsp;|&nbsp;
+    <strong>401 interceptor:</strong> attempts one silent refresh; if that fails, redirects to <code>/login</code>.
+    &nbsp;|&nbsp;
+    <strong>Refresh token rotation:</strong> each use replaces the old token (tracked via <code>replaced_by_token_id</code>).
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       3. DATA MODEL
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>🗄</span> Core Data Model</div>
+
+  <div class="entity-grid">
+
+    <div class="entity">
+      <div class="entity-header" style="background:#64748b;">school_district</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_school_district</div>
+        <div>name</div>
+        <div>contact_email</div>
+        <div class="field-note" style="color:#9ca3af;font-size:.68rem;padding:.2rem 0;">Top-level tenant</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#2563eb;">program</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_program</div>
+        <div><span class="fk">FK</span> id_school_district</div>
+        <div>name, description</div>
+        <div class="field-note">Scope boundary for data</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#0d9488;">user</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_user</div>
+        <div>email, name</div>
+        <div>password_hash, password_salt</div>
+        <div>locked_until</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#7c3aed;">user_program <span style="font-size:.65rem;opacity:.8;">(junction)</span></div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_user_program</div>
+        <div><span class="fk">FK</span> id_user</div>
+        <div><span class="fk">FK</span> id_program</div>
+        <div><span class="fk">FK</span> id_role</div>
+        <div>is_primary, status</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#d97706;">student</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_student</div>
+        <div><span class="fk">FK</span> id_program</div>
+        <div>identifier, program_year</div>
+        <div>enrollment_date</div>
+        <div>next_iep_date</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#7c3aed;">user_student <span style="font-size:.65rem;opacity:.8;">(junction)</span></div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_user_student</div>
+        <div><span class="fk">FK</span> id_user</div>
+        <div><span class="fk">FK</span> id_student</div>
+        <div>is_primary</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#16a34a;">goal</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_goal</div>
+        <div><span class="fk">FK</span> id_goal_parent <span class="field-note">(self-ref)</span></div>
+        <div><span class="fk">FK</span> id_student</div>
+        <div>description, category</div>
+        <div>baseline, target_completion_date</div>
+        <div>close_date, achieved</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#0d9488;">benchmark</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_benchmark</div>
+        <div><span class="fk">FK</span> id_goal</div>
+        <div>benchmark (description)</div>
+        <div>short_name</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#e11d48;">progress_event</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_progress_event</div>
+        <div><span class="fk">FK</span> id_goal</div>
+        <div><span class="fk">FK</span> id_user_created</div>
+        <div>content (rich text)</div>
+        <div>is_sensitive</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#7c3aed;">progress_event_benchmark <span style="font-size:.65rem;opacity:.8;">(junction)</span></div>
+      <div class="entity-fields">
+        <div><span class="fk">FK</span> id_progress_event</div>
+        <div><span class="fk">FK</span> id_benchmark</div>
+        <div class="field-note">Links events to benchmarks</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#64748b;">refresh_token</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_refresh_token</div>
+        <div><span class="fk">FK</span> id_user, id_program</div>
+        <div>token_hash, token_salt</div>
+        <div>expires_at, revoked_at</div>
+        <div>replaced_by_token_id</div>
+      </div>
+    </div>
+
+    <div class="entity">
+      <div class="entity-header" style="background:#4f46e5;">report_prompt</div>
+      <div class="entity-fields">
+        <div><span class="pk">PK</span> id_report_prompt</div>
+        <div><span class="fk">FK</span> program_id</div>
+        <div>report_name</div>
+        <div>prompt_template (LLM)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- relationship summary -->
+  <div style="margin-top:.9rem; background:white; border-radius:10px; padding:.85rem 1rem; border:1px solid #e5e7eb; font-size:.75rem; color:#374151;">
+    <strong>Key relationships:</strong>
+    &nbsp;school_district <strong>1→N</strong> program &nbsp;·&nbsp;
+    program <strong>1→N</strong> student &nbsp;·&nbsp;
+    student <strong>1→N</strong> goal (recursive parent/child) &nbsp;·&nbsp;
+    goal <strong>1→N</strong> benchmark &nbsp;·&nbsp;
+    goal <strong>1→N</strong> progress_event &nbsp;·&nbsp;
+    progress_event <strong>M↔N</strong> benchmark (junction) &nbsp;·&nbsp;
+    user <strong>M↔N</strong> program (via user_program + role) &nbsp;·&nbsp;
+    user <strong>M↔N</strong> student (via user_student)
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       4. ROLE HIERARCHY
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>👥</span> Role Hierarchy &amp; Permissions</div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; flex-wrap:wrap;" class="role-and-matrix">
+
+    <!-- pyramid -->
+    <div style="background:white; border-radius:12px; padding:1.2rem 1rem; box-shadow:0 2px 8px rgba(0,0,0,.07); border:1px solid #e5e7eb;">
+      <div style="font-size:.82rem; font-weight:700; margin-bottom:.9rem; color:#111827;">Role Tiers (highest → lowest)</div>
+      <div class="role-pyramid">
+        <div class="role-row">
+          <div class="role-chip" style="background:#111827; min-width:280px; text-align:center;">
+            super_admin &nbsp;·&nbsp; <span style="font-weight:400;font-size:.72rem;">full platform access</span>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-chip" style="background:#1d4ed8; min-width:240px; text-align:center;">
+            district_admin &nbsp;·&nbsp; <span style="font-weight:400;font-size:.72rem;">manages programs</span>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-chip" style="background:#2563eb; min-width:200px; text-align:center;">
+            program_admin &nbsp;·&nbsp; <span style="font-weight:400;font-size:.72rem;">manages users</span>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-chip" style="background:#16a34a; min-width:160px; text-align:center;">
+            teacher &nbsp;·&nbsp; <span style="font-weight:400;font-size:.72rem;">full student CRUD</span>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-chip" style="background:#d97706; min-width:120px; text-align:center;">
+            paraeducator &nbsp;·&nbsp; <span style="font-weight:400;font-size:.72rem;">log events</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- permission matrix -->
+    <div style="background:white; border-radius:12px; padding:1.2rem 1rem; box-shadow:0 2px 8px rgba(0,0,0,.07); border:1px solid #e5e7eb; overflow-x:auto;">
+      <div style="font-size:.82rem; font-weight:700; margin-bottom:.9rem; color:#111827;">Sample Permission Matrix</div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Entity / Action</th>
+            <th>super_admin</th>
+            <th>district_admin</th>
+            <th>program_admin</th>
+            <th>teacher</th>
+            <th>paraeducator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Student — Create</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>Student — Update</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>Goal — Create</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>Goal — Update</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>ProgressEvent — Create</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+          </tr>
+          <tr>
+            <td>ProgressEvent — Delete</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>Program — Create</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+            <td><span class="deny">Deny</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+          <tr>
+            <td>User — Create</td>
+            <td><span class="allow">Allow</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="mine">Mine</span></td>
+            <td><span class="deny">Deny</span></td>
+            <td><span class="deny">Deny</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:.65rem;color:#9ca3af;margin-top:.5rem;">
+        <span class="allow">Allow</span> = full access &nbsp;
+        <span class="mine">Mine</span> = own records only &nbsp;
+        <span class="deny">Deny</span> = not permitted
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       5. DEPLOYMENT
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>🐳</span> Deployment &amp; Infrastructure</div>
+
+  <div class="info-cards">
+
+    <div class="info-card">
+      <h3>Docker Containers</h3>
+      <ul>
+        <li>mysql:8 (port 3309)</li>
+        <li>.NET API (port 8005)</li>
+        <li>Angular / Nginx (port 8006)</li>
+        <li>Traefik reverse proxy</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Docker Networks</h3>
+      <ul>
+        <li>web — external HTTPS routing</li>
+        <li>backend — internal service mesh</li>
+        <li>API depends on MySQL healthcheck</li>
+        <li>UI depends on API (build time)</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Environment Config</h3>
+      <ul>
+        <li>MYSQL_ROOT_PASSWORD</li>
+        <li>MYSQL_DATABASE / USER / PASSWORD</li>
+        <li>JWT_KEY (signing secret)</li>
+        <li>MYSQL_HOST / PORT</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Frontend Environments</h3>
+      <ul>
+        <li>Dev: localhost:5000 (API)</li>
+        <li>Prod: winapi.opelly.me (API)</li>
+        <li>Served by Nginx in production</li>
+        <li>Angular CLI dev server locally</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>DB Initialisation</h3>
+      <ul>
+        <li>Schemas from db/docker-init/</li>
+        <li>51 stored procedures</li>
+        <li>Health check gates API startup</li>
+        <li>No ORM migrations — raw SQL</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>AI / External Services</h3>
+      <ul>
+        <li>Ollama LLM — llm.opelly.me</li>
+        <li>STT service — stt.opelly.me</li>
+        <li>Both called from API tier only</li>
+        <li>5-minute timeout on both</li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       6. KEY DESIGN DECISIONS
+  ══════════════════════════════════════════ -->
+  <div class="section-title"><span>⚙️</span> Key Design Decisions</div>
+
+  <div class="info-cards">
+
+    <div class="info-card">
+      <h3>Two-Phase JWT Auth</h3>
+      <ul>
+        <li>Phase 1: credentials → session token</li>
+        <li>Phase 2: program select → scoped JWT</li>
+        <li>Prevents data leakage before program chosen</li>
+        <li>JWT scoped to one program at a time</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Refresh Token Rotation</h3>
+      <ul>
+        <li>New token issued on each refresh</li>
+        <li>Old token replaced (not deleted)</li>
+        <li>Genealogy tracked via replaced_by</li>
+        <li>Prevents replay attacks</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Program-Scoped Multi-Tenancy</h3>
+      <ul>
+        <li>JWT contains program_id claim</li>
+        <li>All queries filtered by program</li>
+        <li>district_admin scoped to district</li>
+        <li>super_admin bypasses scope</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Dapper + Stored Procedures</h3>
+      <ul>
+        <li>No ORM (Entity Framework)</li>
+        <li>Business logic close to data</li>
+        <li>Dapper maps rows to C# objects</li>
+        <li>51 procedures for full coverage</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Angular Signals (not RxJS)</h3>
+      <ul>
+        <li>Auth state as reactive signals</li>
+        <li>Computed signals derive user context</li>
+        <li>Simpler than Observable chains</li>
+        <li>Auto-update dependent UI</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>Centralised Permission Matrix</h3>
+      <ul>
+        <li>Declarative rules per entity + action</li>
+        <li>Allow / MineOnly / Deny granularity</li>
+        <li>Evaluated at request time in API</li>
+        <li>Single source of truth for authz</li>
+      </ul>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  WIN Student Goal Tracker — Architecture Overview &nbsp;|&nbsp; Generated 2026-04-15
+</footer>
+
+</body>
+</html>
