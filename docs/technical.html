@@ -1224,25 +1224,220 @@
 
       <section id="install">
         <h2>5. Application Installation</h2>
+        <p>
+          The application is composed of three moving parts — an Angular 20 SPA (<code>ui/winstudentgoaltracker</code>),
+          a .NET 9 Web API (<code>api/</code>), and a MySQL 8 database initialised from the SQL objects in
+          <code>db/Objects/</code>. Configuration for every tier is read from a single <code>.env</code> file at the
+          repository root. Two workflows are supported: running the stack directly on a developer workstation, or
+          deploying the full stack to a server with <code>docker compose</code> behind an existing Traefik reverse
+          proxy.
+        </p>
 
-        <h3>Prerequisites</h3>
-        <p>Node.js, .NET 9 SDK, MySQL, Docker</p>
+        <h3>5.1 Local Development Environment</h3>
+        <p>
+          The recommended local workflow runs MySQL in Docker (so the schema initialises itself from
+          <code>db/docker-init/01-schema.sh</code>) while the API and UI run on the host for fast iteration and
+          debugging.
+        </p>
 
-        <h3>Frontend</h3>
-        <pre><code>cd frontend
-npm install
-npm start</code></pre>
+        <h4>Prerequisites</h4>
+        <ul>
+          <li><strong>Node.js 22+</strong> and <strong>npm</strong> — to run the Angular CLI</li>
+          <li><strong>.NET 9 SDK</strong> — to build and run the API</li>
+          <li><strong>Docker Desktop</strong> (or Docker Engine + Compose plugin) — to run MySQL</li>
+          <li><strong>Git</strong> — to clone the repository</li>
+        </ul>
 
-        <h3>Backend</h3>
-        <pre><code>cd backend
+        <h4>Step 1 — Clone and create <code>.env</code></h4>
+        <p>
+          Clone the repository and create a <code>.env</code> file at the project root. The API reads it via
+          <code>DotNetEnv</code> (which traverses parent directories), the UI/API containers read it through
+          <code>docker-compose.yml</code>'s <code>env_file</code> directive, and the MySQL container consumes the
+          <code>MYSQL_*</code> variables natively.
+        </p>
+        <pre><code>git clone &lt;repo-url&gt; WinStudentGoalTracker
+cd WinStudentGoalTracker</code></pre>
+        <p>Create <code>.env</code> with the following keys (replace the secrets before sharing or deploying):</p>
+        <pre><code># MySQL container bootstrap
+MYSQL_ROOT_PASSWORD=change_me_root
+MYSQL_DATABASE=winstudentgoaltracker
+MYSQL_USER=appuser
+MYSQL_PASSWORD=change_me_app
+
+# Connection used by the .NET API
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3309
+# (the api falls back to root/no-password if MYSQL_USER/PASSWORD are omitted)
+
+# JWT signing key — must be &gt;= 32 bytes
+JWT_KEY=replace_with_a_long_random_string_at_least_32_chars</code></pre>
+        <p>
+          <code>.env</code> is listed in <code>.gitignore</code>; never commit it. For local dev, point
+          <code>MYSQL_HOST</code> at <code>127.0.0.1</code> so the host-side API can reach the containerised MySQL
+          through the published port <code>3309</code>.
+        </p>
+
+        <h4>Step 2 — Start MySQL</h4>
+        <p>
+          Bring up only the database service from the root compose file. On first run it creates the volume, creates
+          the database and application user, and executes <code>db/docker-init/01-schema.sh</code> which loads tables,
+          functions, views, and stored procedures from <code>db/Objects/</code> in the correct order.
+        </p>
+        <pre><code>docker compose up -d mysql
+docker compose logs -f mysql   # watch for "Schema initialization complete"</code></pre>
+        <p>
+          MySQL is exposed on host port <code>3309</code> (mapped to container port <code>3306</code>). To reset the
+          database during development, stop the container and remove the named volume:
+          <code>docker compose down &amp;&amp; docker volume rm winstudentgoaltracker_win_mysql_data</code>.
+        </p>
+
+        <h4>Step 3 — Run the API</h4>
+        <pre><code>cd api
 dotnet restore
 dotnet run</code></pre>
+        <p>
+          The API listens on <code>http://localhost:5000</code> (and <code>https://localhost:5001</code>) by default
+          via Kestrel. Swagger UI is available at <code>/swagger</code> when running in the
+          <code>Development</code> environment (the default for <code>dotnet run</code>). On startup the console
+          prints the resolved MySQL connection string — verify it points at <code>127.0.0.1:3309</code> and the
+          database name from your <code>.env</code>.
+        </p>
 
-        <h3>Database</h3>
-        <p>Create DB, import schema, update <code>.env</code>.</p>
+        <h4>Step 4 — Run the UI</h4>
+        <pre><code>cd ui/winstudentgoaltracker
+npm install
+npm start</code></pre>
+        <p>
+          The Angular dev server starts on <code>http://localhost:4200</code>. The base URL the UI calls is defined in
+          <code>src/environments/environment.development.ts</code>. For a fully local stack, edit that file so
+          <code>apiBaseUrl</code> points at your locally running API (e.g. <code>http://localhost:5000</code>) instead
+          of the deployed <code>https://winapi.opelly.me</code>. The API's CORS policy already allows any origin in
+          development.
+        </p>
 
-        <h3>Docker</h3>
-        <pre><code>docker-compose up --build</code></pre>
+        <h4>Step 5 — Seed a user</h4>
+        <p>
+          The schema initialises empty. To sign in, insert at least one <code>user</code>, one
+          <code>school_district</code>, one <code>program</code>, and a <code>user_program</code> row linking the user
+          to the program with a role. Passwords are hashed with PBKDF2 by <code>PasswordHasher</code>; the simplest
+          path is to use an existing seeded dump (ask a team member for <code>seed.sql</code>) or register via a
+          <code>super_admin</code> account using the admin endpoints.
+        </p>
+
+        <h3>5.2 Production Deployment (Docker Compose + Traefik)</h3>
+        <p>
+          Production deploys all four tiers — MySQL, .NET API, Nginx-served Angular build, and the Traefik reverse
+          proxy — as Docker containers on a single VPS. The repository's <code>docker-compose.yml</code> brings up
+          MySQL, the API, and the UI; <strong>Traefik runs in a separate compose stack</strong> on the same host and
+          publishes ports 80/443 for the whole server. The two stacks communicate through an external Docker network
+          named <code>web</code>.
+        </p>
+
+        <h4>Prerequisites on the server</h4>
+        <ul>
+          <li>Linux VPS with <strong>Docker Engine</strong> and the <strong>Compose plugin</strong> installed</li>
+          <li>Ports <strong>80</strong> and <strong>443</strong> open on the server's firewall</li>
+          <li>Two DNS <code>A</code> records pointing at the server's public IP:
+            <code>win.&lt;your-domain&gt;</code> (UI) and <code>winapi.&lt;your-domain&gt;</code> (API)</li>
+          <li>A working Traefik stack on the host (see next section)</li>
+        </ul>
+
+        <h4>Setting up Traefik (one-time)</h4>
+        <p>
+          Traefik is the edge router that terminates TLS, requests Let's Encrypt certificates, and forwards traffic to
+          the correct container based on the <code>Host()</code> rule. The WIN compose file assumes Traefik is already
+          running on the host and configured with:
+        </p>
+        <ul>
+          <li>An <strong>external Docker network named <code>web</code></strong> that Traefik is attached to. The
+            application's UI and API containers join this network so Traefik can reach them.
+            <pre><code>docker network create web</code></pre>
+          </li>
+          <li>An entrypoint named <strong><code>websecure</code></strong> listening on <code>:443</code> (and typically
+            a redirect from <code>:80</code>).</li>
+          <li>A certificate resolver named <strong><code>letsencrypt</code></strong> (ACME, HTTP or DNS challenge)
+            configured with an email and a persistent <code>acme.json</code> volume.</li>
+          <li>Two file-provider middlewares referenced by the labels in <code>docker-compose.yml</code>:
+            <strong><code>gzip@file</code></strong> (compression) and
+            <strong><code>security-headers@file</code></strong> (HSTS, frame-deny, etc.).</li>
+        </ul>
+        <p>
+          A minimal Traefik <code>docker-compose.yml</code> typically lives in <code>/opt/traefik/</code> alongside a
+          <code>traefik.yml</code> static config (declaring the entrypoints, providers, and ACME resolver) and a
+          <code>dynamic/</code> directory containing the <code>gzip</code> and <code>security-headers</code>
+          middleware definitions. Traefik's official documentation at
+          <a href="https://doc.traefik.io/traefik/">doc.traefik.io</a> covers this setup in detail — the WIN stack
+          does not prescribe a specific Traefik configuration, it only requires that the network, entrypoint, cert
+          resolver, and middleware names above exist.
+        </p>
+
+        <h4>Step 1 — Prepare the repository on the server</h4>
+        <pre><code>git clone &lt;repo-url&gt; /opt/winstudentgoaltracker
+cd /opt/winstudentgoaltracker</code></pre>
+
+        <h4>Step 2 — Populate <code>.env</code></h4>
+        <p>Same keys as the local workflow, but with production-safe values. For the containerised deployment,
+          <code>MYSQL_HOST</code> must be the service name <code>mysql</code> (the API container resolves it over the
+          internal <code>backend</code> Docker network) and <code>MYSQL_PORT</code> must be <code>3306</code> (the
+          container's internal port, not the host-mapped <code>3309</code>):</p>
+        <pre><code>MYSQL_ROOT_PASSWORD=&lt;strong-random&gt;
+MYSQL_DATABASE=winstudentgoaltracker
+MYSQL_USER=appuser
+MYSQL_PASSWORD=&lt;strong-random&gt;
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+JWT_KEY=&lt;32+ byte random secret&gt;</code></pre>
+
+        <h4>Step 3 — Update domain labels (if not using <code>opelly.me</code>)</h4>
+        <p>
+          <code>docker-compose.yml</code> hard-codes the Traefik <code>Host()</code> rules
+          <code>winapi.opelly.me</code> and <code>win.opelly.me</code>. Edit those two labels to match your DNS
+          records before bringing the stack up. The UI also points at <code>https://winapi.opelly.me</code> via
+          <code>src/environments/environment.ts</code>; update that file and rebuild the UI image so the browser calls
+          your API host.
+        </p>
+
+        <h4>Step 4 — Build and start the stack</h4>
+        <pre><code>docker compose up -d --build</code></pre>
+        <p>This creates:</p>
+        <ul>
+          <li><code>winstudent-mysql</code> — MySQL 8 on the internal <code>backend</code> network, volume
+            <code>win_mysql_data</code>, schema loaded on first start.</li>
+          <li><code>winstudent-api</code> — .NET 9 API on port <code>8005</code>, attached to both
+            <code>backend</code> (to reach MySQL) and <code>web</code> (to be reached by Traefik). Published at
+            <code>winapi.&lt;your-domain&gt;</code> over HTTPS.</li>
+          <li><code>winstudent-ui</code> — Angular build served by Nginx on port <code>8006</code>, attached to
+            <code>web</code>. Published at <code>win.&lt;your-domain&gt;</code> over HTTPS.</li>
+        </ul>
+        <p>
+          Traefik picks up the new containers automatically via its Docker provider, requests TLS certificates from
+          Let's Encrypt on first request, and begins routing traffic. Confirm with
+          <code>docker compose ps</code> (all services <code>healthy</code>/<code>running</code>) and
+          <code>docker compose logs -f api</code> (look for the Kestrel startup line and the printed connection
+          string).
+        </p>
+
+        <h4>Step 5 — Verify</h4>
+        <ul>
+          <li>Visit <code>https://win.&lt;your-domain&gt;</code> — the login page should load over HTTPS with a valid
+            Let's Encrypt certificate.</li>
+          <li>Visit <code>https://winapi.&lt;your-domain&gt;/swagger</code> — should return 404 in production (Swagger
+            is only enabled in <code>Development</code>); a 404 from the API itself confirms routing works.</li>
+          <li>Sign in with a seeded user and check <code>docker compose logs api</code> for successful
+            <code>/api/Auth/Login</code> requests.</li>
+        </ul>
+
+        <h4>Updating a running deployment</h4>
+        <pre><code>cd /opt/winstudentgoaltracker
+git pull
+docker compose up -d --build    # rebuilds changed images and recreates containers
+docker compose logs -f</code></pre>
+        <p>
+          MySQL is <strong>not</strong> rebuilt by <code>--build</code> (it uses the upstream image) and its volume
+          persists across <code>up</code>/<code>down</code> cycles, so data survives code deployments. Schema
+          migrations should be applied by running the appropriate SQL files from <code>db/migrations/</code> against
+          the running MySQL container; see section 7 for backup procedures before running migrations.
+        </p>
       </section>
 
       <section id="auth">
