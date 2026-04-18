@@ -68,7 +68,7 @@
     align-items: center;
     width: 30px;
     height: 16px;
-    background: #d1d5db;
+    background: var(--toggle-inactive);
     border-radius: 8px;
     padding: 2px;
     transition: background var(--transition-normal);
@@ -102,11 +102,11 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #4338CA;
-    background: #EEF2FF;
+    color: var(--accent-indigo);
+    background: var(--accent-indigo-bg);
     padding: 6px 12px;
     margin-top: 6px;
-    border-left: 3px solid #818CF8;
+    border-left: 3px solid var(--accent-indigo-border);
 }
 
 .student-item {

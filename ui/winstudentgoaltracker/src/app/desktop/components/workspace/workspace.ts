@@ -10,6 +10,7 @@ import { EditBenchmarkModal } from '../edit-benchmark-modal/edit-benchmark-modal
 import { EditEventModal } from '../edit-event-modal/edit-event-modal';
 import { EditIcon } from '../edit-icon/edit-icon';
 import { ConfirmModal } from '../confirm-modal/confirm-modal';
+import { ToastService } from '../../../shared/services/toast.service';
 import { formatDate } from '../../../shared/utils/format-date';
 
 type TabView = 'benchmarks' | 'progress';
@@ -66,6 +67,7 @@ export class Workspace {
     private readonly studentService = inject(StudentService);
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
+    private readonly toast = inject(ToastService);
 
     protected readonly studentId = signal<string | null>(null);
     protected readonly student = signal<StudentCardDto | null>(null);
@@ -136,6 +138,7 @@ export class Workspace {
     onGoalSaved() {
         this.showGoalModal.set(null);
         this.refetchProfile();
+        this.toast.show('Goal updated');
     }
 
     onAddGoal() {
@@ -162,6 +165,7 @@ export class Workspace {
         this.selectedGoalId.set(null);
         this.studentService.notifyDataChanged();
         await this.refetchProfile();
+        this.toast.show('Goal deleted');
     }
 
     onGoalCreated(goal: StudentGoalItem) {
@@ -170,6 +174,7 @@ export class Workspace {
         this.refetchProfile().then(() => {
             this.selectedGoalId.set(goal.goalId);
         });
+        this.toast.show('Goal added');
     }
 
     onEditBenchmark(b: BenchmarkDto) {
@@ -179,6 +184,7 @@ export class Workspace {
     onEditBenchmarkSaved() {
         this.showEditBenchmarkModal.set(null);
         this.refetchProfile();
+        this.toast.show('Benchmark saved');
     }
 
     onAddBenchmark() {
@@ -204,6 +210,7 @@ export class Workspace {
         if (!result.success) return;
 
         await this.refetchProfile();
+        this.toast.show('Benchmark deleted');
     }
 
     onNewEvent() {
@@ -217,6 +224,7 @@ export class Workspace {
     onEventSaved() {
         this.showEditEventModal.set(null);
         this.refetchProfile();
+        this.toast.show('Progress event saved');
     }
 
     onDeleteEvent(ev: ProgressEventWithGoalDto) {
@@ -238,6 +246,7 @@ export class Workspace {
         if (!result.success) return;
 
         await this.refetchProfile();
+        this.toast.show('Progress event deleted');
     }
 
     // *****************************************************************
@@ -274,6 +283,7 @@ export class Workspace {
         if (!result.success) return;
 
         this.studentService.notifyDataChanged();
+        this.toast.show('Student deleted');
         this.router.navigate(['/']);
     }
 
