@@ -16,7 +16,7 @@ var dbName = Environment.GetEnvironmentVariable("MYSQL_DATABASE") ?? "winstudent
 var dbUser = Environment.GetEnvironmentVariable("MYSQL_USER") ?? "root";
 var dbPassword = Environment.GetEnvironmentVariable("MYSQL_PASSWORD") ?? "";
 builder.Configuration["ConnectionStrings:DefaultConnection"] =
-    $"Server={dbServer};Port={dbPort};Database={dbName};Uid={dbUser};Pwd={dbPassword};";
+    $"Server={dbServer};Port={dbPort};Database={dbName};Uid={dbUser};Pwd={dbPassword};SslMode=Disabled;";
 
 // Override JWT key from .env if present
 var envJwtKey = Environment.GetEnvironmentVariable("JWT_KEY");

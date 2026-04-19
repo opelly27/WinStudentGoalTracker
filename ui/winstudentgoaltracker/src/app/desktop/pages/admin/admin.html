@@ -1,0 +1,138 @@
+<div class="admin-page">
+    <div class="admin-header">
+        <h1>Administration</h1>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    <div class="tabs">
+        <button class="tab" [class.active]="activeTab() === 'programs'" (click)="onSwitchTab('programs')">Programs</button>
+        <button class="tab" [class.active]="activeTab() === 'users'" (click)="onSwitchTab('users')">Users</button>
+    </div>
+
+    <!-- Programs Tab -->
+    @if (activeTab() === 'programs') {
+    <div class="tab-content">
+        <div class="toolbar">
+            <button class="action-btn" (click)="onAddProgram()">+ Add Program</button>
+        </div>
+
+        @if (programs().length === 0) {
+        <p class="empty">No programs yet. Create your first program to get started.</p>
+        } @else {
+        <div class="list">
+            @for (program of programs(); track program.programId) {
+            <div class="list-item">
+                <div class="list-item-info">
+                    <div class="list-item-name">{{ program.name }}</div>
+                    @if (program.description) {
+                    <div class="list-item-meta">{{ program.description }}</div>
+                    }
+                </div>
+                <button class="edit-btn" (click)="onEditProgram(program)">Edit</button>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Users Tab -->
+    @if (activeTab() === 'users') {
+    <div class="tab-content">
+        <div class="toolbar">
+            <button class="action-btn" (click)="onAddUser()">+ Add User</button>
+        </div>
+
+        @if (users().length === 0) {
+        <p class="empty">No users yet.</p>
+        } @else {
+        <div class="list">
+            @for (user of users(); track user.userId + user.programId) {
+            <div class="list-item">
+                <div class="list-item-info">
+                    <div class="list-item-name">{{ user.name }}</div>
+                    <div class="list-item-meta">{{ user.email }} · {{ user.roleName }} · {{ user.programName }}</div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Database Section -->
+    <div class="section-divider"></div>
+    <h2 class="section-heading">Database</h2>
+    <div class="backup-row">
+        <button class="action-btn backup-btn" (click)="onBackupDatabase()" [disabled]="backingUp()">
+            @if (backingUp()) {
+                Backing up…
+            } @else {
+                Back Up Database
+            }
+        </button>
+        @if (backupSuccess()) {
+        <span class="backup-success">{{ backupSuccess() }}</span>
+        }
+    </div>
+</div>
+
+
+<!-- Program Modal -->
+@if (showProgramModal()) {
+<app-modal-shell [title]="editingProgram() ? 'Edit Program' : 'New Program'" (closed)="showProgramModal.set(false)">
+    <form (ngSubmit)="onSaveProgram()" class="modal-form">
+        <label>
+            Program Name
+            <input type="text" [(ngModel)]="programName" name="programName" required />
+        </label>
+        <label>
+            Description
+            <textarea [(ngModel)]="programDescription" name="programDescription" rows="3"></textarea>
+        </label>
+        <button type="submit">{{ editingProgram() ? 'Save' : 'Create' }}</button>
+    </form>
+</app-modal-shell>
+}
+
+<!-- User Modal -->
+@if (showUserModal()) {
+<app-modal-shell title="New User" (closed)="showUserModal.set(false)">
+    <form (ngSubmit)="onSaveUser()" class="modal-form">
+        <label>
+            Name
+            <input type="text" [(ngModel)]="userName" name="userName" required />
+        </label>
+        <label>
+            Email
+            <input type="email" [(ngModel)]="userEmail" name="userEmail" required />
+        </label>
+        <label>
+            Password
+            <input type="password" [(ngModel)]="userPassword" name="userPassword" required />
+        </label>
+        <label>
+            Program
+            <select [(ngModel)]="userProgramId" name="userProgramId" required>
+                <option value="" disabled>Select a program</option>
+                @for (p of programs(); track p.programId) {
+                <option [value]="p.programId">{{ p.name }}</option>
+                }
+            </select>
+        </label>
+        <label>
+            Role
+            <select [(ngModel)]="userRoleId" name="userRoleId" required>
+                <option value="" disabled>Select a role</option>
+                @for (r of roles(); track r.roleId) {
+                <option [value]="r.roleId">{{ r.name }}</option>
+                }
+            </select>
+        </label>
+        <button type="submit">Create User</button>
+    </form>
+</app-modal-shell>
+}

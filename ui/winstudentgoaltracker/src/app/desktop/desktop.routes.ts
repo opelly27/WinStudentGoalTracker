@@ -3,6 +3,7 @@ import { Home } from './pages/home/home';
 import { Workspace } from './components/workspace/workspace';
 import { Reports } from './components/reports/reports';
 import { StudentProgressReport } from './components/student-progress-report/student-progress-report';
+import { Admin } from './pages/admin/admin';
 export default [
     {
         path: '',
@@ -14,6 +15,7 @@ export default [
             { path: 'students/:studentId/goals/:goalId', component: Workspace },
             { path: 'reports', component: Reports },
             { path: 'reports/student-progress', component: StudentProgressReport },
+            { path: 'admin', component: Admin },
         ],
     },
 ] satisfies Routes;

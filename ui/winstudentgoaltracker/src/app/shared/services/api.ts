@@ -53,6 +53,12 @@ export class Api {
     );
   }
 
-  
+  // Self-service registration — creates a new district + program + user
+  register(request: { email: string; password: string; name: string; districtName: string; districtContactEmail?: string; programName: string; programDescription?: string }): Observable<ResponseResult<object>> {
+    return this.http.post<ResponseResult<object>>(
+      `${this.base}/api/Auth/Register`,
+      request,
+    );
+  }
 
 }

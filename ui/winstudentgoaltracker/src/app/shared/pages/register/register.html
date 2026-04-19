@@ -1,0 +1,71 @@
+@if (success()) {
+<div class="card">
+    <h2>Registration Complete</h2>
+    <p class="subtitle">Your district has been created. You can now log in.</p>
+    <a class="link-button" routerLink="/login">Go to Login</a>
+</div>
+} @else {
+<div class="card">
+    <h2>Register Your School District</h2>
+    <p class="subtitle">Create your account and set up your school district.</p>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    <form (ngSubmit)="onRegister()">
+        <fieldset>
+            <legend>Your Details</legend>
+
+            <label>
+                Name
+                <input type="text" [(ngModel)]="name" name="name" required />
+            </label>
+
+            <label>
+                Email
+                <input type="email" [(ngModel)]="email" name="email" required />
+            </label>
+
+            <label>
+                Password
+                <input type="password" [(ngModel)]="password" name="password" required />
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>District Details</legend>
+
+            <label>
+                District Name
+                <input type="text" [(ngModel)]="districtName" name="districtName" required />
+            </label>
+
+            <label>
+                Contact Email (optional)
+                <input type="email" [(ngModel)]="districtContactEmail" name="districtContactEmail" />
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Your First Program</legend>
+
+            <label>
+                Program Name
+                <input type="text" [(ngModel)]="programName" name="programName" required />
+            </label>
+
+            <label>
+                Description (optional)
+                <textarea [(ngModel)]="programDescription" name="programDescription" rows="2"></textarea>
+            </label>
+        </fieldset>
+
+        <button type="submit" [disabled]="loading()">
+            {{ loading() ? 'Creating...' : 'Create District & Account' }}
+        </button>
+    </form>
+
+    <a class="link-button" routerLink="/login">Already have an account? Sign in</a>
+</div>
+}

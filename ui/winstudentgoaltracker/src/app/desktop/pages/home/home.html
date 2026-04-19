@@ -54,6 +54,9 @@
 
         <div class="sidebar-nav">
             <a class="nav-link" routerLink="/reports">Reports</a>
+            @if (auth.user()?.role === 'district_admin' || auth.user()?.role === 'super_admin') {
+            <a class="nav-link" routerLink="/admin">Admin</a>
+            }
         </div>
 
         <div class="sidebar-bottom">

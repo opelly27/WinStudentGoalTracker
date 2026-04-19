@@ -43,6 +43,11 @@ export class GoalModal {
         targetCompletionDate: null,
     };
 
+    // Close-goal fields — only used in edit mode.
+    protected closeDate: string | null = null;
+    protected achieved = false;
+    protected closeNotes = '';
+
     protected get isEditMode(): boolean {
         return !!this.goal();
     }
@@ -66,6 +71,11 @@ export class GoalModal {
             this.form.targetCompletionDate = existing.targetCompletionDate
                 ? existing.targetCompletionDate.substring(0, 10)
                 : null;
+            this.closeDate = existing.closeDate
+                ? existing.closeDate.substring(0, 10)
+                : null;
+            this.achieved = existing.achieved ?? false;
+            this.closeNotes = existing.closeNotes ?? '';
         } else {
             // Add mode — pre-fill target date from IEP if available
             const iepDate = this.nextIepDate?.();
@@ -89,6 +99,9 @@ export class GoalModal {
                     description: this.form.description,
                     baseline: this.form.baseline,
                     targetCompletionDate: this.form.targetCompletionDate,
+                    closeDate: this.closeDate || null,
+                    achieved: this.closeDate ? this.achieved : null,
+                    closeNotes: this.closeDate && !this.achieved ? this.closeNotes || null : null,
                 },
             );
             this.isSubmitting.set(false);

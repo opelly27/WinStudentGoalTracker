@@ -452,4 +452,76 @@ public class AuthController : BaseController
             Message = "Password set successfully."
         });
     }
+
+    // *****************************************************************
+    // Self-service registration: creates a school district, the user's
+    // first program, and the user account. The user is assigned as
+    // district_admin on the new program, giving them a program_id for
+    // their JWT and access to create more programs from the admin panel.
+    // *****************************************************************
+    [HttpPost("Register")]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseResult<object>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResponseResult<object>>> Register([FromBody] RegisterDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Email) ||
+            string.IsNullOrWhiteSpace(dto.Password) ||
+            string.IsNullOrWhiteSpace(dto.Name) ||
+            string.IsNullOrWhiteSpace(dto.DistrictName) ||
+            string.IsNullOrWhiteSpace(dto.ProgramName))
+        {
+            return BadRequest(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "Email, password, name, district name, and program name are required."
+            });
+        }
+
+        var adminRepo = new AdminRepository();
+
+        // Check for duplicate email
+        if (await adminRepo.EmailExistsAsync(dto.Email))
+        {
+            return Ok(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "An account with this email already exists."
+            });
+        }
+
+        // Look up the district_admin role
+        var districtAdminRole = await adminRepo.GetRoleByInternalNameAsync(UserRoles.DistrictAdmin);
+        if (districtAdminRole == null)
+        {
+            return Ok(new ResponseResult<object>
+            {
+                Success = false,
+                Message = "System configuration error: district_admin role not found."
+            });
+        }
+
+        // Create the school district
+        var districtId = Guid.NewGuid();
+        await adminRepo.CreateDistrictAsync(districtId, dto.DistrictName, dto.DistrictContactEmail);
+
+        // Create the user with hashed password
+        var userId = Guid.NewGuid();
+        var (hash, salt) = PasswordHasher.HashPassword(dto.Password);
+        await adminRepo.CreateUserAsync(userId, dto.Email, dto.Name, hash, salt);
+
+        // Create the user's first program under the new district.
+        // This gives the district_admin a program_id for their JWT,
+        // enabling them to log in and manage the district from the admin panel.
+        var programId = Guid.NewGuid();
+        await adminRepo.CreateProgramAsync(programId, districtId, dto.ProgramName, dto.ProgramDescription);
+
+        // Assign the user as district_admin on the new program
+        await adminRepo.AssignUserToProgramAsync(userId, programId, districtAdminRole.IdRole, isPrimary: true);
+
+        return Ok(new ResponseResult<object>
+        {
+            Success = true,
+            Message = "Registration successful. You can now log in."
+        });
+    }
 }

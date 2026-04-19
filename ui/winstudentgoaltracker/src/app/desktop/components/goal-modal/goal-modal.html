@@ -19,6 +19,29 @@
         <input class="field-input" type="date" [(ngModel)]="form.targetCompletionDate" />
     </div>
 
+    @if (isEditMode) {
+    <hr class="close-divider" />
+    <div class="field">
+        <label class="field-label">Close Date</label>
+        <input class="field-input" type="date" [(ngModel)]="closeDate" />
+    </div>
+    @if (closeDate) {
+    <div class="field">
+        <label class="field-check">
+            <input type="checkbox" [(ngModel)]="achieved" />
+            Goal achieved
+        </label>
+    </div>
+    @if (!achieved) {
+    <div class="field">
+        <label class="field-label">Close Notes</label>
+        <textarea class="field-input field-textarea" [(ngModel)]="closeNotes"
+            placeholder="Reason the goal was closed without being achieved..."></textarea>
+    </div>
+    }
+    }
+    }
+
     @if (errorMessage()) {
     <p class="error">{{ errorMessage() }}</p>
     }

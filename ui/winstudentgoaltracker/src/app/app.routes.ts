@@ -1,11 +1,13 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { Login } from './shared/pages/login/login';
+import { Register } from './shared/pages/register/register';
 import { PlatformService } from './shared/services/platform.service';
 import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
+  { path: 'register', component: Register },
   {
     path: '',
     canMatch: [() => inject(PlatformService).formFactor() === 'mobile'],

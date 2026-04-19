@@ -39,6 +39,7 @@
     [message]="'Delete \u0022' + (deletingBenchmark()!.shortName || deletingBenchmark()!.benchmark) + '\u0022? This cannot be undone.'"
     confirmLabel="Delete"
     [destructive]="true"
+    [doubleConfirm]="true"
     (confirmed)="onDeleteBenchmarkConfirmed()"
     (closed)="showDeleteBenchmarkConfirm.set(false)" />
 }
@@ -80,6 +81,7 @@
         <button class="goal-tab add-goal" (click)="onAddGoal()">+ Goal</button>
         @for (g of goals(); track g.goalId) {
         <button class="goal-tab" [class.active]="selectedGoalId() === g.goalId || (selectedGoal()?.goalId === g.goalId)"
+            [class.closed]="!!g.closeDate"
             (click)="onSelectGoal(g.goalId)">
             {{ g.category }}
         </button>
@@ -97,6 +99,11 @@
             <span class="goal-badge">{{ selectedGoal()!.category }} Goal</span>
             @if (selectedGoal()!.targetCompletionDate) {
             <span class="goal-due">Due {{ formatDate(selectedGoal()!.targetCompletionDate) }}</span>
+            }
+            @if (selectedGoal()!.closeDate) {
+            <span class="goal-status" [class.achieved]="selectedGoal()!.achieved">
+                {{ selectedGoal()!.achieved ? '✓ Achieved' : 'Closed' }}
+            </span>
             }
             <button class="delete-goal-btn" (click)="onDeleteGoal()" aria-label="Delete goal" title="Delete goal">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
