@@ -5,11 +5,13 @@ import { StudentService } from '../../../shared/services/student.service';
 import { StudentCardDto } from '../../../shared/classes/student-card.dto';
 import { StudentModal } from '../../components/student-modal/student-modal';
 import { EditIcon } from '../../components/edit-icon/edit-icon';
+import { ToastHost } from '../../components/toast-host/toast-host';
+import { ToastService } from '../../../shared/services/toast.service';
 import { formatDate } from '../../../shared/utils/format-date';
 
 @Component({
     selector: 'app-home',
-    imports: [RouterOutlet, RouterLink, StudentModal, EditIcon],
+    imports: [RouterOutlet, RouterLink, StudentModal, EditIcon, ToastHost],
     templateUrl: './home.html',
     styleUrl: './home.scss',
 })
@@ -36,6 +38,7 @@ export class Home {
     protected readonly auth = inject(Auth);
     private readonly router = inject(Router);
     private readonly studentService = inject(StudentService);
+    private readonly toast = inject(ToastService);
 
     protected readonly students = signal<StudentCardDto[]>([]);
     protected readonly selectedStudentId = signal<string | null>(null);
@@ -96,6 +99,7 @@ export class Home {
         this.studentService.notifyDataChanged();
         this.selectedStudentId.set(student.studentId);
         this.router.navigate(['/students', student.studentId]);
+        this.toast.show('Student added');
     }
 
     onEditStudent(student: StudentCardDto, event: Event) {
@@ -106,6 +110,7 @@ export class Home {
     onStudentSaved() {
         this.showStudentModal.set(null);
         this.loadStudents();
+        this.toast.show('Student updated');
     }
 
     onLogout() {

@@ -8,9 +8,9 @@
     padding: 4px 10px;
     border-radius: 5px;
     font-size: 12px;
-    border: 1.5px solid #D5D5D0;
-    background: #FFF;
-    color: #666;
+    border: 1.5px solid var(--border-muted);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
     cursor: pointer;
     font-family: inherit;
     transition: all 0.15s ease;

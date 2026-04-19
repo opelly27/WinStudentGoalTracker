@@ -25,7 +25,7 @@
     font-family: inherit;
 
     &:hover {
-        background: #EEF2FF;
+        background: var(--accent-indigo-bg);
     }
 
     &:disabled {
@@ -60,7 +60,7 @@
 .field-label {
     font-size: 12px;
     font-weight: 600;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 4px;
 }
 
@@ -80,7 +80,7 @@
 
 .error {
     font-size: 13px;
-    color: #dc2626;
+    color: var(--danger);
     margin: 0 0 12px;
 }
 
