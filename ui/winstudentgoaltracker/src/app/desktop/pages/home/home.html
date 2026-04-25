@@ -19,7 +19,7 @@
         <div class="sidebar-controls">
             <span class="controls-label">My Students</span>
             <label class="scope-toggle">
-                <input type="checkbox" [checked]="showAll()" (change)="onToggleScope()" hidden>
+                <input type="checkbox" class="sr-only" [checked]="showAll()" (change)="onToggleScope()" aria-label="Show all students">
                 <span class="toggle-track" [class.active]="showAll()">
                     <span class="toggle-thumb"></span>
                 </span>
@@ -34,7 +34,11 @@
             }
             @for (s of group.students; track s.studentId) {
             <div class="student-item" [class.active]="selectedStudentId() === s.studentId"
-                (click)="onSelectStudent(s)">
+                role="button" tabindex="0"
+                [attr.aria-label]="s.identifier"
+                (click)="onSelectStudent(s)"
+                (keydown.enter)="onSelectStudent(s)"
+                (keydown.space)="onSelectStudent(s); $event.preventDefault()">
                 <div class="student-item-info">
                     <div class="student-item-name" [class.bold]="selectedStudentId() === s.studentId">
                         {{ s.identifier }}

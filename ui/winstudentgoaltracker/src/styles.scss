@@ -11,8 +11,8 @@
     --text-primary: #1a1a1a;
     --text-secondary: #555;
     --text-muted: #888;
-    --text-faint: #999;
-    --text-dim: #bbb;
+    --text-faint: #717171;
+    --text-dim: #767676;
     --accent-indigo: #4338CA;
     --accent-indigo-light: #6366F1;
     --accent-indigo-dark: #3730A3;
@@ -70,6 +70,32 @@ select:focus {
     outline: none;
     border-color: var(--accent-indigo) !important;
     box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.12);
+}
+
+/* Visible focus ring for all interactive elements (keyboard navigation) */
+:focus-visible {
+    outline: 2px solid var(--accent-indigo);
+    outline-offset: 2px;
+}
+
+/* Suppress outline for mouse/touch users on inputs (handled above) */
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ─── Screen reader only utility ─── */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ─── Scrollbar (subtle) ─── */

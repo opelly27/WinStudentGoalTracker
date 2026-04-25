@@ -48,9 +48,9 @@
         <div class="field">
             <div class="field-label-row">
                 <label class="field-label" for="prompt">Prompt</label>
-                @if (promptSaved()) {
-                    <span class="save-indicator">&#10003; Saved</span>
-                }
+                <span class="save-indicator" aria-live="polite" aria-atomic="true">
+                    @if (promptSaved()) { &#10003; Saved }
+                </span>
             </div>
             <textarea
                 id="prompt"
