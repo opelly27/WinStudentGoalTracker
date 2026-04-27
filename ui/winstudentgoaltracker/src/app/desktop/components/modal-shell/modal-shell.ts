@@ -15,9 +15,9 @@ export class ModalShell implements OnInit, OnDestroy {
     ngOnInit() {
         this.previousFocus = document.activeElement as HTMLElement;
         requestAnimationFrame(() => {
-            const focusable = this.el.nativeElement.querySelector<HTMLElement>(
+            const focusable = this.el.nativeElement.querySelector(
                 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-            );
+            ) as HTMLElement | null;
             focusable?.focus();
         });
     }

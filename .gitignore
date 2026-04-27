@@ -8,3 +8,5 @@
 /.vs/WinStudentGoalTracker/DesignTimeBuild
 /.vs/WinStudentGoalTracker/v17
 /.vs
+*.md
+/db/Scripts
