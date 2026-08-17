@@ -8,12 +8,12 @@ namespace WinStudentGoalTracker.Services;
 
 public class RecommendationService
 {
-    private readonly OllamaClient _ollamaClient;
+    private readonly OpenRouterClient _openRouterClient;
     private readonly int _maxRetries = 3;
 
-    public RecommendationService(OllamaClient ollamaClient)
+    public RecommendationService(OpenRouterClient openRouterClient)
     {
-        _ollamaClient = ollamaClient;
+        _openRouterClient = openRouterClient;
     }
 
     // -------------------------------------------------------------------------
@@ -35,9 +35,9 @@ public class RecommendationService
         {
             try
             {
-                var content = await _ollamaClient.ChatAsync(prompt, cancellationToken);
+                var content = await _openRouterClient.ChatAsync(prompt, cancellationToken);
 
-                var parsed = JsonSerializer.Deserialize<OllamaSubgoalsResult>(content)
+                var parsed = JsonSerializer.Deserialize<LlmSubgoalsResult>(content)
                     ?? throw new JsonException("LLM response deserialized to null.");
 
                 var subgoals = NormalizeSubgoals(parsed.Subgoals);
@@ -161,9 +161,9 @@ public class RecommendationService
         {
             try
             {
-                var content = await _ollamaClient.ChatAsync(prompt, cancellationToken);
+                var content = await _openRouterClient.ChatAsync(prompt, cancellationToken);
 
-                var parsed = JsonSerializer.Deserialize<OllamaBenchmarkResult>(content)
+                var parsed = JsonSerializer.Deserialize<LlmBenchmarkResult>(content)
                     ?? throw new JsonException("LLM response deserialized to null.");
 
                 if (string.IsNullOrWhiteSpace(parsed.Benchmark))
@@ -240,13 +240,13 @@ public class RecommendationService
     // Private DTOs
     // -------------------------------------------------------------------------
 
-    private class OllamaSubgoalsResult
+    private class LlmSubgoalsResult
     {
         [JsonPropertyName("subgoals")]
         public List<JsonElement> Subgoals { get; set; } = [];
     }
 
-    private class OllamaBenchmarkResult
+    private class LlmBenchmarkResult
     {
         [JsonPropertyName("benchmark")]
         public string Benchmark { get; set; } = string.Empty;

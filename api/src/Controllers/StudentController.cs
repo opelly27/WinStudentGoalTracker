@@ -868,7 +868,7 @@ public class StudentController : BaseController
                 Data = recommendation
             });
         }
-        catch (OllamaClient.OllamaUnavailableException ex)
+        catch (OpenRouterClient.OpenRouterUnavailableException ex)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new ResponseResult<BenchmarkRecommendationResponse>
             {

@@ -61,9 +61,9 @@ builder.Services.AddHttpClient<TranscriptionService>(client =>
     client.Timeout = TimeSpan.FromMinutes(5);
 });
 
-builder.Services.AddHttpClient<OllamaClient>(client =>
+// BaseAddress, model and API key are resolved from configuration inside the client.
+builder.Services.AddHttpClient<OpenRouterClient>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["Ollama:BaseUrl"] ?? "https://llm.opelly.me");
     client.Timeout = TimeSpan.FromMinutes(5);
 });
 builder.Services.AddScoped<RecommendationService>();
