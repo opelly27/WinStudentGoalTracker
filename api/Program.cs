@@ -15,8 +15,14 @@ var dbPort = Environment.GetEnvironmentVariable("MYSQL_PORT") ?? "3309";
 var dbName = Environment.GetEnvironmentVariable("MYSQL_DATABASE") ?? "winstudentgoaltracker";
 var dbUser = Environment.GetEnvironmentVariable("MYSQL_USER") ?? "root";
 var dbPassword = Environment.GetEnvironmentVariable("MYSQL_PASSWORD") ?? "";
+// SslMode=Preferred (not Disabled): MySQL 8 defaults users to caching_sha2_password,
+// whose full-auth path needs the server's RSA public key, which the connector will only
+// fetch over an encrypted connection. Full auth happens whenever the server's in-memory
+// password cache is cold — i.e. after every MySQL restart — so a disabled-SSL connection
+// fails with "Retrieval of the RSA public key is not enabled for insecure connections".
+// Preferred negotiates TLS with MySQL's auto-generated cert without requiring CA validation.
 builder.Configuration["ConnectionStrings:DefaultConnection"] =
-    $"Server={dbServer};Port={dbPort};Database={dbName};Uid={dbUser};Pwd={dbPassword};SslMode=Disabled;";
+    $"Server={dbServer};Port={dbPort};Database={dbName};Uid={dbUser};Pwd={dbPassword};SslMode=Preferred;";
 
 // Override JWT key from .env if present
 var envJwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
